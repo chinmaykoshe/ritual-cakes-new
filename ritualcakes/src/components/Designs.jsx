@@ -3,7 +3,7 @@
     import { Carousel } from "react-responsive-carousel";
     import "react-responsive-carousel/lib/styles/carousel.min.css";
     import { designnames } from "../designs/designassets";
-    import DesignCard from "./Designcard";
+    import DesignCard from "./DesignCard";
 
     const ThemeSection = ({ title, categoryPrefix, designnames }) => {
       // Filter design names by category prefix

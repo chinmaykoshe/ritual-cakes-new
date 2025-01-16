@@ -1,5 +1,5 @@
 import React from "react";
-import DesignCard from "./Designcard";
+import DesignCard from "./DesignCard";
 
 const ThemeSection = ({ title, categoryPrefix, designnames, handleZoomIn }) => {
   if (!designnames || typeof designnames !== 'object') {
