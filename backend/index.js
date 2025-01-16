@@ -27,9 +27,7 @@ app.use((req, res, next) => {
 // Parse JSON bodies
 app.use(express.json());
 
-
-
-// Root route for testing
+// Root route for testin
 app.get("/", (req, res) => {
     res.json({
         message: "CORS headers are working!",

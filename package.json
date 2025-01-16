@@ -5,6 +5,7 @@
     "path": "^0.12.7",
     "react-multi-carousel": "^2.8.5",
     "react-responsive-carousel": "^3.2.23",
+    "vercel": "^39.3.0",
     "ws": "^8.18.0"
   }
 }

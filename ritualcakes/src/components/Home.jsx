@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import assets from '../assets/assets';
 import { NavLink } from 'react-router-dom';
 import Card from './Card';
-import DesignCard from './Designcard';
+import DesignCard from './DesignCard';
 import { designnames } from '../designs/designassets';
 
 // Get the design keys (in this case design1, design2, etc.)
