@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.font-montserrat {
+    font-family: 'Montserrat';
+  }
+  
+  .font-nunito {
+    font-family: 'Nunito', sans-serif;
+  }
+  
+  body {
+    background-color: white;
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps it fixed during scrolling */
+    background-position: center;
+}

@@ -1,0 +1,19 @@
+body{
+  background-color: #ffffff;
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps it fixed during scrolling */
+    background-position: center;
+    backdrop-filter: blur(8px);
+}
+
+
+.navlink-active {
+  background-color: rgb(255, 192, 143); /* darkcustombg color */
+  color: #ffffff; /* text color */
+}
+
+.navlink-inactive {
+  background-color: transparent;
+  color: #000000; /* text color */
+}

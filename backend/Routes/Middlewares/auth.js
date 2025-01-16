@@ -1,0 +1,23 @@
+const jwt = require('jsonwebtoken');
+
+const ensureAuthenticated = (req, res, next) => {
+    const auth = req.headers['authorization'];
+    if (!auth || !auth.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Unauthorized. JWT Token required' });
+    }
+
+    const token = auth.split(' ')[1]; // Extract the token
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized. Invalid token format' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // Attach decoded token to request
+        next(); // Proceed to the next middleware/route
+    } catch (err) {
+        return res.status(401).json({ message: 'Unauthorized. JWT Token invalid or expired' });
+    }
+};
+
+module.exports = ensureAuthenticated;
