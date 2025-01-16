@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom"; // For accessing state passed through navigation
 import { designnames } from "../designs/designassets";
-import DesignCard from "./Designcard";
+import DesignCard from "./DesignCard";
 
 const ThemeSection = ({ title, categoryPrefix, designnames }) => {
   // Filter design names by category prefix
