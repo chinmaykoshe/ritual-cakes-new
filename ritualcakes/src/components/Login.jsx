@@ -53,7 +53,7 @@ const handleSignInSubmit = async (e) => {
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                'Access-Control-Allow-Origin':'https://ritualcakes.netlify.app/',
+                'Access-Control-Allow-Origin':'https://ritual-cakes--alpha.vercel.app/',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(hashedSignInData),
