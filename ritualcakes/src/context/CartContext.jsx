@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
     const fetchCart = async () => {
       try {
         const token = localStorage.getItem('token'); // Get the token if needed
-        const response = await axios.get(`https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/api/cart`, {
+        const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/cart`, {
           mode: 'no-cors',
           headers: {
             'Authorization': `Bearer ${token}`, // Attach token to request header
@@ -35,7 +35,7 @@ export const CartProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token'); // Fetch the token if needed
       const response = await axios.post(
-        `https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/api/cart/add`,
+        `https://ritual-cakes-new-ogk5.vercel.app/api/cart/add`,
         
         { products: [product] }, // Wrap the single product in an array
         {
@@ -57,7 +57,7 @@ export const CartProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token'); // Fetch the token if needed
       const response = await axios.post(
-        `https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/api/cart/update`,
+        `https://ritual-cakes-new-ogk5.vercel.app/api/cart/update`,
         { orderID, quantity },
         {
           mode: 'no-cors',
@@ -85,7 +85,7 @@ export const CartProvider = ({ children }) => {
   const removeFromCart = async (orderID) => {
     try {
       const token = localStorage.getItem('token'); // Fetch the token if needed
-      const response = await axios.delete(`https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/api/cart/remove/${orderID}`, {
+      const response = await axios.delete(`https://ritual-cakes-new-ogk5.vercel.app/api/cart/remove/${orderID}`, {
         mode: 'no-cors',
         headers: {
           

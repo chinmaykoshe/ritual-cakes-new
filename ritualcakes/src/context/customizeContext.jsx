@@ -43,7 +43,7 @@ export const CustomizationProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations/${userEmail}`, {
+      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations/${userEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export const CustomizationProvider = ({ children }) => {
     console.log("Submitting customization with data:", formData); // Debugging line
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations`, {
+      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ export const CustomizationProvider = ({ children }) => {
     setSuccess('');
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations/${id}`, {
+      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export const CustomizationProvider = ({ children }) => {
     setSuccess('');
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations/${id}`, {
+      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${yourToken}`,

@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
       if (userEmail && token) {
         setLoading(true);
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userEmail}`, {
+          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/user/${userEmail}`, {
             headers: {
               Authorization: `${token}`, // Ensure "Bearer " is added to the token
             },
