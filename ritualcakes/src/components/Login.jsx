@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login() {
@@ -68,7 +66,6 @@ function Login() {
 
     } catch (error) {
         setErrorMessages(error.message || 'An error occurred during sign-in.');
-        toast.error(error.message || 'An error occurred during sign-in.');
     } finally {
         setLoading(false);
     }
@@ -132,7 +129,6 @@ function Login() {
         </form>
       </div>
 
-      <ToastContainer />
     </div>
   );
 }

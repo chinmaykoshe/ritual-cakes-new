@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
   const navigate = useNavigate();
@@ -41,10 +39,12 @@ function Signup() {
 
   const handlePasswordChange = (e) => {
     const { value } = e.target;
-    if (validatePassword(value)) {
-      setSignUpData((prevData) => ({ ...prevData, password: value }));
+    setSignUpData((prevData) => ({ ...prevData, password: value }));
+    if (!validatePassword(value)) {
+      console.log("Password doesn't meet the criteria.");
     }
   };
+  
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
@@ -63,11 +63,9 @@ function Signup() {
       if (!response.ok) {
         const errorMessage = result.error || result.message || 'An error occurred during sign-up.';
         setErrorMessages(errorMessage);
-        toast.error(errorMessage);
         return;
       }
 
-      toast.success('Sign-up successful!');
       setTimeout(() => {
         navigate('/login'); 
       }, 500);
@@ -75,7 +73,6 @@ function Signup() {
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';
       setErrorMessages(errorMessage);
-      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -190,7 +187,6 @@ function Signup() {
           {errorMessages && (
             <>
               <p className="text-red-500 text-center mb-4">{errorMessages}</p>
-              {toast.error(errorMessages)} {/* Triggering error toast */}
             </>
           )}
 
@@ -219,8 +215,6 @@ function Signup() {
         </form>
       </div>
 
-      {/* Toast Notifications */}
-      <ToastContainer />
     </div>
   );
 }
