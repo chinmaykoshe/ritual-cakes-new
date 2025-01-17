@@ -15,37 +15,31 @@ const TotalOrders = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token); // Check if the token is retrieved
-
       if (!token) throw new Error("Token not found. Please log in again.");
 
-      const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/RITUALCAKE.ADMIN@gmail.com", {
+      // Use the correct URL for all orders
+      const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("API Response:", response); // Log the API response
-
+      // Get orders and filter by admin email
       const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
       const filteredOrders = orders.filter(
         (order) => order.userEmail === "RITUALCAKE.ADMIN@gmail.com"
       );
 
+      // Sort orders by created date
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
 
       setAdminOrders(sortedOrders);
     } catch (err) {
-      console.error("Error fetching orders:", err); // Log the error details
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchAdminOrders();
-  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -59,7 +53,7 @@ const TotalOrders = () => {
 
   const filteredOrders = useMemo(() => {
     return adminOrders.filter((order) =>
-      order.orderItems.some((item) => {
+      order.orderItems?.some((item) => {
         const matchesSearchQuery =
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -98,7 +92,7 @@ const TotalOrders = () => {
       "Order Time",
     ];
     const rows = filteredOrders.flatMap((order) =>
-      order.orderItems.map((item) => [
+      order.orderItems?.map((item) => [
         item.name,
         item.shape,
         item.quantity || 1,
@@ -124,6 +118,10 @@ const TotalOrders = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  useEffect(() => {
+    fetchAdminOrders();
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -201,8 +199,8 @@ const TotalOrders = () => {
           </thead>
           <tbody>
             {filteredOrders.map((order) =>
-              order.orderItems.map((item, index) => (
-                <tr key={order._id}>
+              order.orderItems?.map((item, index) => (
+                <tr key={order._id + item.name + index}>
                   <td className="border border-gray-300 p-2">{item.name}</td>
                   <td className="border border-gray-300 p-2">{item.shape}</td>
                   <td className="border border-gray-300 p-2">{item.quantity || 1}</td>
