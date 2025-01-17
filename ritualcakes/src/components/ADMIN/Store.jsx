@@ -63,7 +63,7 @@ function Store() {
 
       console.log('Order Data:', orderData);
 
-      const response = await axios.post('http://localhost:8084/api/orders', orderData);
+      const response = await axios.post('https://ritual-cakes-new-ogk5.vercel.app/api/orders', orderData);
 
       if (response.status === 201) {
         const successMessage = `Order for "${selectedCake.name}" placed successfully!`;
