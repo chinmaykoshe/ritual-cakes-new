@@ -15,11 +15,15 @@ const TotalOrders = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
+      console.log("Token:", token); // Check if the token is retrieved
+
       if (!token) throw new Error("Token not found. Please log in again.");
 
       const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      console.log("API Response:", response); // Log the API response
 
       const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
       const filteredOrders = orders.filter(
@@ -32,6 +36,7 @@ const TotalOrders = () => {
 
       setAdminOrders(sortedOrders);
     } catch (err) {
+      console.error("Error fetching orders:", err); // Log the error details
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
