@@ -23,7 +23,7 @@ const Reviews = ({ orderID }) => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/reviews/${orderID}`);
+        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${orderID}`);
         if (!response.ok) throw new Error("Failed to fetch reviews");
         const data = await response.json();
         setReviews(data);
@@ -62,7 +62,7 @@ const Reviews = ({ orderID }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`, 
+          'Authorization': `Bearer ${token}`, 
         },
         body: JSON.stringify({
           content: newReview,
