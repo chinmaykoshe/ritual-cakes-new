@@ -13,7 +13,8 @@ const reviewRouter = require('./Routes/reviewRouter');
 const app = express();
 
 // CORS configuration
-const allowedOrigins = ["https://ritual-cakes--alpha.vercel.app", "http://localhost:5174","https://ritualcakes.netlify.app/"];
+const allowedOrigins = ["https://ritual-cakes--alpha.vercel.app",
+ "http://localhost:5174","https://ritualcakes.netlify.app/","https://vercel.com/chinmaykoshes-projects/ritual-cakes-"];
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
