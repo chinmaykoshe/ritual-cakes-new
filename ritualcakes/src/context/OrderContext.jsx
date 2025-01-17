@@ -27,7 +27,7 @@ export const OrderProvider = ({ children }) => {
         }
 
         const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`, {
-          headers: { Authorization: `${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setOrders(response.data); // Set the fetched orders
@@ -53,7 +53,7 @@ export const OrderProvider = ({ children }) => {
         return;
       }
       const response = await axios.post(`https://ritual-cakes-new-ogk5.vercel.app/api/orders`, orderData, {
-        headers: { Authorization: `${token}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
 
       setOrders((prevOrders) => [...prevOrders, response.data.order]);
@@ -70,7 +70,7 @@ export const OrderProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${orderID}`, {
-        headers: { Authorization: `${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderID));

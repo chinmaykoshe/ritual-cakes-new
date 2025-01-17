@@ -13,7 +13,7 @@ function UserButton() {
         try {
           setLoading(true);
           const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user`, {
-            headers: { Authorization: `${token}` }, // Send token in the headers
+            headers: { Authorization: `Bearer ${token}` }, // Send token in the headers
           });
           setUserData(response.data);
           setLoading(false);

@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
         {
           mode: 'no-cors',
           headers: {
-            'Authorization': `${token}`, // Attach token
+            'Authorization': `Bearer ${token}`, // Attach token
             'Content-Type': 'application/json',
           },
         }
@@ -62,7 +62,7 @@ export const CartProvider = ({ children }) => {
         {
           mode: 'no-cors',
           headers: {
-            'Authorization': `${token}`, // Include token if authentication is required
+            'Authorization': `Bearer ${token}`, // Include token if authentication is required
             'Content-Type': 'application/json',
           },
         }
@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
         mode: 'no-cors',
         headers: {
           
-          'Authorization': `${token}`, // Attach token
+          'Authorization': `Bearer ${token}`, // Attach token
         },
       });
       console.log('Product removed successfully:', response.data);

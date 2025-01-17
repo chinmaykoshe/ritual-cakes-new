@@ -47,7 +47,7 @@ export const CustomizationProvider = ({ children }) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${yourToken}`,
+          'Authorization': `Bearer ${yourToken}`,
         },
       });
 

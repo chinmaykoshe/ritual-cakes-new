@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
         try {
           const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/user/${userEmail}`, {
             headers: {
-              Authorization: `${token}`, // Ensure "Bearer " is added to the token
+              Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
             },
           });
           setUser(response.data); // Set user data
