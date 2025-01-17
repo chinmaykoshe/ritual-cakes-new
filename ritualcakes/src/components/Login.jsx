@@ -44,6 +44,7 @@ const handleSignInSubmit = async (e) => {
         const url = process.env.REACT_APP_AUTH_LOGIN_URL || 
             'https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/auth/login';
 
+            console.log('Auth URL:', process.env.REACT_APP_AUTH_LOGIN_URL);
         // Hash the password before sending
         const hashedPassword = bcrypt.hashSync(signInData.password, 10);
         const hashedSignInData = { ...signInData, password: hashedPassword };
