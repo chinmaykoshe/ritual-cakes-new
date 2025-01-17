@@ -19,7 +19,7 @@ function Orders() {
   const handleDeleteCustomization = async (customizationId) => {
     if (window.confirm("Are you sure you want to delete this customization? Please call +91 8169296802 before deleting")) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations/${customizationId}`, {
+        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations/${customizationId}`, {
           method: 'DELETE',
         });
 
@@ -42,7 +42,7 @@ function Orders() {
   useEffect(() => {
     const fetchCustomizations = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/customizations/${userEmail}`);
+        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/customizations/${userEmail}`);
         if (!response.ok) {
           throw new Error("Failed to fetch customizations");
         }

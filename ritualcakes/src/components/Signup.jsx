@@ -50,7 +50,7 @@ function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
-      const url = "https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/auth/signup";
+      const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: {

@@ -12,7 +12,7 @@ function UserButton() {
       if (token) {
         try {
           setLoading(true);
-          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/user`, {
+          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user`, {
             headers: { Authorization: `${token}` }, // Send token in the headers
           });
           setUserData(response.data);

@@ -15,7 +15,7 @@ const UserComponent = ({ userId }) => {
       }
 
       try {
-        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/user/${userId}`, {
+        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/user/${userId}`, {
           headers: {
             Authorization: `${token}`,
           },
