@@ -58,7 +58,7 @@ const Reviews = ({ orderID }) => {
     }
 
     try {
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/reviews/${orderID}`, {
+      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${orderID}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

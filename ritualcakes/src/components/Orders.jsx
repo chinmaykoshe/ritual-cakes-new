@@ -101,7 +101,6 @@ function Orders() {
         {customizationError && (
           <p className="text-red-500 text-center mb-4">{customizationError}</p>
         )}
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         {/* Display orders */}
         {orders.length > 0 ? (
