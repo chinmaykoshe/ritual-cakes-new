@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 const TotalOrders = () => {
@@ -21,11 +21,11 @@ const TotalOrders = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const filteredOrders = response.data.filter(
+      const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
+      const filteredOrders = orders.filter(
         (order) => order.userEmail === "RITUALCAKE.ADMIN@gmail.com"
       );
 
-      // Sort orders by latest first
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -52,6 +52,36 @@ const TotalOrders = () => {
     return date.toLocaleTimeString("en-US", { hour12: true }); // Format: hh:mm:ss AM/PM
   };
 
+  const filteredOrders = useMemo(() => {
+    return adminOrders.filter((order) =>
+      order.orderItems.some((item) => {
+        const matchesSearchQuery =
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (order.status && order.status.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesShapeFilter = shapeFilter ? item.shape === shapeFilter : true;
+        const matchesDateFilter = dateFilter
+          ? new Date(order.createdAt).toLocaleDateString("en-US") ===
+            new Date(dateFilter).toLocaleDateString("en-US")
+          : true;
+        const matchesMinAmount = minAmount ? order.totalAmount >= Number(minAmount) : true;
+        const matchesMaxAmount = maxAmount ? order.totalAmount <= Number(maxAmount) : true;
+        return (
+          matchesSearchQuery &&
+          matchesShapeFilter &&
+          matchesDateFilter &&
+          matchesMinAmount &&
+          matchesMaxAmount
+        );
+      })
+    );
+  }, [adminOrders, searchQuery, shapeFilter, dateFilter, minAmount, maxAmount]);
+
+  const today = new Date().toLocaleDateString("en-US");
+  const todayTotal = adminOrders
+    .filter((order) => formatDate(order.createdAt) === today)
+    .reduce((total, order) => total + order.totalAmount, 0);
+
   const exportToCSV = () => {
     const headers = [
       "Cake Name",
@@ -62,7 +92,7 @@ const TotalOrders = () => {
       "Order Date",
       "Order Time",
     ];
-    const rows = filteredOrders.map((order) =>
+    const rows = filteredOrders.flatMap((order) =>
       order.orderItems.map((item) => [
         item.name,
         item.shape,
@@ -76,7 +106,7 @@ const TotalOrders = () => {
 
     const csvContent = [
       headers.join(","),
-      ...rows.flat().map((row) => row.join(",")),
+      ...rows.map((row) => row.join(",")),
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -90,40 +120,11 @@ const TotalOrders = () => {
     document.body.removeChild(link);
   };
 
-  const filteredOrders = adminOrders.filter((order) =>
-    order.orderItems.some((item) => {
-      const matchesSearchQuery =
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (order.status && order.status.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchesShapeFilter = shapeFilter ? item.shape === shapeFilter : true;
-      const matchesDateFilter = dateFilter
-        ? new Date(order.createdAt).toLocaleDateString("en-US") ===
-          new Date(dateFilter).toLocaleDateString("en-US")
-        : true;
-      const matchesMinAmount = minAmount ? order.totalAmount >= Number(minAmount) : true;
-      const matchesMaxAmount = maxAmount ? order.totalAmount <= Number(maxAmount) : true;
-      return (
-        matchesSearchQuery &&
-        matchesShapeFilter &&
-        matchesDateFilter &&
-        matchesMinAmount &&
-        matchesMaxAmount
-      );
-    })
-  );
-
-  const today = new Date().toLocaleDateString("en-US");
-  const todayTotal = adminOrders
-    .filter((order) => formatDate(order.createdAt) === today)
-    .reduce((total, order) => total + order.totalAmount, 0);
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">ORDERS FROM STORE</h2>
         <div className="flex items-center space-x-4">
@@ -140,7 +141,6 @@ const TotalOrders = () => {
         </div>
       </div>
 
-      {/* Search and Filter Section */}
       <div className="mb-4 grid grid-cols-6 gap-4">
         <input
           type="text"
@@ -149,7 +149,6 @@ const TotalOrders = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border p-2 rounded"
         />
-
         <select
           value={shapeFilter}
           onChange={(e) => setShapeFilter(e.target.value)}
@@ -160,14 +159,12 @@ const TotalOrders = () => {
           <option value="square">Square</option>
           <option value="heart">Heart</option>
         </select>
-
         <input
           type="date"
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
           className="border p-2 rounded"
         />
-
         <input
           type="number"
           placeholder="Min Amount"
@@ -175,7 +172,6 @@ const TotalOrders = () => {
           onChange={(e) => setMinAmount(e.target.value)}
           className="border p-2 rounded"
         />
-
         <input
           type="number"
           placeholder="Max Amount"
@@ -185,7 +181,6 @@ const TotalOrders = () => {
         />
       </div>
 
-      {/* Orders Table */}
       {filteredOrders.length > 0 ? (
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
@@ -202,7 +197,7 @@ const TotalOrders = () => {
           <tbody>
             {filteredOrders.map((order) =>
               order.orderItems.map((item, index) => (
-                <tr key={`${order._id}-${index}`}>
+                <tr key={order._id}>
                   <td className="border border-gray-300 p-2">{item.name}</td>
                   <td className="border border-gray-300 p-2">{item.shape}</td>
                   <td className="border border-gray-300 p-2">{item.quantity || 1}</td>
@@ -216,33 +211,7 @@ const TotalOrders = () => {
           </tbody>
         </table>
       ) : (
-        <div>
-          <div className="text-center text-lg font-semibold mb-4">No orders yet</div>
-          <table className="table-auto w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-2">Cake Name</th>
-                <th className="border border-gray-300 p-2">Shape</th>
-                <th className="border border-gray-300 p-2">Quantity</th>
-                <th className="border border-gray-300 p-2">Weight</th>
-                <th className="border border-gray-300 p-2">Total Amount</th>
-                <th className="border border-gray-300 p-2">Order Date</th>
-                <th className="border border-gray-300 p-2">Order Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-                <td className="border border-gray-300 p-2">-</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div className="text-center text-lg font-semibold mb-4">No orders available</div>
       )}
     </div>
   );
