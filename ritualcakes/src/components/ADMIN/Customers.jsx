@@ -14,7 +14,7 @@ function Customers() {
       if (token) {
         try {
           const response = await axios.get('https://ritual-cakes--alpha.vercel.app/api/users', {
-            headers: { Authorization: `${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           });
 
           if (Array.isArray(response.data)) {
@@ -41,7 +41,7 @@ function Customers() {
     if (confirmDelete) {
       try {
         await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/users/${id}`, {
-          headers: { Authorization: `${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setCustomers((prev) => prev.filter((customer) => customer._id !== id));
         alert('Customer deleted successfully.');

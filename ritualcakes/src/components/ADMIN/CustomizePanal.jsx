@@ -19,7 +19,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.get("https://ritual-cakes-new-ogk5.vercel.app/api/customizations", {
-        headers: { Authorization: `${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       // Check if the response data is an array
@@ -57,7 +57,7 @@ const CustomizationPanel = () => {
       const response = await axios.put(
         `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
         { approvalStatus: newStatus },
-        { headers: { Authorization: `${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setCustomizations((prevCustomizations) =>
@@ -83,7 +83,7 @@ const CustomizationPanel = () => {
 
       const response = await axios.delete(
         `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
-        { headers: { Authorization: `${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setCustomizations((prevCustomizations) =>
@@ -108,7 +108,7 @@ const CustomizationPanel = () => {
       const response = await axios.put(
         `https://ritual-cakes--alpha.vercel.app/api/customizations/${customizationId}`,
         { price: newPrice },
-        { headers: { Authorization: `${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setCustomizations((prevCustomizations) =>

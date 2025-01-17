@@ -63,7 +63,7 @@ const ReviewSection = () => {
       const response = await fetch(`https://ritual-cakes--alpha.vercel.app/api/reviews/${orderID}/${reviewID}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `${token}`,
+          "Authorization": `Bearer ${token}`,
         },
       });
 
@@ -91,7 +91,7 @@ const ReviewSection = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ content: editedContent }),
       });

@@ -18,7 +18,7 @@ const TotalOrders = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
 
       const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
-        headers: { Authorization: `${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const filteredOrders = response.data.filter(

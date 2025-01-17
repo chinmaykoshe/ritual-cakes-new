@@ -19,7 +19,7 @@ const OrdersPanel = () => {
       const response = await axios.put(
         `https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}/status`,
         { status: newStatus },
-        { headers: { Authorization: `${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setOrders((prevOrders) =>
@@ -43,7 +43,7 @@ const OrdersPanel = () => {
       }
 
       const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
-        headers: { Authorization: `${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       // Filter out orders from 'RITUALCAKE.ADMIN@gmail.com'
