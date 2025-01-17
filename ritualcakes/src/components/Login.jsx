@@ -36,52 +36,31 @@ function Login() {
   };
 
 
-const handleSignInSubmit = async (e) => {
+  
+
+
+  const handleSignInSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-        const url = 
-            'https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/auth/login';
+        const url = 'https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/auth/login';
 
-            console.log('Auth URL:', process.env.REACT_APP_AUTH_LOGIN_URL);
-        // Hash the password before sending
-        const hashedPassword = bcrypt.hashSync(signInData.password, 10);
-        const hashedSignInData = { ...signInData, password: hashedPassword };
-
-        console.log("Sign-In Data with Hashed Password:", hashedSignInData);
-
+        // Send the password as plain text (not recommended for production; passwords should be hashed on the backend)
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                'Access-Control-Allow-Origin':'https://ritual-cakes--alpha.vercel.app/',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(hashedSignInData),
-            credentials: 'include'
+            body: JSON.stringify(signInData), // Directly sending the password
         });
 
-        console.log('Response Status:', response.status);
-        console.log('Response Headers:', response.headers);
-
-        // Process response
-        let result;
-        try {
-            result = await response.json();
-        } catch (error) {
-            setErrorMessages('Received non-JSON response. Please check the backend.');
-            toast.error('Received non-JSON response. Please check the backend.');
-            return;
-        }
-
         if (!response.ok) {
-            const errorMessage = result.error || result.message || 'An error occurred during sign-in.';
-            setErrorMessages(errorMessage);
-            toast.error(errorMessage);
-            return;
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to sign in');
         }
 
-        const { token, email, role } = result;
+        const { token, email, role } = await response.json();
         localStorage.setItem('token', token);
         localStorage.setItem('user', email);
         localStorage.setItem('role', role);
@@ -89,12 +68,13 @@ const handleSignInSubmit = async (e) => {
         navigateToDashboard(role);
 
     } catch (error) {
-        setErrorMessages(error.message || 'An unexpected error occurred during sign-in.');
-        toast.error(error.message || 'An unexpected error occurred during sign-in.');
+        setErrorMessages(error.message || 'An error occurred during sign-in.');
+        toast.error(error.message || 'An error occurred during sign-in.');
     } finally {
         setLoading(false);
     }
 };
+
 
 
 

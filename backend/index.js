@@ -1,19 +1,24 @@
 const express = require('express');
 require('dotenv').config();
 require('./Models/db'); // Assuming this connects to your database
+
+// Import routers
 const AuthRouter = require('./Routes/AuthRouter');
 const CartRouter = require('./Routes/CartRouter');
 const orderRoutes = require('./Routes/orderRoutes');
 const customizeRoutes = require('./Routes/customizeRoutes');
 const userRoutes = require('./Routes/userRoutes');
-const reviewRouter = require("./Routes/reviewRouter");
+const reviewRouter = require('./Routes/reviewRouter');
 
+const app = express();
 
-
-// CORS configuration with direct allowed origin
+// CORS configuration
+const allowedOrigins = ["https://ritual-cakes--alpha.vercel.app", "http://localhost:5174"];
 app.use((req, res, next) => {
-    const allowedOrigin =["https://ritual-cakes--alpha.vercel.app","http://localhost:5174"];
-    res.header("Access-Control-Allow-Origin", allowedOrigin);
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
@@ -24,22 +29,27 @@ app.use((req, res, next) => {
     next();
 });
 
-// Parse JSON bodies
+// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Root route for testin
+// Root route for testing
 app.get("/", (req, res) => {
-    res.json({
-        message: "CORS headers are working!",
-    });
+    res.json({ message: "CORS headers are working!" });
 });
 
 // Register routes
-app.use('/api', userRoutes);  // User routes
-app.use('/auth', AuthRouter);  // Authentication routes
-app.use('/api/cart', CartRouter);  // Cart routes
+app.use('/api', userRoutes);          // User routes
+app.use('/auth', AuthRouter);         // Authentication routes
+app.use('/api/cart', CartRouter);     // Cart routes
 app.use('/api/orders', orderRoutes);  // Order routes
-app.use('/api', customizeRoutes);  // Customization routes
-app.use("/api/reviews", reviewRouter);  // Review routes
+app.use('/api', customizeRoutes);     // Customization routes
+app.use("/api/reviews", reviewRouter);// Review routes
 
-module.exports = app;
+// Handle favicon requests to prevent unnecessary errors
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
