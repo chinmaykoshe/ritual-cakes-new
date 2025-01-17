@@ -34,7 +34,6 @@ const OrdersPanel = () => {
     }
   };
 
-  
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -42,11 +41,11 @@ const OrdersPanel = () => {
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
-  
+
       const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       // Assuming the orders are in response.data.orders
       if (Array.isArray(response.data.orders)) {
         // Filter out orders from 'RITUALCAKE.ADMIN@gmail.com'
@@ -61,7 +60,7 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
-  
+
   // Filter orders based on search query
   const filteredOrders = orders.filter((order) => {
     return (
@@ -70,9 +69,6 @@ const OrdersPanel = () => {
       order.deliveryAddress?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
-  
-
-
 
   const exportToCSV = () => {
     const headers = [
@@ -152,79 +148,84 @@ const OrdersPanel = () => {
           Export to CSV
         </button>
       </div>
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr>
-            <th className="border border-gray-300 px-4 py-2">Order ID</th>
-            <th className="border border-gray-300 px-4 py-2">Customer Email</th>
-            <th className="border border-gray-300 px-4 py-2">Order Date</th>
-            <th className="border border-gray-300 px-4 py-2">Order Time</th>
-            <th className="border border-gray-300 px-4 py-2">Delivery Address</th>
-            <th className="border border-gray-300 px-4 py-2">Items</th>
-            <th className="border border-gray-300 px-4 py-2">Message on Cake</th>
-            <th className="border border-gray-300 px-4 py-2">Total</th>
-            <th className="border border-gray-300 px-4 py-2">Status</th>
-            <th className="border border-gray-300 px-4 py-2">Actions</th>
-            <th className="border border-gray-300 px-4 py-2">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredOrders.map((order) => (
-            <tr key={order._id}>
-              <td className="border border-gray-300 px-4 py-2">{order._id}</td>
-              <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {new Date(order.orderDate).toLocaleDateString()}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{order.orderTime}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {order.deliveryAddress || "N/A"}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <ul>
-                  {order.orderItems.map((item, index) => (
-                    <li key={index} className="py-1">
-                      <strong>Name:</strong>-{item.name}<br />
-                      <strong>Weight:</strong>-{item.weight}kg<br />
-                      <strong>Shape:</strong>-{item.shape}<br />
-                      <strong>Quantity:</strong>-{item.quantity}
-                    </li>
-                  ))}
-                </ul>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {order.messageOnCake || "N/A"}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">₹{order.totalAmount}</td>
-              <td className="border border-gray-300 px-4 py-2">{order.status}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <select
-                  className="border border-gray-400 rounded px-2 py-1"
-                  value={order.status}
-                  onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <button
-                  onClick={() => deleteOrder(order._id)}
-                  className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </td>
+
+      {/* Display "No orders yet" message if no orders */}
+      {filteredOrders.length === 0 ? (
+        <div className="text-center text-lg font-semibold mb-4">No orders yet</div>
+      ) : (
+        <table className="table-auto w-full border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2">Order ID</th>
+              <th className="border border-gray-300 px-4 py-2">Customer Email</th>
+              <th className="border border-gray-300 px-4 py-2">Order Date</th>
+              <th className="border border-gray-300 px-4 py-2">Order Time</th>
+              <th className="border border-gray-300 px-4 py-2">Delivery Address</th>
+              <th className="border border-gray-300 px-4 py-2">Items</th>
+              <th className="border border-gray-300 px-4 py-2">Message on Cake</th>
+              <th className="border border-gray-300 px-4 py-2">Total</th>
+              <th className="border border-gray-300 px-4 py-2">Status</th>
+              <th className="border border-gray-300 px-4 py-2">Actions</th>
+              <th className="border border-gray-300 px-4 py-2">Delete</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredOrders.map((order) => (
+              <tr key={order._id}>
+                <td className="border border-gray-300 px-4 py-2">{order._id}</td>
+                <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {new Date(order.orderDate).toLocaleDateString()}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">{order.orderTime}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {order.deliveryAddress || "N/A"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <ul>
+                    {order.orderItems.map((item, index) => (
+                      <li key={index} className="py-1">
+                        <strong>Name:</strong>-{item.name}<br />
+                        <strong>Weight:</strong>-{item.weight}kg<br />
+                        <strong>Shape:</strong>-{item.shape}<br />
+                        <strong>Quantity:</strong>-{item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {order.messageOnCake || "N/A"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">₹{order.totalAmount}</td>
+                <td className="border border-gray-300 px-4 py-2">{order.status}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <select
+                    className="border border-gray-400 rounded px-2 py-1"
+                    value={order.status}
+                    onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <button
+                    onClick={() => deleteOrder(order._id)}
+                    className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
 
 export default OrdersPanel;
-  

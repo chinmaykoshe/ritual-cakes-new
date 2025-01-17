@@ -216,7 +216,33 @@ const TotalOrders = () => {
           </tbody>
         </table>
       ) : (
-        <div>No orders found</div>
+        <div>
+          <div className="text-center text-lg font-semibold mb-4">No orders yet</div>
+          <table className="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 p-2">Cake Name</th>
+                <th className="border border-gray-300 p-2">Shape</th>
+                <th className="border border-gray-300 p-2">Quantity</th>
+                <th className="border border-gray-300 p-2">Weight</th>
+                <th className="border border-gray-300 p-2">Total Amount</th>
+                <th className="border border-gray-300 p-2">Order Date</th>
+                <th className="border border-gray-300 p-2">Order Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+                <td className="border border-gray-300 p-2">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
