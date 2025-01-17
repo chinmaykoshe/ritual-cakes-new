@@ -15,8 +15,8 @@ const getUserOrders = async (req, res, next) => {
     req.userOrders = orders;
     next();
   } catch (error) {
-    console.error('Error fetching orders:', error.message);
-    res.status(500).json({ message: 'Error fetching orders', error });
+    console.error('Error fetching orders for user', req.params.userEmail, error.message);
+    res.status(500).json({ message: 'Error fetching orders', error: error.message });
   }
 };
 
@@ -54,8 +54,11 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
     }
 
+    // Normalize userEmail (optional, for consistency)
+    const userEmailNormalized = userEmail.toLowerCase();
+
     const newOrder = new OrderModel({
-      userEmail,
+      userEmail: userEmailNormalized,
       orderItems,
       totalAmount,
       deliveryAddress,
@@ -77,8 +80,8 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
 
 // Get all orders for a specific user (Authenticated users only)
 router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
-  // Ensure the user can only see their own orders
-  if (req.user.email !== req.params.userEmail) {
+  // Ensure the user can only see their own orders (case insensitive)
+  if (req.user.email.toLowerCase() !== req.params.userEmail.toLowerCase()) {
     return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
   }
   res.status(200).json(req.userOrders);
