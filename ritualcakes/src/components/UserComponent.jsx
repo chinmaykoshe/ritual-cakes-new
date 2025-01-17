@@ -15,7 +15,7 @@ const UserComponent = ({ userId }) => {
       }
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/user/${userId}`, {
           headers: {
             Authorization: `${token}`,
           },
