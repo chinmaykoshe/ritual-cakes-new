@@ -17,12 +17,18 @@ function Customers() {
             headers: { Authorization: `Bearer ${token}` },
           });
 
+          console.log('API Response:', response.data); // Debugging: Log the response data
+
+          // Check the structure of the response
           if (Array.isArray(response.data)) {
             setCustomers(response.data);
+          } else if (Array.isArray(response.data.users)) {
+            setCustomers(response.data.users); // If users are nested inside `data.users`
           } else {
             setError('Unexpected data format');
           }
         } catch (err) {
+          console.error('Error fetching customers:', err); // Debugging: Log the error
           setError(err.response?.data?.message || 'Error fetching customers');
         } finally {
           setLoading(false);
@@ -46,6 +52,7 @@ function Customers() {
         setCustomers((prev) => prev.filter((customer) => customer._id !== id));
         alert('Customer deleted successfully.');
       } catch (err) {
+        console.error('Error deleting customer:', err); // Debugging: Log the error
         setError('Failed to delete customer: ' + err.message);
       }
     }
@@ -55,11 +62,11 @@ function Customers() {
   const filteredCustomers = customers.filter((customer) => {
     const search = searchQuery.toLowerCase();
     return (
-      customer.name.toLowerCase().includes(search) ||
-      customer.surname.toLowerCase().includes(search) ||
-      customer.email.toLowerCase().includes(search) ||
-      customer.mobile.toLowerCase().includes(search) ||
-      customer.address.toLowerCase().includes(search)
+      customer.name?.toLowerCase().includes(search) ||
+      customer.surname?.toLowerCase().includes(search) ||
+      customer.email?.toLowerCase().includes(search) ||
+      customer.mobile?.toLowerCase().includes(search) ||
+      customer.address?.toLowerCase().includes(search)
     );
   });
 

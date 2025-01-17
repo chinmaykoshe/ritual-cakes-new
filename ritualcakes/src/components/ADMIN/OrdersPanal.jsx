@@ -34,6 +34,8 @@ const OrdersPanel = () => {
     }
   };
 
+  
+
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -41,21 +43,28 @@ const OrdersPanel = () => {
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
-
+  
       const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Filter out orders from 'RITUALCAKE.ADMIN@gmail.com'
-      const filteredOrders = response.data.filter(order => order.userEmail !== 'RITUALCAKE.ADMIN@gmail.com');
-      
-      setOrders(filteredOrders);
+  
+      // Check if response.data is an array
+      if (Array.isArray(response.data)) {
+        // Filter out orders from 'RITUALCAKE.ADMIN@gmail.com'
+        const filteredOrders = response.data.filter(order => order.userEmail !== 'RITUALCAKE.ADMIN@gmail.com');
+        setOrders(filteredOrders);
+      } else {
+        throw new Error("Received data is not an array");
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }
   };
+
+
+
 
   const exportToCSV = () => {
     const headers = [
