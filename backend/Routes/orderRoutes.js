@@ -1,33 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const OrderModel = require('../Models/Order'); // Import the Order model
-
+const OrderModel = require('../Models/Order');
+const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
 // Get all orders (Admin only)
-router.get('/orders', async (req, res) => {
+router.get('/orders', ensureAuthenticated, async (req, res) => {
   try {
-    const orders = await OrderModel.find().sort({ createdAt: -1 }); // Fetch all orders sorted by newest
-    res.status(200).json(orders); // Return the orders
+    // Check if the user is an admin (based on req.user role or permissions)
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access forbidden: Admins only' });
+    }
+    const orders = await OrderModel.find().sort({ createdAt: -1 });
+    res.status(200).json(orders);
   } catch (error) {
     console.error('Error fetching all orders:', error.message);
     res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
   }
 });
 
-
-// Add a route to fetch all orders for admin
-router.get('/orders/all', async (req, res) => {
-  try {
-    // Only allow access to admins (you can add your authorization logic here)
-    const orders = await OrderModel.find().sort({ createdAt: -1 });
-    res.status(200).json(orders);
-  } catch (error) {
-    console.error('Error fetching all orders:', error.message);
-    res.status(500).json({ message: 'Error fetching all orders', error });
+// Route to fetch orders for a specific user (Authenticated users only)
+router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
+  // Ensure the user can only see their own orders
+  if (req.user.email !== req.params.userEmail) {
+    return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
   }
+  res.status(200).json(req.userOrders);
 });
-
-
 
 // Middleware to fetch orders based on userEmail
 const getUserOrders = async (req, res, next) => {
@@ -37,7 +35,7 @@ const getUserOrders = async (req, res, next) => {
       return res.status(400).json({ message: 'User email is required' });
     }
 
-    const orders = await OrderModel.find({ userEmail }).sort({ createdAt: -1 }); // Sort by newest first
+    const orders = await OrderModel.find({ userEmail }).sort({ createdAt: -1 });
     req.userOrders = orders;
     next();
   } catch (error) {
@@ -46,38 +44,25 @@ const getUserOrders = async (req, res, next) => {
   }
 };
 
-// Create a new order
-router.post('/orders', async (req, res) => {
+// Create a new order (Authenticated users)
+router.post('/orders', ensureAuthenticated, async (req, res) => {
   try {
-    const {
-      userEmail,
-      orderItems,
-      totalAmount,
-      deliveryAddress,
-      paymentMethod,
-      cakeMessage,
-      orderDate,
-      orderTime
-      
-    } = req.body;
+    const { userEmail, orderItems, totalAmount, deliveryAddress, paymentMethod, cakeMessage, orderDate, orderTime } = req.body;
 
     // Validation for required fields
     if (!userEmail || !orderItems || !totalAmount || !deliveryAddress || !paymentMethod || !orderDate) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // Check if paymentMethod is valid
     const validPaymentMethods = ['COD', 'Online'];
     if (!validPaymentMethods.includes(paymentMethod)) {
       return res.status(400).json({ message: 'Invalid payment method' });
     }
 
-    // Validate cakeMessage length
     if (cakeMessage && cakeMessage.length > 100) {
       return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
     }
 
-    // Create the new order
     const newOrder = new OrderModel({
       userEmail,
       orderItems,
@@ -87,8 +72,8 @@ router.post('/orders', async (req, res) => {
       cakeMessage,
       orderDate,
       orderTime,
-      status: 'Pending', // Default status
-      createdAt: new Date(), // Current date/time
+      status: 'Pending',
+      createdAt: new Date(),
     });
 
     await newOrder.save();
@@ -99,13 +84,8 @@ router.post('/orders', async (req, res) => {
   }
 });
 
-// Get all orders for a user (uses middleware for dynamic updates)
-router.get('/orders/:userEmail', getUserOrders, (req, res) => {
-  res.status(200).json(req.userOrders);
-});
-
-// Update tracking info for an order
-router.put('/orders/:orderID/tracking', async (req, res) => {
+// Update tracking info for an order (Admin only)
+router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) => {
   try {
     const { orderID } = req.params;
     const { trackingNumber, deliveryStatus } = req.body;
@@ -137,12 +117,16 @@ router.put('/orders/:orderID/tracking', async (req, res) => {
   }
 });
 
-// Delete an order by ID
-router.delete('/orders/:orderID', async (req, res) => {
+// Delete an order by ID (Admin only)
+router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
   try {
     const { orderID } = req.params;
 
-    // Find and delete the order by ID
+    // Only allow deletion if the user is an admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access forbidden: Admins only' });
+    }
+
     const deletedOrder = await OrderModel.findByIdAndDelete(orderID);
 
     if (!deletedOrder) {
@@ -156,24 +140,21 @@ router.delete('/orders/:orderID', async (req, res) => {
   }
 });
 
-
-// Update order status
-router.put('/orders/:orderId/status', async (req, res) => {
+// Update order status (Admin only)
+router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    // Validate status
     const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    // Update the order's status
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       orderId,
       { status },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!updatedOrder) {
@@ -186,6 +167,5 @@ router.put('/orders/:orderId/status', async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
-
 
 module.exports = router;

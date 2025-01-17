@@ -17,7 +17,8 @@ function Customers() {
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          console.log('API Response:', response.data); // Debugging: Log the response data
+          // Debugging: Log the full response
+          console.log('API Response:', response.data);
 
           // Check the structure of the response
           if (Array.isArray(response.data)) {
@@ -28,8 +29,9 @@ function Customers() {
             setError('Unexpected data format');
           }
         } catch (err) {
-          console.error('Error fetching customers:', err); // Debugging: Log the error
-          setError(err.response?.data?.message || 'Error fetching customers');
+          // Log and set error message in case of failure
+          console.error('Error fetching customers:', err);
+          setError(err.response?.data?.message || err.message || 'Error fetching customers');
         } finally {
           setLoading(false);
         }
@@ -52,7 +54,7 @@ function Customers() {
         setCustomers((prev) => prev.filter((customer) => customer._id !== id));
         alert('Customer deleted successfully.');
       } catch (err) {
-        console.error('Error deleting customer:', err); // Debugging: Log the error
+        console.error('Error deleting customer:', err);
         setError('Failed to delete customer: ' + err.message);
       }
     }
