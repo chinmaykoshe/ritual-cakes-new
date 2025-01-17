@@ -4,6 +4,7 @@ const OrderModel = require('../Models/Order');
 const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
 // Middleware to fetch orders based on userEmail
+
 const getUserOrders = async (req, res, next) => {
   try {
     const { userEmail } = req.params;
@@ -11,7 +12,9 @@ const getUserOrders = async (req, res, next) => {
       return res.status(400).json({ message: 'User email is required' });
     }
 
+    console.log('Fetching orders for user:', userEmail); // Log the email
     const orders = await OrderModel.find({ userEmail }).sort({ createdAt: -1 });
+    console.log('Orders found:', orders); // Log the found orders
     req.userOrders = orders;
     next();
   } catch (error) {
@@ -19,6 +22,7 @@ const getUserOrders = async (req, res, next) => {
     res.status(500).json({ message: 'Error fetching orders', error: error.message });
   }
 };
+
 
 // Get all orders (Admin only)
 router.get('/orders', ensureAuthenticated, async (req, res) => {
