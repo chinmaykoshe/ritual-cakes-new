@@ -18,6 +18,9 @@ const TotalOrders = () => {
     try {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("user");
+      const role = localStorage.getItem("role");
+      console.log(role); // Ensure this prints 'admin' or the expected role
+
 
       // Debug: Check local storage values
       console.log("[DEBUG] Token:", token);
@@ -103,9 +106,19 @@ const TotalOrders = () => {
   }, [adminOrders, searchQuery, shapeFilter, dateFilter, minAmount, maxAmount]);
 
   const today = new Date().toLocaleDateString("en-US");
-  const todayTotal = adminOrders
-    .filter((order) => formatDate(order.createdAt) === today)
-    .reduce((total, order) => total + order.totalAmount, 0);
+  // Inside your component function
+const todayTotal = useMemo(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to midnight for today's date comparison
+
+  return adminOrders
+    .filter((order) => {
+      const orderDate = new Date(order.createdAt);
+      orderDate.setHours(0, 0, 0, 0); // Reset time to midnight for each order
+      return orderDate.getTime() === today.getTime(); // Compare date parts only
+    })
+    .reduce((total, order) => total + order.totalAmount, 0); // Sum totalAmount for today's orders
+}, [adminOrders]); // Recalculate when adminOrders changes
 
   // Export orders to CSV
   const exportToCSV = () => {

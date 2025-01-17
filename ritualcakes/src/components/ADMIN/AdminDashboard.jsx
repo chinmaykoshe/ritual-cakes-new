@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 import NavigationPane from './Navigationpane';
 import Customers from './Customers';
-import Analytics from './Analytics';
 import Store from './Store';
 import Dashboard from './Dashboard';
 import Orders from './OrdersPanal';
@@ -24,7 +23,6 @@ function AdminDashboard() {
         <Routes>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/customers" element={<Customers />} />
-          <Route path="/admin/analytics" element={<Analytics />} />
           <Route path="/admin/store" element={<Store />} />
           <Route path="/admin/orders" element={<Orders />} />
           <Route path="/admin/products" element={<Products />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // Import the CartContext
 
@@ -7,12 +7,16 @@ function Cart() {
   const [errorMessages, setErrorMessages] = useState(""); // State for error messages
   const navigate = useNavigate();
 
-  
-
+  useEffect(() => {
+    // Ensure that cart is always initialized as an empty array if it's undefined
+    if (!cart) {
+      console.error("Cart is undefined");
+    }
+  }, [cart]);
 
   // Calculate total price
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
   };
 
   const handleRemoveFromCart = (orderId) => {
@@ -50,7 +54,7 @@ function Cart() {
 
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
 
-        {cart.length > 0 ? (
+        {cart?.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             {cart.map((item) => (
               <div
@@ -98,7 +102,7 @@ function Cart() {
             <div className="flex justify-between items-center mt-4 mx-6">
               <span className="text-xl font-bold">Total:</span>
               <span className="text-2xl font-bold">
-                ${calculateTotal().toFixed(2)}
+                ₹{calculateTotal().toFixed(2)}
               </span>
             </div>
             <div className="flex justify-center mt-6">

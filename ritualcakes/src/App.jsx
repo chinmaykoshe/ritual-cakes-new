@@ -24,11 +24,10 @@ import 'react-toastify/ReactToastify.css';
 import './index.css';
 import { CartProvider } from './context/CartContext.jsx';
 import axios from 'axios';
-axios.defaults.headers.common['Authorization'] = `${localStorage.getItem('token')}`
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
 import UserDetails from './components/UserButton.jsx'; 
 import PrivateRoute from './PrivateRoute.jsx';
 import Customers from './components/ADMIN/Customers.jsx';
-import Analytics from './components/ADMIN/Analytics.jsx';
 import Store from './components/ADMIN/Store.jsx';
 import OrdersPanal from './components/ADMIN/OrdersPanal.jsx';
 import Login from './components/Login.jsx';
@@ -82,7 +81,6 @@ function App() {
                 <Route path="/admin/customers" element={<PrivateRoute element={<Customers />} />} />
                 <Route path="/admin/orderspanel" element={<PrivateRoute element={<OrdersPanal />} />} />
                 <Route path="/admin/adminproducts" element={<PrivateRoute element={<AdminProducts />} />} />
-                <Route path="/admin/analytics" element={<PrivateRoute element={<Analytics />} />} />
                 <Route path="/admin/store" element={<PrivateRoute element={<Store />} />} />
                 <Route path="/admin/customizedpanal" element={<PrivateRoute element={<CustomizePanal />} />} />
                 <Route path="/admin/CakesAvailable" element={<PrivateRoute element={<CakesAvailable />} />} />

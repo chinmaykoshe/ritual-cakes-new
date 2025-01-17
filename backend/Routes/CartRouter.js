@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router(); // Initialize the Router
 const ensureAuthenticated = require('./Middlewares/auth');
 
-
 const UserModel = require('../Models/User'); // Ensure you have the correct User model imported
 
 // Example Product for testing - This can be removed in production
@@ -16,11 +15,15 @@ const exampleProduct = {
     price: 20 // Example price for one unit
 };
 
-// GET Route to fetch cart items for the authenticated user
+// -------------------------- USER ROUTES --------------------------
+
+/**
+ * GET Route to fetch cart items for the authenticated user
+ * This route is for the user to view their cart.
+ */
 router.get('/', ensureAuthenticated, async (req, res) => {
     console.log("GET /cart - Fetching cart items");
     try {
-        // Fetch the user by their ID using the user ID from the authenticated session (req.user._id)
         const user = await UserModel.findById(req.user._id); 
         console.log("User fetched:", user);
 
@@ -30,7 +33,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
         const cartItems = user.cartProducts; // Retrieve the cart items from the user document
         console.log("Cart items retrieved:", cartItems);
-        
+
         // Return both cartItems and the exampleProduct for testing purposes (you might want to remove exampleProduct in production)
         return res.status(200).json({ cartItems, exampleProduct }); 
     } catch (error) {
@@ -39,7 +42,10 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// POST Route to add multiple items to the cart
+/**
+ * POST Route to add multiple items to the cart
+ * This route is for the user to add products to their cart.
+ */
 router.post('/add', ensureAuthenticated, async (req, res) => {
     console.log("POST /cart/add - Adding products to cart");
     const { products } = req.body; // Get products from the request body (array of product details)
@@ -106,7 +112,10 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// POST Route to update the quantity of a cart item
+/**
+ * POST Route to update the quantity of a cart item
+ * This route is for the user to update the quantity of a cart item.
+ */
 router.post('/update', ensureAuthenticated, async (req, res) => {
     console.log("POST /cart/update - Updating cart item quantity");
     const { orderID, quantity } = req.body; // Get the orderID and new quantity from the request body
@@ -128,7 +137,7 @@ router.post('/update', ensureAuthenticated, async (req, res) => {
 
         // Find the index of the cart item with the matching orderID
         const cartItemIndex = user.cartProducts.findIndex(item => item.orderID === orderID);
-        
+
         if (cartItemIndex === -1) {
             console.log("Product not found in cart:", orderID);
             return res.status(404).json({ message: 'Product not found in cart' });
@@ -146,30 +155,32 @@ router.post('/update', ensureAuthenticated, async (req, res) => {
         return res.status(500).json({ message: 'Error updating cart' });
     }
 });
+
+/**
+ * DELETE Route to remove a product from the cart
+ * This route is for the user to remove a product from their cart.
+ */
 router.delete('/remove/:orderID', ensureAuthenticated, async (req, res) => {
     const { orderID } = req.params;
     if (!orderID) {
-      return res.status(400).json({ message: 'Missing required fields' });
+        return res.status(400).json({ message: 'Missing required fields' });
     }
-  
+
     try {
-      const user = await UserModel.findById(req.user._id);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      // Remove the product from the cart using the orderID
-      user.cartProducts = user.cartProducts.filter(item => item.orderID !== orderID);
-  
-      await user.save();
-      return res.status(200).json({ message: 'Product removed from cart' });
+        const user = await UserModel.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Remove the product from the cart using the orderID
+        user.cartProducts = user.cartProducts.filter(item => item.orderID !== orderID);
+
+        await user.save();
+        return res.status(200).json({ message: 'Product removed from cart' });
     } catch (error) {
-      return res.status(500).json({ message: 'Error removing product from cart' });
+        return res.status(500).json({ message: 'Error removing product from cart' });
     }
-  });
-  
+});
+
 
 module.exports = router;
-
-
-
