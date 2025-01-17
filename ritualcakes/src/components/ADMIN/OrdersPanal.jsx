@@ -35,7 +35,6 @@ const OrdersPanel = () => {
   };
 
   
-
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -48,10 +47,10 @@ const OrdersPanel = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      // Check if response.data is an array
-      if (Array.isArray(response.data)) {
+      // Assuming the orders are in response.data.orders
+      if (Array.isArray(response.data.orders)) {
         // Filter out orders from 'RITUALCAKE.ADMIN@gmail.com'
-        const filteredOrders = response.data.filter(order => order.userEmail !== 'RITUALCAKE.ADMIN@gmail.com');
+        const filteredOrders = response.data.orders.filter(order => order.userEmail !== 'RITUALCAKE.ADMIN@gmail.com');
         setOrders(filteredOrders);
       } else {
         throw new Error("Received data is not an array");
@@ -62,7 +61,16 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
-
+  
+  // Filter orders based on search query
+  const filteredOrders = orders.filter((order) => {
+    return (
+      order.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.deliveryAddress?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+  
 
 
 
@@ -125,15 +133,6 @@ const OrdersPanel = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-
-  // Filter orders based on search query
-  const filteredOrders = orders.filter((order) => {
-    return (
-      order.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.deliveryAddress?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  });
 
   return (
     <div>
