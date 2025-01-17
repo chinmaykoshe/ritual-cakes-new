@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 
 const TotalOrders = () => {
@@ -10,33 +10,39 @@ const TotalOrders = () => {
   const [dateFilter, setDateFilter] = useState("");
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
+  const isFetching = useRef(false); // Prevent redundant API calls
 
   const fetchAdminOrders = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token); // Check if the token is retrieved
+      const userEmail = localStorage.getItem("user");
 
       if (!token) throw new Error("Token not found. Please log in again.");
+      if (!userEmail) throw new Error("User email not found.");
 
-      const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/RITUALCAKE.ADMIN@gmail.com", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      console.log("API Response:", response); // Log the API response
-
-      const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
-      const filteredOrders = orders.filter(
-        (order) => order.userEmail === "RITUALCAKE.ADMIN@gmail.com"
+      // Fetch orders based on the logged-in user's email
+      const response = await axios.get(
+        `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
+      // Handle response data
+      const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
+      const filteredOrders = orders.filter(
+        (order) => order.userEmail === userEmail
+      );
+
+      // Sort orders by date
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
 
       setAdminOrders(sortedOrders);
     } catch (err) {
-      console.error("Error fetching orders:", err); // Log the error details
+      console.error("Error fetching orders:", err);
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
@@ -44,17 +50,21 @@ const TotalOrders = () => {
   };
 
   useEffect(() => {
-    fetchAdminOrders();
+    if (!isFetching.current) {
+      isFetching.current = true;
+      fetchAdminOrders();
+      isFetching.current = false;
+    }
   }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US"); // Format: MM/DD/YYYY
+    return date.toLocaleDateString("en-US");
   };
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", { hour12: true }); // Format: hh:mm:ss AM/PM
+    return date.toLocaleTimeString("en-US", { hour12: true });
   };
 
   const filteredOrders = useMemo(() => {
