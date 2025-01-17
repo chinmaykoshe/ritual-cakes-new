@@ -18,7 +18,7 @@ const exampleProduct = {
 
 // GET Route to fetch cart items for the authenticated user
 router.get('/', ensureAuthenticated, async (req, res) => {
-    console.log("GET /api/cart - Fetching cart items");
+    console.log("GET /cart - Fetching cart items");
     try {
         // Fetch the user by their ID using the user ID from the authenticated session (req.user._id)
         const user = await UserModel.findById(req.user._id); 
@@ -41,7 +41,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
 // POST Route to add multiple items to the cart
 router.post('/add', ensureAuthenticated, async (req, res) => {
-    console.log("POST /api/cart/add - Adding products to cart");
+    console.log("POST /cart/add - Adding products to cart");
     const { products } = req.body; // Get products from the request body (array of product details)
 
     console.log("Products received:", products);
@@ -108,7 +108,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
 
 // POST Route to update the quantity of a cart item
 router.post('/update', ensureAuthenticated, async (req, res) => {
-    console.log("POST /api/cart/update - Updating cart item quantity");
+    console.log("POST /cart/update - Updating cart item quantity");
     const { orderID, quantity } = req.body; // Get the orderID and new quantity from the request body
 
     console.log("Request body:", req.body);

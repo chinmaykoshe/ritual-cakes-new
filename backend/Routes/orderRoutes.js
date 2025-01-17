@@ -4,7 +4,7 @@ const OrderModel = require('../Models/Order'); // Import the Order model
 
 
 // Get all orders (Admin only)
-router.get('/api/orders', async (req, res) => {
+router.get('/orders', async (req, res) => {
   try {
     const orders = await OrderModel.find().sort({ createdAt: -1 }); // Fetch all orders sorted by newest
     res.status(200).json(orders); // Return the orders
@@ -16,7 +16,7 @@ router.get('/api/orders', async (req, res) => {
 
 
 // Add a route to fetch all orders for admin
-router.get('/api/orders/all', async (req, res) => {
+router.get('/orders/all', async (req, res) => {
   try {
     // Only allow access to admins (you can add your authorization logic here)
     const orders = await OrderModel.find().sort({ createdAt: -1 });
@@ -47,7 +47,7 @@ const getUserOrders = async (req, res, next) => {
 };
 
 // Create a new order
-router.post('/api/orders', async (req, res) => {
+router.post('/orders', async (req, res) => {
   try {
     const {
       userEmail,
@@ -100,12 +100,12 @@ router.post('/api/orders', async (req, res) => {
 });
 
 // Get all orders for a user (uses middleware for dynamic updates)
-router.get('/api/orders/:userEmail', getUserOrders, (req, res) => {
+router.get('/orders/:userEmail', getUserOrders, (req, res) => {
   res.status(200).json(req.userOrders);
 });
 
 // Update tracking info for an order
-router.put('/api/orders/:orderID/tracking', async (req, res) => {
+router.put('/orders/:orderID/tracking', async (req, res) => {
   try {
     const { orderID } = req.params;
     const { trackingNumber, deliveryStatus } = req.body;
@@ -138,7 +138,7 @@ router.put('/api/orders/:orderID/tracking', async (req, res) => {
 });
 
 // Delete an order by ID
-router.delete('/api/orders/:orderID', async (req, res) => {
+router.delete('/orders/:orderID', async (req, res) => {
   try {
     const { orderID } = req.params;
 
@@ -158,7 +158,7 @@ router.delete('/api/orders/:orderID', async (req, res) => {
 
 
 // Update order status
-router.put('/api/orders/:orderId/status', async (req, res) => {
+router.put('/orders/:orderId/status', async (req, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;

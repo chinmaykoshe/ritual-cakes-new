@@ -4,7 +4,7 @@ const Review = require("../Models/Review");
 const router = express.Router();
 const ensureAuthenticated = require("./Middlewares/auth"); // Import the middleware
 
-// Backend API route for fetching reviews
+// Backend  route for fetching reviews
 router.get('/', async (req, res) => {
   try {
     const reviews = await Review.find(); // Get all reviews from the database
