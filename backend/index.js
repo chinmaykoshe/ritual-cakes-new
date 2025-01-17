@@ -41,10 +41,10 @@ app.get("/", (req, res) => {
 // Register routes
 app.use('/api', userRoutes);          // User routes
 app.use('/auth', AuthRouter);         // Authentication routes
-app.use('/api/cart', CartRouter);     // Cart routes
-app.use('/api/orders', orderRoutes);  // Order routes
+app.use('/api', CartRouter);     // Cart routes
+app.use('/api', orderRoutes);  // Order routes
 app.use('/api', customizeRoutes);     // Customization routes
-app.use("/api/reviews", reviewRouter);// Review routes
+app.use("/api", reviewRouter);// Review routes
 
 // Handle favicon requests to prevent unnecessary errors
 app.get('/favicon.ico', (req, res) => res.status(204).end());
