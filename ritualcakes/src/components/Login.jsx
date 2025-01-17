@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import bcrypt from 'bcryptjs';
 
 
 function Login() {
@@ -44,7 +43,7 @@ function Login() {
     setLoading(true);
 
     try {
-        const url = 'https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app/auth/login';
+        const url = 'https://ritual-cakes-new-ogk5.vercel.app/auth/login';
 
         // Send the password as plain text (not recommended for production; passwords should be hashed on the backend)
         const response = await fetch(url, {
