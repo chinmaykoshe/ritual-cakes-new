@@ -3,30 +3,6 @@ const router = express.Router();
 const OrderModel = require('../Models/Order');
 const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
-// Get all orders (Admin only)
-router.get('/orders', ensureAuthenticated, async (req, res) => {
-  try {
-    // Check if the user is an admin (based on req.user role or permissions)
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: 'Access forbidden: Admins only' });
-    }
-    const orders = await OrderModel.find().sort({ createdAt: -1 });
-    res.status(200).json(orders);
-  } catch (error) {
-    console.error('Error fetching all orders:', error.message);
-    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
-  }
-});
-
-// Route to fetch orders for a specific user (Authenticated users only)
-router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
-  // Ensure the user can only see their own orders
-  if (req.user.email !== req.params.userEmail) {
-    return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
-  }
-  res.status(200).json(req.userOrders);
-});
-
 // Middleware to fetch orders based on userEmail
 const getUserOrders = async (req, res, next) => {
   try {
@@ -43,6 +19,21 @@ const getUserOrders = async (req, res, next) => {
     res.status(500).json({ message: 'Error fetching orders', error });
   }
 };
+
+// Get all orders (Admin only)
+router.get('/orders', ensureAuthenticated, async (req, res) => {
+  try {
+    // Check if the user is an admin (based on req.user role or permissions)
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access forbidden: Admins only' });
+    }
+    const orders = await OrderModel.find().sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching all orders:', error.message);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+});
 
 // Create a new order (Authenticated users)
 router.post('/orders', ensureAuthenticated, async (req, res) => {
@@ -72,7 +63,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       cakeMessage,
       orderDate,
       orderTime,
-      status: 'Pending',
+      status: 'Pending', // Default status
       createdAt: new Date(),
     });
 
@@ -82,6 +73,15 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     console.error('Error creating order:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
+});
+
+// Get all orders for a specific user (Authenticated users only)
+router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
+  // Ensure the user can only see their own orders
+  if (req.user.email !== req.params.userEmail) {
+    return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
+  }
+  res.status(200).json(req.userOrders);
 });
 
 // Update tracking info for an order (Admin only)
