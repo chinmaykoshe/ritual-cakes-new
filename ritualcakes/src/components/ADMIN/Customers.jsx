@@ -14,7 +14,7 @@ function Customers() {
       if (token) {
         try {
           const response = await axios.get('https://ritual-cakes--alpha.vercel.app/api/users', {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `${token}` },
           });
 
           // Debugging: Log the full response

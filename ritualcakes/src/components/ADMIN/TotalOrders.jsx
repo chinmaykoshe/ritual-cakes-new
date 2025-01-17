@@ -12,51 +12,60 @@ const TotalOrders = () => {
   const [maxAmount, setMaxAmount] = useState("");
   const isFetching = useRef(false); // Prevent redundant API calls
 
+  // Function to fetch orders
   const fetchAdminOrders = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("user");
 
+      // Debug: Check local storage values
+      console.log("[DEBUG] Token:", token);
+      console.log("[DEBUG] User Email:", userEmail);
+
       if (!token) throw new Error("Token not found. Please log in again.");
       if (!userEmail) throw new Error("User email not found.");
 
-      // Fetch orders based on the logged-in user's email
-      const response = await axios.get(
-        `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`;
+      console.log("[DEBUG] API URL:", apiUrl);
 
-      // Handle response data
+      const response = await axios.get(apiUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("[DEBUG] API Response:", response.data);
+
       const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
+      console.log("[DEBUG] Parsed Orders:", orders);
+
       const filteredOrders = orders.filter(
         (order) => order.userEmail === userEmail
       );
+      console.log("[DEBUG] Filtered Orders:", filteredOrders);
 
-      // Sort orders by date
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
+      console.log("[DEBUG] Sorted Orders:", sortedOrders);
 
       setAdminOrders(sortedOrders);
     } catch (err) {
-      console.error("Error fetching orders:", err);
+      console.error("[ERROR] Fetching Orders:", err.response || err);
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch orders on component mount
   useEffect(() => {
     if (!isFetching.current) {
       isFetching.current = true;
-      fetchAdminOrders();
-      isFetching.current = false;
+      fetchAdminOrders().then(() => (isFetching.current = false));
     }
   }, []);
 
+  // Helper functions for date formatting
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");
@@ -67,6 +76,7 @@ const TotalOrders = () => {
     return date.toLocaleTimeString("en-US", { hour12: true });
   };
 
+  // Filter orders dynamically
   const filteredOrders = useMemo(() => {
     return adminOrders.filter((order) =>
       order.orderItems.some((item) => {
@@ -97,6 +107,7 @@ const TotalOrders = () => {
     .filter((order) => formatDate(order.createdAt) === today)
     .reduce((total, order) => total + order.totalAmount, 0);
 
+  // Export orders to CSV
   const exportToCSV = () => {
     const headers = [
       "Cake Name",
@@ -212,7 +223,7 @@ const TotalOrders = () => {
           <tbody>
             {filteredOrders.map((order) =>
               order.orderItems.map((item, index) => (
-                <tr key={order._id}>
+                <tr key={`${order._id}-${index}`}>
                   <td className="border border-gray-300 p-2">{item.name}</td>
                   <td className="border border-gray-300 p-2">{item.shape}</td>
                   <td className="border border-gray-300 p-2">{item.quantity || 1}</td>
