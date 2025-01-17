@@ -13,7 +13,7 @@ function Customers() {
     const fetchCustomers = async () => {
       if (token) {
         try {
-          const response = await axios.get('http://localhost:8084/api/users', {
+          const response = await axios.get('https://ritual-cakes--alpha.vercel.app/api/users', {
             headers: { Authorization: `${token}` },
           });
 
@@ -40,7 +40,7 @@ function Customers() {
     const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8084/api/users/${id}`, {
+        await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/users/${id}`, {
           headers: { Authorization: `${token}` },
         });
         setCustomers((prev) => prev.filter((customer) => customer._id !== id));

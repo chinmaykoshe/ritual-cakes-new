@@ -18,7 +18,7 @@ function Dashboard() {
       if (!token) throw new Error('Token not found. Please log in again.');
 
       // Fetch all orders (no date filter needed here)
-      const allOrdersResponse = await axios.get('http://localhost:8084/api/orders/all', {
+      const allOrdersResponse = await axios.get('https://ritual-cakes--alpha.vercel.app/api/orders/all', {
         headers: { Authorization: `${token}` },
       });
 

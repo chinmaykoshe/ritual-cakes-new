@@ -17,7 +17,7 @@ const TotalOrders = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
 
-      const response = await axios.get("http://localhost:8084/api/orders/all", {
+      const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `${token}` },
       });
 

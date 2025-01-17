@@ -17,7 +17,7 @@ const OrdersPanel = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:8084/api/orders/${orderId}/status`,
+        `https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `${token}` } }
       );
@@ -42,7 +42,7 @@ const OrdersPanel = () => {
         throw new Error("Token not found. Please log in again.");
       }
 
-      const response = await axios.get("http://localhost:8084/api/orders/all", {
+      const response = await axios.get("https://ritual-cakes--alpha.vercel.app/api/orders/all", {
         headers: { Authorization: `${token}` },
       });
 

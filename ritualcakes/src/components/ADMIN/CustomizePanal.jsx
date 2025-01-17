@@ -106,7 +106,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:8084/api/customizations/${customizationId}`,
+        `https://ritual-cakes--alpha.vercel.app/api/customizations/${customizationId}`,
         { price: newPrice },
         { headers: { Authorization: `${token}` } }
       );
