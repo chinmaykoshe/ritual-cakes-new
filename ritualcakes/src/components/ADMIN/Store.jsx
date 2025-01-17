@@ -63,7 +63,23 @@ function Store() {
 
       console.log('Order Data:', orderData);
 
-      const response = await axios.post('https://ritual-cakes-new-ogk5.vercel.app/api/orders', orderData);
+      // Retrieve the token from localStorage or wherever it is stored
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Token is missing. Please log in.");
+      }
+
+      // Send the POST request with the Authorization header
+      const response = await axios.post(
+        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the bearer token here
+          },
+        }
+      );
 
       if (response.status === 201) {
         const successMessage = `Order for "${selectedCake.name}" placed successfully!`;
