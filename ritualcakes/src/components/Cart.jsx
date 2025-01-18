@@ -8,7 +8,7 @@ function Cart() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Ensure that cart is always initialized as an empty array if it's undefined
+    // Ensure that cart is always initialized as an empty array if it's undefine
     if (!cart) {
       console.error("Cart is undefined");
     }
