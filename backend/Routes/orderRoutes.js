@@ -1,139 +1,177 @@
-const router = require('express').Router(); // Correct usage
-const Customization = require('../Models/Customizationdb'); // Assuming model file is at this path
-const moment = require('moment');
+const express = require('express');
+const router = express.Router();
+const OrderModel = require('../Models/Order');
+const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
-// Middleware to check if the user is an admin
-const ensureAdmin = (req, res, next) => {
-  if (!req.user.roles || !req.user.roles.includes('admin')) {
-    return res.status(403).json({ message: 'Access forbidden: Admins only' });
+// Middleware to fetch orders based on userEmail
+
+const getUserOrders = async (req, res, next) => {
+  try {
+    const { userEmail } = req.params;
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    console.log('Fetching orders for user:', userEmail); // Log the email
+    const orders = await OrderModel.find({ userEmail }).sort({ createdAt: -1 });
+    console.log('Orders found:', orders); // Log the found orders
+    req.userOrders = orders;
+    next();
+  } catch (error) {
+    console.error('Error fetching orders for user', req.params.userEmail, error.message);
+    res.status(500).json({ message: 'Error fetching orders', error: error.message });
   }
-  next();
 };
 
-// -------------------------- USER ROUTES --------------------------
 
-/**
- * POST route to create a new customization
- * This route allows users to submit a customization request.
- */
-router.post('/customizations', async (req, res) => {
+// Get all orders (Admin only)
+router.get('/orders', ensureAuthenticated, async (req, res) => {
   try {
-    // Destructure form data from request body
-    const { name, email, phone, address, size, cakeType, flavor, message, specialInstructions, deliveryDate, imageOrDesign } = req.body;
+    // Check if the user is an admin (based on req.user role or permissions)
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access forbidden: Admins only' });
+    }
+    const orders = await OrderModel.find().sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching all orders:', error.message);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+});
 
-    // Ensure deliveryDate is at least 2 days ahead
-    const twoDaysLater = moment().add(2, 'days').startOf('day').toDate();
-    if (new Date(deliveryDate) < twoDaysLater) {
-      return res.status(400).json({ message: "Delivery date must be at least two days from now." });
+// Create a new order (Authenticated users)
+router.post('/orders', ensureAuthenticated, async (req, res) => {
+  try {
+    const { userEmail, orderItems, totalAmount, deliveryAddress, paymentMethod, cakeMessage, orderDate, orderTime } = req.body;
+
+    // Validation for required fields
+    if (!userEmail || !orderItems || !totalAmount || !deliveryAddress || !paymentMethod || !orderDate) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // Create the customization
-    const customization = new Customization({
-      name,
-      email,
-      phone,
-      address,
-      size,
-      cakeType,
-      flavor,
-      message,
-      specialInstructions,
-      deliveryDate,
-      imageOrDesign,
-      approvalStatus: 'pending', // Default approval status
-      price: 0 // Default price
+    const validPaymentMethods = ['COD', 'Online'];
+    if (!validPaymentMethods.includes(paymentMethod)) {
+      return res.status(400).json({ message: 'Invalid payment method' });
+    }
+
+    if (cakeMessage && cakeMessage.length > 100) {
+      return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
+    }
+
+    // Normalize userEmail (optional, for consistency)
+    const userEmailNormalized = userEmail.toLowerCase();
+
+    const newOrder = new OrderModel({
+      userEmail: userEmailNormalized,
+      orderItems,
+      totalAmount,
+      deliveryAddress,
+      paymentMethod,
+      cakeMessage,
+      orderDate,
+      orderTime,
+      status: 'Pending', // Default status
+      createdAt: new Date(),
     });
 
-    // Save the customization to the database
-    await customization.save();
-    res.status(201).json({ message: "Customization created successfully", customization });
+    await newOrder.save();
+    res.status(201).json({ message: 'Order placed successfully!', order: newOrder });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error creating order:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
 
-/**
- * GET route to fetch all customizations
- * This route allows users to view all their customization requests.
- */
-router.get('/customizations', async (req, res) => {
-  try {
-    const customizations = await Customization.find();
-    res.status(200).json(customizations);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+// Get all orders for a specific user (Authenticated users only)
+router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
+  // Ensure the user can only see their own orders (case insensitive)
+  if (req.user.email.toLowerCase() !== req.params.userEmail.toLowerCase()) {
+    return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
   }
+  res.status(200).json(req.userOrders);
 });
 
-/**
- * GET route to fetch a single customization by email
- * This route allows users to view their specific customization by email.
- */
-router.get('/customizations/:email', async (req, res) => {
+// Update tracking info for an order (Admin only)
+router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) => {
   try {
-    // Find customization by email instead of id
-    const customization = await Customization.find({ email: req.params.email });
-    
-    if (!customization) {
-      return res.status(404).json({ message: "Customization not found" });
+    const { orderID } = req.params;
+    const { trackingNumber, deliveryStatus } = req.body;
+
+    const validStatuses = ['In Transit', 'Out for Delivery', 'Delivered', 'Delayed', 'Failed'];
+    if (deliveryStatus && !validStatuses.includes(deliveryStatus)) {
+      return res.status(400).json({ message: 'Invalid delivery status' });
     }
-    res.status(200).json(customization);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
-// -------------------------- ADMIN ROUTES --------------------------
-
-/**
- * PUT route to update the price and approval status (for admin)
- * This route allows the admin to approve or reject a customization and set its price.
- * Only accessible by an admin.
- */
-router.put('/customizations/:id', ensureAdmin, async (req, res) => {
-  const { approvalStatus, price } = req.body;
-  
-  // Validate that price and approvalStatus are provided for update
-  if (approvalStatus && !['pending', 'approved', 'rejected'].includes(approvalStatus)) {
-    return res.status(400).json({ message: "Invalid approval status" });
-  }
-
-  try {
-    const customization = await Customization.findByIdAndUpdate(
-      req.params.id,
-      { approvalStatus, price },
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderID,
+      {
+        $set: {
+          'trackingInfo.trackingNumber': trackingNumber,
+          'trackingInfo.deliveryStatus': deliveryStatus,
+        },
+      },
       { new: true }
     );
 
-    if (!customization) {
-      return res.status(404).json({ message: "Customization not found" });
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
     }
 
-    res.status(200).json({ message: "Customization updated successfully", customization });
+    res.status(200).json({ message: 'Tracking info updated', order: updatedOrder });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error updating tracking info:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
 
-/**
- * DELETE route to remove a customization (optional, if needed)
- * This route allows the admin to delete a customization request.
- * Only accessible by an admin.
- */
-router.delete('/customizations/:id', ensureAdmin, async (req, res) => {
+// Delete an order by ID (Admin only)
+router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
   try {
-    const customization = await Customization.findByIdAndDelete(req.params.id);
-    if (!customization) {
-      return res.status(404).json({ message: "Customization not found" });
+    const { orderID } = req.params;
+
+    // Only allow deletion if the user is an admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access forbidden: Admins only' });
     }
-    res.status(200).json({ message: "Customization deleted successfully" });
+
+    const deletedOrder = await OrderModel.findByIdAndDelete(orderID);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({ message: 'Order deleted successfully', orderID });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error deleting order:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
+
+// Update order status (Admin only)
+router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({ message: 'Order status updated successfully', order: updatedOrder });
+  } catch (error) {
+    console.error('Error updating order status:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
 
