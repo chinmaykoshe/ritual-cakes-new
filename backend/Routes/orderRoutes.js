@@ -3,7 +3,16 @@ const router = express.Router();
 const OrderModel = require('../Models/Order');
 const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
+const ensureAdmin = (req, res, next) => {
+  if (!req.user.roles || !req.user.roles.includes('admin')) {
+    return res.status(403).json({ message: 'Access forbidden: Admins only' });
+  }
+  next();
+};
+
 // Middleware to fetch orders based on userEmail
+
+
 
 const getUserOrders = async (req, res, next) => {
   try {
@@ -25,10 +34,10 @@ const getUserOrders = async (req, res, next) => {
 
 
 // Get all orders (Admin only)
-router.get('/orders', ensureAuthenticated, async (req, res) => {
+router.get('/orders', ensureAuthenticated, ensureAdmin , async (req, res) => {
   try {
     // Check if the user is an admin (based on req.user role or permissions)
-    if (!req.user.isAdmin) {
+    if (!req.user.ensureAdmin) {
       return res.status(403).json({ message: 'Access forbidden: Admins only' });
     }
     const orders = await OrderModel.find().sort({ createdAt: -1 });
@@ -125,12 +134,12 @@ router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) =>
 });
 
 // Delete an order by ID (Admin only)
-router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
+router.delete('/orders/:orderID', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     const { orderID } = req.params;
 
     // Only allow deletion if the user is an admin
-    if (!req.user.isAdmin) {
+    if (!req.user.ensureAdmin) {
       return res.status(403).json({ message: 'Access forbidden: Admins only' });
     }
 

@@ -8,7 +8,7 @@ import Orders from './OrdersPanal';
 import Products from './Products';
 import CustomizePanal from './CustomizePanal';
 import CakesAvailable from './CakesAvailable';
-import TotalOrders from './TotalOrders';
+import StoreOrders from './StoreOrders';
 
 function AdminDashboard() {
   return (
@@ -27,7 +27,7 @@ function AdminDashboard() {
           <Route path="/admin/orders" element={<Orders />} />
           <Route path="/admin/products" element={<Products />} />
           <Route path="/admin/customizedpanal" element={<CustomizePanal />} />
-          <Route path="/admin/orderscollection" element={<TotalOrders />} />
+          <Route path="/admin/orderscollection" element={<StoreOrders />} />
           <Route path="/admin/CakesAvailable" element={<CakesAvailable />} />
           <Route path="/admin/reviewsection" element={<CakesAvailable />} />
         </Routes>

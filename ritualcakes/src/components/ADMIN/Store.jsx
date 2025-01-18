@@ -31,7 +31,7 @@ function Store() {
 
   const placeOrder = async (selectedCake) => {
     try {
-      const userEmail = 'RITUALCAKE.ADMIN@gmail.com';
+      const userEmail = 'ritualcake.admin@gmail.com';
       const selectedOption = selectedOptions[selectedCake.orderID];
 
       const orderItem = {

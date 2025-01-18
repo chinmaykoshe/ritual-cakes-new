@@ -41,7 +41,7 @@ import { CustomizationProvider } from './context/customizeContext';
 import { OrderProvider } from './context/OrderContext';
 import CustomizePanal from './components/ADMIN/CustomizePanal.jsx';
 import CakesAvailable from './components/ADMIN/CakesAvailable.jsx';
-import TotalOrders from './components/ADMIN/TotalOrders.jsx';
+import StoreOrders from './components/ADMIN/StoreOrders.jsx';
 import ReviewSection from './components/ADMIN/ReviewSection.jsx';
 
 // InvalidRouteRedirect component
@@ -84,7 +84,7 @@ function App() {
                 <Route path="/admin/store" element={<PrivateRoute element={<Store />} />} />
                 <Route path="/admin/customizedpanal" element={<PrivateRoute element={<CustomizePanal />} />} />
                 <Route path="/admin/CakesAvailable" element={<PrivateRoute element={<CakesAvailable />} />} />
-                <Route path="/admin/orderscollection" element={<PrivateRoute element={<TotalOrders />} />} />
+                <Route path="/admin/orderscollection" element={<PrivateRoute element={<StoreOrders />} />} />
                 <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
               </Route>
 

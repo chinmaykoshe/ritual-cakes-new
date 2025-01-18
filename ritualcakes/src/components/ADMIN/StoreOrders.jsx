@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 
-const TotalOrders = () => {
+const StoreOrders = () => {
   const [adminOrders, setAdminOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -256,4 +256,4 @@ const todayTotal = useMemo(() => {
   );
 };
 
-export default TotalOrders;
+export default StoreOrders;
