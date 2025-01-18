@@ -34,8 +34,6 @@ function Login() {
 
 
   
-
-
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -43,13 +41,18 @@ function Login() {
     try {
         const url = 'https://ritual-cakes-new-ogk5.vercel.app/auth/login';
 
-        // Send the password as plain text (not recommended for production; passwords should be hashed on the backend)
+        // Convert email to lowercase before sending
+        const lowercasedSignInData = {
+            ...signInData,
+            email: signInData.email.toLowerCase(), // Ensure email is lowercase
+        };
+
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(signInData), // Directly sending the password
+            body: JSON.stringify(lowercasedSignInData),
         });
 
         if (!response.ok) {
@@ -58,8 +61,10 @@ function Login() {
         }
 
         const { token, email, role } = await response.json();
+
+        // Save email and role in lowercase to localStorage
         localStorage.setItem('token', token);
-        localStorage.setItem('user', email);
+        localStorage.setItem('user', email.toLowerCase()); // Save email as lowercase
         localStorage.setItem('role', role);
 
         navigateToDashboard(role);

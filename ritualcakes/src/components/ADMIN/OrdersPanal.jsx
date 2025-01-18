@@ -62,7 +62,8 @@ const OrdersPanel = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
 
-      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, {
+      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, 
+      {
         headers: { Authorization: `Bearer ${token}` },
       });
 

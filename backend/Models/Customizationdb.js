@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 const customizationSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { 
+    type: String, 
+    required: true,
+    set: (email) => email.toLowerCase() // Automatically convert to lowercase
+  },
   phone: { type: String },
   address: { type: String, required: true },
   size: { type: String, required: true },
