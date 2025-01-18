@@ -30,31 +30,24 @@ const StoreOrders = () => {
       if (!userEmail) throw new Error("User email not found.");
 
       const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`;
-      console.log("[DEBUG] API URL:", apiUrl);
 
       const response = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("[DEBUG] API Response:", response.data);
 
       const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
-      console.log("[DEBUG] Parsed Orders:", orders);
 
       const filteredOrders = orders.filter(
         (order) => order.userEmail === userEmail
       );
-      console.log("[DEBUG] Filtered Orders:", filteredOrders);
 
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-      console.log("[DEBUG] Sorted Orders:", sortedOrders);
 
       setAdminOrders(sortedOrders);
     } catch (err) {
-      console.error("[ERROR] Fetching Orders:", err.response || err);
-      setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }

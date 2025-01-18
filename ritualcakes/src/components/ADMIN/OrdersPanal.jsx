@@ -8,23 +8,31 @@ const OrdersPanel = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Validate Admin Access
+  const validateAdminAccess = () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    
+    // Check if token and role exist
+    if (!token) {
+      throw new Error("Token not found. Please log in again.");
+    }
+    if (role !== "admin") {
+      throw new Error("Unauthorized access. Admins only.");
+    }
+    return token; // Return token for API requests
+  };
+
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found. Please log in again.");
+      const token = validateAdminAccess(); // Validate role and token
 
-      // Call the API to fetch all orders (for admin)
       const response = await axios.get("https://ritual-cakes-new-ogk5.vercel.app/api/orders", {
-        headers: { Authorization: `Bearer ${token}` }, // Send token in the request header
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      // You can filter out admin orders if needed here
-      const filteredOrders = response.data.filter(
-        (order) => order.userEmail !== "ritualcake.admin@gmail.com"
-      );
-
-      setOrders(filteredOrders);
+      setOrders(response.data); // Set all orders for admins
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
@@ -35,8 +43,7 @@ const OrdersPanel = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found. Please log in again.");
+      const token = validateAdminAccess(); // Validate role and token
 
       await axios.put(
         `https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}/status`,
@@ -59,11 +66,9 @@ const OrdersPanel = () => {
   const deleteOrder = async (orderId) => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found. Please log in again.");
+      const token = validateAdminAccess(); // Validate role and token
 
-      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, 
-      {
+      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -102,7 +107,11 @@ const OrdersPanel = () => {
   const handleSearch = (event) => setSearchQuery(event.target.value);
 
   useEffect(() => {
-    fetchOrders();
+    try {
+      fetchOrders();
+    } catch (err) {
+      setError(err.message); // Catch any error during fetching
+    }
   }, []);
 
   const filteredOrders = orders.filter((order) =>

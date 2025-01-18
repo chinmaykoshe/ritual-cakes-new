@@ -11,9 +11,6 @@ const ensureAdmin = (req, res, next) => {
 };
 
 // Middleware to fetch orders based on userEmail
-
-
-
 const getUserOrders = async (req, res, next) => {
   try {
     const { userEmail } = req.params;
@@ -21,9 +18,7 @@ const getUserOrders = async (req, res, next) => {
       return res.status(400).json({ message: 'User email is required' });
     }
 
-    console.log('Fetching orders for user:', userEmail); // Log the email
     const orders = await OrderModel.find({ userEmail }).sort({ createdAt: -1 });
-    console.log('Orders found:', orders); // Log the found orders
     req.userOrders = orders;
     next();
   } catch (error) {
@@ -32,18 +27,12 @@ const getUserOrders = async (req, res, next) => {
   }
 };
 
-
 // Get all orders (Admin only)
-router.get('/orders', ensureAuthenticated, ensureAdmin , async (req, res) => {
+router.get('/orders', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
-    // Check if the user is an admin (based on req.user role or permissions)
-    if (!req.user.ensureAdmin) {
-      return res.status(403).json({ message: 'Access forbidden: Admins only' });
-    }
     const orders = await OrderModel.find().sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
-    console.error('Error fetching all orders:', error.message);
     res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
   }
 });
@@ -67,7 +56,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
     }
 
-    // Normalize userEmail (optional, for consistency)
+    // Normalize userEmail
     const userEmailNormalized = userEmail.toLowerCase();
 
     const newOrder = new OrderModel({
@@ -86,7 +75,6 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     await newOrder.save();
     res.status(201).json({ message: 'Order placed successfully!', order: newOrder });
   } catch (error) {
-    console.error('Error creating order:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
@@ -128,7 +116,6 @@ router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) =>
 
     res.status(200).json({ message: 'Tracking info updated', order: updatedOrder });
   } catch (error) {
-    console.error('Error updating tracking info:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
@@ -138,11 +125,6 @@ router.delete('/orders/:orderID', ensureAuthenticated, ensureAdmin, async (req, 
   try {
     const { orderID } = req.params;
 
-    // Only allow deletion if the user is an admin
-    if (!req.user.ensureAdmin) {
-      return res.status(403).json({ message: 'Access forbidden: Admins only' });
-    }
-
     const deletedOrder = await OrderModel.findByIdAndDelete(orderID);
 
     if (!deletedOrder) {
@@ -151,7 +133,6 @@ router.delete('/orders/:orderID', ensureAuthenticated, ensureAdmin, async (req, 
 
     res.status(200).json({ message: 'Order deleted successfully', orderID });
   } catch (error) {
-    console.error('Error deleting order:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
@@ -179,7 +160,6 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
 
     res.status(200).json({ message: 'Order status updated successfully', order: updatedOrder });
   } catch (error) {
-    console.error('Error updating order status:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
