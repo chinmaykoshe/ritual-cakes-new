@@ -2,13 +2,6 @@ const router = require('express').Router();
 const UserModel = require('../Models/User');
 const ensureAuthenticated = require('./Middlewares/auth'); // Assuming auth middleware is set up
 
-// Middleware to check if the user is an admin
-const ensureAdmin = (req, res, next) => {
-  if (!req.user.roles || !req.user.roles.includes('admin')) {
-    return res.status(403).json({ message: 'Access forbidden: Admins only' });
-  }
-  next();
-};
 
 // Route to fetch user data (Authenticated user can fetch their own data)
 router.get('/user', ensureAuthenticated, async (req, res) => {
@@ -24,7 +17,7 @@ router.get('/user', ensureAuthenticated, async (req, res) => {
 });
 
 // Route to fetch all users (Admin only)
-router.get('/users', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.get('/users', ensureAuthenticated, async (req, res) => {
   try {
     const users = await UserModel.find(); // Fetch all users
     res.json(users); // Return the users as a JSON array
@@ -35,7 +28,7 @@ router.get('/users', ensureAuthenticated, ensureAdmin, async (req, res) => {
 });
 
 // Route to delete a user by ID (Admin only)
-router.delete('/users/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.delete('/users/:id', ensureAuthenticated, async (req, res) => {
   const userId = req.params.id;
 
   try {

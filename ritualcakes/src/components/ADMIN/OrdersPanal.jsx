@@ -1,199 +1,146 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment";
 
-const OrdersPanel = () => {
-  const [orders, setOrders] = useState([]);
+function Dashboard() {
+  const [mostSoldToday, setMostSoldToday] = useState("");
+  const [bestSoldAllTime, setBestSoldAllTime] = useState("");
+  const [totalCollectionToday, setTotalCollectionToday] = useState(0);
+  const [totalOrdersToday, setTotalOrdersToday] = useState(0);
+  const [totalOrdersAllTime, setTotalOrdersAllTime] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Validate Admin Access
+  // Get today's date in YYYY-MM-DD format for comparison
+  const todayDate = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
   const validateAdminAccess = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-    
-    // Check if token and role exist
+    console.log('Token:', token);
+    console.log('Role:', role);
+  
     if (!token) {
       throw new Error("Token not found. Please log in again.");
     }
+  
     if (role !== "admin") {
-      throw new Error("Unauthorized access. Admins only.");
+      throw new Error("Access restricted. Only admins can view this data.");
     }
-    return token; // Return token for API requests
+  
+    return token; // Return the token if validated
   };
+  
 
-  const fetchOrders = async () => {
-    setLoading(true);
+  // Fetch data from API
+  const fetchDashboardData = async () => {
     try {
       const token = validateAdminAccess(); // Validate role and token
 
-      const response = await axios.get("https://ritual-cakes-new-ogk5.vercel.app/api/orders", {
+      // API URL logic
+      const apiUrl =
+        process.env.NODE_ENV === "production"
+          ? "https://ritual-cakes-new-ogk5.vercel.app/api/orders/all"
+          : "http://localhost:8084/api/orders/all";
+
+      // Fetch all orders (no date filter needed here)
+      const allOrdersResponse = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setOrders(response.data); // Set all orders for admins
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to fetch orders");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateOrderStatus = async (orderId, newStatus) => {
-    setLoading(true);
-    try {
-      const token = validateAdminAccess(); // Validate role and token
-
-      await axios.put(
-        `https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}/status`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
+      // Filter today's orders by createdAt
+      const todayOrders = allOrdersResponse.data.filter(
+        (order) => new Date(order.createdAt).toLocaleDateString("en-CA") === todayDate
       );
 
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to update order status");
+      // Process Today's Data
+      const todayCollection = todayOrders.reduce((total, order) => total + order.totalAmount, 0);
+      const mostSoldToday = getMostSoldCake(todayOrders);
+
+      setMostSoldToday(mostSoldToday);
+      setTotalCollectionToday(todayCollection);
+      setTotalOrdersToday(todayOrders.length);
+
+      // Process All-time Data
+      const allOrders = allOrdersResponse.data;
+      const bestSoldAllTime = getMostSoldCake(allOrders);
+      setBestSoldAllTime(bestSoldAllTime);
+      setTotalOrdersAllTime(allOrders.length);
+    } catch (error) {
+      console.error("Error fetching dashboard data", error);
+      setError(error.message || "Failed to fetch dashboard data.");
     } finally {
       setLoading(false);
     }
   };
-
-  const deleteOrder = async (orderId) => {
-    setLoading(true);
-    try {
-      const token = validateAdminAccess(); // Validate role and token
-
-      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to delete order");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exportToCSV = () => {
-    const headers = ["Order ID", "Customer Email", "Order Date", "Total Amount", "Status"];
-    const rows = orders.map((order) => [
-      order._id,
-      order.userEmail,
-      new Date(order.orderDate).toLocaleDateString(),
-      `₹${order.totalAmount}`,
-      order.status,
-    ]);
-
-    const csvContent = [headers, ...rows]
-      .map((row) => row.map((item) => `"${item}"`).join(","))
-      .join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `orders_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleSearch = (event) => setSearchQuery(event.target.value);
 
   useEffect(() => {
-    try {
-      fetchOrders();
-    } catch (err) {
-      setError(err.message); // Catch any error during fetching
-    }
+    fetchDashboardData(); // Call function to fetch data on component mount
   }, []);
 
-  const filteredOrders = orders.filter((order) =>
-    [order.userEmail, order._id, order.deliveryAddress]
-      .some((field) => field?.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // Function to calculate the most sold cake from the orders
+  const getMostSoldCake = (orders) => {
+    const cakeCount = {};
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        cakeCount[item.name] = (cakeCount[item.name] || 0) + item.quantity;
+      });
+    });
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+    let mostSold = "";
+    let maxCount = 0;
+    for (const cake in cakeCount) {
+      if (cakeCount[cake] > maxCount) {
+        maxCount = cakeCount[cake];
+        mostSold = cake;
+      }
+    }
+    return mostSold || "N/A"; // Return 'N/A' if no cakes are sold
+  };
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Orders Panel</h2>
-      <div className="flex mb-4">
-        <input
-          type="text"
-          className="border border-gray-400 rounded px-2 py-1 mr-4"
-          placeholder="Search by Order ID, Email, or Address"
-          value={searchQuery}
-          onChange={handleSearch}
-        />
-        <button
-          onClick={exportToCSV}
-          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-        >
-          Export to CSV
-        </button>
-      </div>
+    <div className="p-8 bg-white h-full">
+      <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
+      <p className="text-neutral-500 mt-2">Welcome to the admin dashboard!</p>
 
-      {filteredOrders.length === 0 ? (
-        <div className="text-center text-lg font-semibold mb-4">No orders yet</div>
+      {loading ? (
+        <div className="text-center mt-8">
+          <p>Loading...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center mt-8 text-red-500">
+          <p>{error}</p>
+        </div>
       ) : (
-        <table className="table-auto w-full border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-4 py-2">Order ID</th>
-              <th className="border border-gray-300 px-4 py-2">Customer Email</th>
-              <th className="border border-gray-300 px-4 py-2">Order Date</th>
-              <th className="border border-gray-300 px-4 py-2">Total</th>
-              <th className="border border-gray-300 px-4 py-2">Status</th>
-              <th className="border border-gray-300 px-4 py-2">Actions</th>
-              <th className="border border-gray-300 px-4 py-2">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order) => (
-              <tr key={order._id}>
-                <td className="border border-gray-300 px-4 py-2">{order._id}</td>
-                <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">₹{order.totalAmount}</td>
-                <td className="border border-gray-300 px-4 py-2">{order.status}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <select
-                    className="border border-gray-400 rounded px-2 py-1"
-                    value={order.status}
-                    onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => deleteOrder(order._id)}
-                    className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
+          {/* Most Sold Cake Today */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Most Sold Cake Today</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">{mostSoldToday}</p>
+          </div>
+
+          {/* Best Sold Cake All Time */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Best Sold Cake All Time</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">{bestSoldAllTime}</p>
+          </div>
+
+          {/* Total Collection Today */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Total Collection Today</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">${totalCollectionToday.toFixed(2)}</p>
+          </div>
+
+          {/* Total Orders Today and All Time */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Orders</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">
+              Today: {totalOrdersToday} <br />
+              All Time: {totalOrdersAllTime}
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );
-};
+}
 
-export default OrdersPanel;
+export default Dashboard;

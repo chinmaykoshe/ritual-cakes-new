@@ -3,12 +3,6 @@ const router = express.Router();
 const OrderModel = require('../Models/Order');
 const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 
-const ensureAdmin = (req, res, next) => {
-  if (!req.user.roles || !req.user.roles.includes('admin')) {
-    return res.status(403).json({ message: 'Access forbidden: Admins only' });
-  }
-  next();
-};
 
 // Middleware to fetch orders based on userEmail
 const getUserOrders = async (req, res, next) => {
@@ -28,7 +22,7 @@ const getUserOrders = async (req, res, next) => {
 };
 
 // Get all orders (Admin only)
-router.get('/orders', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.get('/orders', ensureAuthenticated, async (req, res) => {
   try {
     const orders = await OrderModel.find().sort({ createdAt: -1 });
     res.status(200).json(orders);
@@ -121,7 +115,7 @@ router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) =>
 });
 
 // Delete an order by ID (Admin only)
-router.delete('/orders/:orderID', ensureAuthenticated, ensureAdmin, async (req, res) => {
+router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
   try {
     const { orderID } = req.params;
 

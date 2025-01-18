@@ -7,9 +7,18 @@ function Dashboard() {
   const [totalCollectionToday, setTotalCollectionToday] = useState(0);
   const [totalOrdersToday, setTotalOrdersToday] = useState(0);
   const [totalOrdersAllTime, setTotalOrdersAllTime] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [role, setRole] = useState(''); // state for storing user role
 
   // Get today's date in YYYY-MM-DD format for comparison
   const todayDate = new Date().toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+
+  // Retrieve role from localStorage
+  const getRoleFromLocalStorage = () => {
+    const role = localStorage.getItem('role'); // Assuming the role is stored as 'role' in localStorage
+    setRole(role);
+  };
 
   // Fetch data from API
   const fetchDashboardData = async () => {
@@ -17,8 +26,21 @@ function Dashboard() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Token not found. Please log in again.');
 
+      // If role is not admin, restrict access to this panel
+      if (role !== 'admin') {
+        setError('Access restricted. Only admins can view this data.');
+        setLoading(false);
+        return;
+      }
+
+      // API URL logic (remains as is)
+      const apiUrl =
+        process.env.NODE_ENV === 'production'
+          ? 'https://ritual-cakes-new-ogk5.vercel.app/api/orders/all'
+          : 'http://localhost:8084/api/orders/all';
+
       // Fetch all orders (no date filter needed here)
-      const allOrdersResponse = await axios.get('https://ritual-cakes--alpha.vercel.app/api/orders/all', {
+      const allOrdersResponse = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -40,15 +62,23 @@ function Dashboard() {
       const bestSoldAllTime = getMostSoldCake(allOrders);
       setBestSoldAllTime(bestSoldAllTime);
       setTotalOrdersAllTime(allOrders.length);
-
     } catch (error) {
       console.error('Error fetching dashboard data', error);
+      setError('Failed to fetch dashboard data.');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    getRoleFromLocalStorage(); // Get role from localStorage
+  }, []); // Run once when component mounts
+
+  useEffect(() => {
+    if (role === 'admin') {
+      fetchDashboardData(); // Fetch dashboard data only if role is admin
+    }
+  }, [role]); // Only fetch data when the role is set
 
   // Function to calculate the most sold cake from the orders
   const getMostSoldCake = (orders) => {
@@ -67,42 +97,52 @@ function Dashboard() {
         mostSold = cake;
       }
     }
-    return mostSold;
+    return mostSold || 'N/A'; // Return 'N/A' if no cakes are sold
   };
 
   return (
     <div className="p-8 bg-white h-full">
       <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
       <p className="text-neutral-500 mt-2">Welcome to the admin dashboard!</p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
-        {/* Most Sold Cake Today */}
-        <div className="bg-neutral-100 rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold text-neutral-700">Most Sold Cake Today</h2>
-          <p className="text-2xl font-bold text-neutral-900 mt-4">{mostSoldToday || 'N/A'}</p>
-        </div>
 
-        {/* Best Sold Cake All Time */}
-        <div className="bg-neutral-100 rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold text-neutral-700">Best Sold Cake All Time</h2>
-          <p className="text-2xl font-bold text-neutral-900 mt-4">{bestSoldAllTime || 'N/A'}</p>
+      {loading ? (
+        <div className="text-center mt-8">
+          <p>Loading...</p>
         </div>
+      ) : error ? (
+        <div className="text-center mt-8 text-red-500">
+          <p>{error}</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
+          {/* Most Sold Cake Today */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Most Sold Cake Today</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">{mostSoldToday}</p>
+          </div>
 
-        {/* Total Collection Today */}
-        <div className="bg-neutral-100 rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold text-neutral-700">Total Collection Today</h2>
-          <p className="text-2xl font-bold text-neutral-900 mt-4">${totalCollectionToday.toFixed(2)}</p>
-        </div>
+          {/* Best Sold Cake All Time */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Best Sold Cake All Time</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">{bestSoldAllTime}</p>
+          </div>
 
-        {/* Total Orders Today and All Time */}
-        <div className="bg-neutral-100 rounded-lg p-6 shadow">
-          <h2 className="text-xl font-semibold text-neutral-700">Orders</h2>
-          <p className="text-2xl font-bold text-neutral-900 mt-4">
-            Today: {totalOrdersToday} <br />
-            All Time: {totalOrdersAllTime}
-          </p>
+          {/* Total Collection Today */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Total Collection Today</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">${totalCollectionToday.toFixed(2)}</p>
+          </div>
+
+          {/* Total Orders Today and All Time */}
+          <div className="bg-neutral-100 rounded-lg p-6 shadow">
+            <h2 className="text-xl font-semibold text-neutral-700">Orders</h2>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">
+              Today: {totalOrdersToday} <br />
+              All Time: {totalOrdersAllTime}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
