@@ -18,6 +18,7 @@ body{
   color: #000000; /* text color */
 }
 
+
 /* Custom button styles */
 .custom-btn {
   position: relative;
@@ -26,19 +27,22 @@ body{
   border: none;
 }
 
+/* Button with updated gradient using darkcustombg and darkcustombg2 */
 .btn-11 {
-  background: rgb(251,33,117);
-  background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+  background: rgb(255, 228, 208); /* darkcustombg */
+  background: linear-gradient(0deg, rgba(255, 228, 208, 1) 0%, rgba(255, 192, 143, 1) 100%); /* Gradient from darkcustombg to darkcustombg2 */
   color: #fff;
   overflow: hidden;
 }
 
+/* Hover effect */
 .btn-11:hover {
   text-decoration: none;
   color: #fff;
   opacity: 0.7;
 }
 
+/* Before pseudo-element for animation */
 .btn-11:before {
   position: absolute;
   content: '';
@@ -51,17 +55,18 @@ body{
   animation: shiny-btn1 3s ease-in-out infinite;
 }
 
+/* Active state with box-shadow */
 .btn-11:active {
-  box-shadow: 4px 4px 6px 0 rgba(255,255,255,.3),
+  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .3),
               -4px -4px 6px 0 rgba(116, 125, 136, .2), 
-              inset -4px -4px 6px 0 rgba(255,255,255,.2),
+              inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
               inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
 
+/* Keyframe animation for the shiny effect */
 @keyframes shiny-btn1 {
   0% { transform: scale(0) rotate(45deg); opacity: 0; }
   80% { transform: scale(0) rotate(45deg); opacity: 0.5; }
   81% { transform: scale(4) rotate(45deg); opacity: 1; }
   100% { transform: scale(50) rotate(45deg); opacity: 0; }
 }
-
