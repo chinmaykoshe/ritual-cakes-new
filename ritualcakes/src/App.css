@@ -62,7 +62,7 @@ body{
   width: 30px;
   height: 100%;
   background-color: #fff;
-  animation: shiny-btn1 2s ease-in-out infinite; /* Adjusted animation to glow effect */
+  animation: shiny-btn1 3s ease-in-out infinite; /* Adjusted animation to glow effect */
 }
 
 /* Active state with box-shadow */
