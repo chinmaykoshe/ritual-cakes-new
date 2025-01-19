@@ -1,43 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Dashboard() {
-  const [mostSoldToday, setMostSoldToday] = useState('');
-  const [bestSoldAllTime, setBestSoldAllTime] = useState('');
+  const [mostSoldToday, setMostSoldToday] = useState("");
+  const [bestSoldAllTime, setBestSoldAllTime] = useState("");
   const [totalCollectionToday, setTotalCollectionToday] = useState(0);
   const [totalOrdersToday, setTotalOrdersToday] = useState(0);
   const [totalOrdersAllTime, setTotalOrdersAllTime] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [role, setRole] = useState(''); // state for storing user role
 
   // Get today's date in YYYY-MM-DD format for comparison
-  const todayDate = new Date().toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
-
-  // Retrieve role from localStorage
-  const getRoleFromLocalStorage = () => {
-    const role = localStorage.getItem('role'); // Assuming the role is stored as 'role' in localStorage
-    setRole(role);
+  const todayDate = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
+  const validateAdminAccess = () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    console.log('Token:', token);
+    console.log('Role:', role);
+  
+    if (!token) {
+      throw new Error("Token not found. Please log in again.");
+    }
+  
+    if (role !== "admin") {
+      throw new Error("Access restricted. Only admins can view this data.");
+    }
+  
+    return token; // Return the token if validated
   };
+  
 
   // Fetch data from API
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('Token not found. Please log in again.');
+      const token = validateAdminAccess(); // Validate role and token
 
-      // If role is not admin, restrict access to this panel
-      if (role !== 'admin') {
-        setError('Access restricted. Only admins can view this data.');
-        setLoading(false);
-        return;
-      }
-
-      // API URL logic (remains as is)
+      // API URL logic
       const apiUrl =
-        process.env.NODE_ENV === 'production'
-          ? 'https://ritual-cakes-new-ogk5.vercel.app/api/orders/all'
-          : 'http://localhost:8084/api/orders/all';
+        process.env.NODE_ENV === "production"
+          ? "https://ritual-cakes-new-ogk5.vercel.app/api/orders"
+          : "http://localhost:8084/api/orders";
 
       // Fetch all orders (no date filter needed here)
       const allOrdersResponse = await axios.get(apiUrl, {
@@ -45,8 +47,8 @@ function Dashboard() {
       });
 
       // Filter today's orders by createdAt
-      const todayOrders = allOrdersResponse.data.filter((order) =>
-        new Date(order.createdAt).toLocaleDateString('en-CA') === todayDate
+      const todayOrders = allOrdersResponse.data.filter(
+        (order) => new Date(order.createdAt).toLocaleDateString("en-CA") === todayDate
       );
 
       // Process Today's Data
@@ -63,22 +65,16 @@ function Dashboard() {
       setBestSoldAllTime(bestSoldAllTime);
       setTotalOrdersAllTime(allOrders.length);
     } catch (error) {
-      console.error('Error fetching dashboard data', error);
-      setError('Failed to fetch dashboard data.');
+      console.error("Error fetching dashboard data", error);
+      setError(error.message || "Failed to fetch dashboard data.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getRoleFromLocalStorage(); // Get role from localStorage
-  }, []); // Run once when component mounts
-
-  useEffect(() => {
-    if (role === 'admin') {
-      fetchDashboardData(); // Fetch dashboard data only if role is admin
-    }
-  }, [role]); // Only fetch data when the role is set
+    fetchDashboardData(); // Call function to fetch data on component mount
+  }, []);
 
   // Function to calculate the most sold cake from the orders
   const getMostSoldCake = (orders) => {
@@ -89,7 +85,7 @@ function Dashboard() {
       });
     });
 
-    let mostSold = '';
+    let mostSold = "";
     let maxCount = 0;
     for (const cake in cakeCount) {
       if (cakeCount[cake] > maxCount) {
@@ -97,7 +93,7 @@ function Dashboard() {
         mostSold = cake;
       }
     }
-    return mostSold || 'N/A'; // Return 'N/A' if no cakes are sold
+    return mostSold || "N/A"; // Return 'N/A' if no cakes are sold
   };
 
   return (

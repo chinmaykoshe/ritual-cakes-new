@@ -23,7 +23,7 @@ function Login() {
 
   const navigateToDashboard = (role) => {
     if (role === 'admin') {
-      navigate('/admin');
+      navigate('/admin/dashboards');
     } else {
       navigate('/home');
     }
