@@ -4,8 +4,9 @@ import { NavLink } from 'react-router-dom';
 import Card from './Card';
 import DesignCard from './DesignCard';
 import { designnames } from '../designs/designassets';
+import { motion } from 'framer-motion'; // Import framer-motion
+import { useInView } from 'react-intersection-observer'; // Import react-intersection-observer
 import '../App.css'; // Import the custom CSS file
-
 
 // Get the design keys (in this case design1, design2, etc.)
 const designKeys = Object.keys(designnames);
@@ -29,7 +30,6 @@ function Home() {
     getRandomDesigns();
   }, [designnames]); // Re-run the effect if `designnames` changes
 
-
   const reviews = [
     { id: 1, name: 'Alice', text: 'Amazing cakes! Highly recommend.' },
     { id: 2, name: 'Bob', text: 'Fresh and delicious, every single time.' },
@@ -39,98 +39,174 @@ function Home() {
   return (
     <>
       {/* Hero Section */}
-      <div className="py-8 px-4 overflow-hidden">
+      <motion.div 
+        className="py-8 px-4 overflow-hidden"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.3 }}
+      >
         <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="flex-1 lg:ml-16 md:mb-8">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold font-montserrat text-brown">
+            <motion.h1 
+              className="text-4xl md:text-5xl lg:text-7xl font-bold font-montserrat text-brown"
+              initial={{ x: -100 }} 
+              animate={{ x: 0 }} 
+              transition={{ duration: 0.3 }}
+            >
               From Our Oven to Your Heart.
-            </h1>
-            <p className="text-m lg:text-2xl mt-4 text-gray-500 italic font-montserrat">
+            </motion.h1>
+            <motion.p 
+              className="text-m lg:text-2xl mt-4 text-gray-500 italic font-montserrat"
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 0.5, duration: 0.3 }}
+            >
               We are a company dedicated to the preparation of cakes, providing our customers with a product always fresh from the oven.
-            </p>
+            </motion.p>
             <NavLink to="/cakes">
-  <button className="custom-btn btn-11 w-full lg:w-[500px] mt-6 px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50">
-    <span>DISCOVER MENU</span>
-    <span className="text-xl">→</span>
-  </button>
-</NavLink>
-
+              <motion.button 
+                className="custom-btn btn-11 w-full lg:w-[500px] mt-6 px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50"
+                whileHover={{ scale: 1 }} 
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <span>DISCOVER MENU</span>
+                <span className="text-xl">→</span>
+              </motion.button>
+            </NavLink>
           </div>
           <NavLink to="/cakes">
-            <div className="flex-1 flex justify-center mt-8 md:mt-0">
+            <motion.div 
+              className="flex-1 flex justify-center mt-8 md:mt-0"
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 1, duration: 0.3 }}
+            >
               <img
                 src={assets.blueberryCheesecake}
                 alt="Chocolate Cake"
                 className="w-full max-w-[500px] object-cover rounded-xl shadow-md ml-5 md:ml-20 mr-5 md:mr-20"
               />
-            </div>
+            </motion.div>
           </NavLink>
         </div>
-      </div>
+      </motion.div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
 
       {/* Specials Section */}
-      <div className="signature-section py-8 lg:mx-24 mx-4">
+      <motion.div 
+        className="signature-section py-8 lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 1.5, duration: 0.3 }}
+      >
         <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-brown">Our Specials</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card orderID="rituals5" />
-          <Card orderID="rituals6" />
-          <Card orderID="rituals1" />
-          <Card orderID="rituals10" />
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ delay: 2, duration: 0.3 }}
+          >
+            <Card orderID="rituals5" />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ delay: 2.2, duration: 0.3 }}
+          >
+            <Card orderID="rituals6" />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ delay: 2.4, duration: 0.3 }}
+          >
+            <Card orderID="rituals1" />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ delay: 2.6, duration: 0.3 }}
+          >
+            <Card orderID="rituals10" />
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
 
       {/* Categories Section */}
-      <div className="signature-section py-8 lg:mx-24 mx-4">
+      <motion.div 
+        className="signature-section py-8 lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 3, duration: 0.3 }}
+      >
         <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-brown">Explore Our Categories</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {randomDesigns.length > 0 ? (
             randomDesigns.map((designKey) => (
-              <DesignCard
-                key={designKey}
-                designnames={designnames}  // Pass the design data
-                designKey={designKey}      // Pass the individual design key
-              />
+              <motion.div 
+                key={designKey} 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ delay: 3.2, duration: 0.3 }}
+              >
+                <DesignCard
+                  designnames={designnames}  // Pass the design data
+                  designKey={designKey}      // Pass the individual design key
+                />
+              </motion.div>
             ))
           ) : (
             <div>No designs available</div>
           )}
         </div>
-      </div>
+      </motion.div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
-{/* Customer Reviews Section */}
-<div className="py-8 px-4 lg:mx-24 mx-4">
-  <h2 className="text-2xl font-bold mb-6 text-center text-brown">What Our Customers Say</h2>
 
-  <div className="flex flex-col md:flex-row justify-center gap-6">
-    {reviews.map((review) => (
-      <div
-        key={review.id}
-        className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative"
+      {/* Customer Reviews Section */}
+      <motion.div 
+        className="py-8 px-4 lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 3.5, duration: 0.3 }}
       >
-        <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
-          &ldquo;
+        <h2 className="text-2xl font-bold mb-6 text-center text-brown">What Our Customers Say</h2>
+        <div className="flex flex-col md:flex-row justify-center gap-6">
+          {reviews.map((review) => (
+            <motion.div 
+              key={review.id}
+              className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative"
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 3.8, duration: 0.3 }}
+            >
+              <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
+                &ldquo;
+              </div>
+              <div className="flex items-center my-4">
+                <span className="md:text-xl text-lg font-semibold text-brown">{review.name}</span>
+                <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
+              </div>
+              <p className="text-gray-700 md:text-lg text-sm italic">
+                "{review.text}"
+              </p>
+            </motion.div>
+          ))}
         </div>
-        <div className="flex items-center my-4">
-          <span className="md:text-xl text-lg font-semibold text-brown">{review.name}</span>
-          <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
-        </div>
-        <p className="text-gray-700 md:text-lg text-sm italic">
-          "{review.text}"
-        </p>
-      </div>
-    ))}
-  </div>
-</div>
+      </motion.div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
 
       {/* Baking Process Section */}
-      <div className="py-8 px-4 lg:mx-24 mx-4">
+      <motion.div 
+        className="py-8 px-4 lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 4, duration: 0.3 }}
+      >
         <h2 className="text-4xl font-bold text-center text-brown">How We Bake</h2>
         <div className="flex flex-col md:flex-row justify-between items-center mt-8">
           <img
@@ -142,29 +218,42 @@ function Home() {
             Our cakes are made using fresh ingredients, precision, and love. From selecting the finest ingredients to delivering perfectly baked cakes, we ensure every step is done with perfection.
           </p>
         </div>
-      </div>
-
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
-{/* Subscription Section */}
-<div className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4">
-  <h2 className="text-3xl font-bold mb-6">Ready to Order Your Favorite Cake?</h2>
-  <p className="text-lg">
-    Sign up now to customize and order your delicious cake online with just a few clicks!
-  </p>
-  <button
-    type="button"
-    className="ml-4 px-6 py-2 bg-brown text-white rounded-lg mt-6"
-    onClick={() => window.location = '/signup'}
-  >
-    Sign Up to Order Now!
-  </button>
-</div>
+      </motion.div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
 
+      {/* Subscription Section */}
+      <motion.div 
+        className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 4.5, duration: 0.3 }}
+      >
+        <h2 className="text-3xl font-bold mb-6">Ready to Order Your Favorite Cake?</h2>
+        <p className="text-lg">
+          Sign up now to customize and order your delicious cake online with just a few clicks!
+        </p>
+        <motion.button
+  type="button"
+  className="custom-btn btn-11 w-full lg:w-[500px] mt-6 px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50"
+  onClick={() => window.location = '/signup'}
+  whileHover={{ scale: 1 }} 
+  transition={{ type: 'spring', stiffness: 300 }}
+>
+  <span>Sign Up to Order Now!</span>
+  <span className="text-xl">→</span>
+</motion.button>
+      </motion.div>
+
+      <hr className="border-2 border-brown mx-4 md:mx-20" />
 
       {/* Google Maps Section */}
-      <div className="py-8 px-4 lg:mx-24 mx-4 ">
+      <motion.div 
+        className="py-8 px-4 lg:mx-24 mx-4"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ delay: 3, duration: 0.3 }}
+      >
         <h2 className="text-4xl font-bold text-center text-brown">Find Us Here</h2>
         <p className="text-lg text-center mt-4 text-gray-600">
           Visit us at our location for a closer look at our delicious cakes!
@@ -179,7 +268,7 @@ function Home() {
             loading="lazy"
           ></iframe>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }

@@ -27,12 +27,22 @@ body{
   border: none;
 }
 
-/* Button with updated gradient using darkcustombg and darkcustombg2 */
+
+/* 11 */
 .btn-11 {
+  position: relative;
+  border: none;
+  
   background: rgb(255, 228, 208); /* darkcustombg */
-  background: linear-gradient(0deg, rgba(255, 228, 208, 1) 0%, rgba(255, 192, 143, 1) 100%); /* Gradient from darkcustombg to darkcustombg2 */
+  background: linear-gradient(0deg, rgb(255, 146, 62) 0%, rgba(255, 192, 143, 1) 100%); /* Gradient from darkcustombg to darkcustombg2 */
+  
   color: #fff;
   overflow: hidden;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
 }
 
 /* Hover effect */
@@ -42,7 +52,7 @@ body{
   opacity: 0.7;
 }
 
-/* Before pseudo-element for animation */
+/* Before pseudo-element for the glowing animation */
 .btn-11:before {
   position: absolute;
   content: '';
@@ -52,7 +62,7 @@ body{
   width: 30px;
   height: 100%;
   background-color: #fff;
-  animation: shiny-btn1 3s ease-in-out infinite;
+  animation: shiny-btn1 2s ease-in-out infinite; /* Adjusted animation to glow effect */
 }
 
 /* Active state with box-shadow */
@@ -63,10 +73,59 @@ body{
               inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
 
-/* Keyframe animation for the shiny effect */
+/* Animation for glowing effect */
 @keyframes shiny-btn1 {
-  0% { transform: scale(0) rotate(45deg); opacity: 0; }
-  80% { transform: scale(0) rotate(45deg); opacity: 0.5; }
-  81% { transform: scale(4) rotate(45deg); opacity: 1; }
-  100% { transform: scale(50) rotate(45deg); opacity: 0; }
+  0% {
+    transform: scale(0) rotate(45deg);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(0) rotate(45deg);
+    opacity: 0.5;
+  }
+  81% {
+    transform: scale(4) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(50) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+.card-container {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card-container.visible {
+  opacity: 1;
 }
