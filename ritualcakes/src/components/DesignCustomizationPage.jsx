@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate , useParams } from "react-router-dom";
 import { useCustomization } from "../context/customizeContext";  // Using your context
 import { designnames } from "../designs/designassets"; // Assuming you have some predefined designs
 
@@ -217,7 +217,7 @@ const DesignCustomizationPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-darkcustombg text-white py-2 rounded-lg focus:outline-none hover:bg-darkcustombg-light"
+              className="w-full bg-darkcustombg2 text-white py-2 rounded-lg focus:outline-none hover:bg-darkcustombg-light"
               disabled={!isLoggedIn || loading}
             >
               {loading ? 'Submitting...' : 'Submit Customization'}

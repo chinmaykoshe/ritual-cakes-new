@@ -59,7 +59,7 @@ function Navbar() {
               <i className="fa-solid fa-magnifying-glass md:text-2xl text-lg"></i>
             </button>
 
-            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); }}}>
+            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); window.location.reload(); }}}>
               <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
             </button>
 

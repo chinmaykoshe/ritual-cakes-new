@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 function Login() {
   
   const navigate = useNavigate();
@@ -32,8 +31,6 @@ function Login() {
     window.location.reload();
   };
 
-
-  
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -57,7 +54,7 @@ function Login() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to sign in');
+            throw new Error(errorData.error || 'Incorrect credentials !');
         }
 
         const { token, email, role } = await response.json();
@@ -75,9 +72,6 @@ function Login() {
         setLoading(false);
     }
 };
-
-
-
 
   return (
     <div className="flex justify-center items-center min-h-screen ">

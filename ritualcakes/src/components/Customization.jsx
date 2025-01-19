@@ -246,7 +246,7 @@ function CustomizationForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-darkcustombg text-white px-6 py-3 rounded-lg font-semibold w-full disabled:opacity-50"
+          className="bg-darkcustombg2 text-white px-6 py-3 rounded-lg font-semibold w-full disabled:opacity-50"
           disabled={loading || !isLoggedIn} // Disable the button if not logged in or if loading
         >
           {loading ? "Submitting..." : "Submit Customization"}
