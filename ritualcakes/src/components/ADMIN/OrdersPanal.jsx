@@ -146,6 +146,7 @@ const OrdersPanel = () => {
               <th className="border border-gray-300 px-4 py-2">Order ID</th>
               <th className="border border-gray-300 px-4 py-2">Customer Email</th>
               <th className="border border-gray-300 px-4 py-2">Order Date</th>
+              <th className="border border-gray-300 px-4 py-2">Order Time</th>
               <th className="border border-gray-300 px-4 py-2">Total</th>
               <th className="border border-gray-300 px-4 py-2">Status</th>
               <th className="border border-gray-300 px-4 py-2">Actions</th>
@@ -159,7 +160,8 @@ const OrdersPanel = () => {
                 <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
                 <td className="border border-gray-300 px-4 py-2">
                   {new Date(order.orderDate).toLocaleDateString()}
-                </td>
+                  </td>
+                <td className="border border-gray-300 px-4 py-2">{order.orderTime}</td>
                 <td className="border border-gray-300 px-4 py-2">₹{order.totalAmount}</td>
                 <td className="border border-gray-300 px-4 py-2">{order.status}</td>
                 <td className="border border-gray-300 px-4 py-2">
