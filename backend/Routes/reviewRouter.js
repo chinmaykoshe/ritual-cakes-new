@@ -15,7 +15,7 @@ const validateReviewID = (reviewID) => mongoose.Types.ObjectId.isValid(reviewID)
 // -------------------------- USER ROUTES --------------------------
 
 // Backend route for fetching all reviews (public access)
-router.get("/", async (req, res) => {
+router.get("/reviews", async (req, res) => {
   try {
     const reviews = await Review.find().sort({ createdAt: -1 });
     res.status(200).json(reviews);
@@ -79,7 +79,7 @@ router.post("/reviews/:orderID", ensureAuthenticated, async (req, res) => {
 });
 
 // PUT a review (for editing, requires authentication)
-router.put("/:reviewID", ensureAuthenticated, async (req, res) => {
+router.put("/reviews/:reviewID", ensureAuthenticated, async (req, res) => {
   const { reviewID } = req.params;
   const { content } = req.body;
 
@@ -112,7 +112,7 @@ router.put("/:reviewID", ensureAuthenticated, async (req, res) => {
 // -------------------------- ADMIN ROUTES --------------------------
 
 // DELETE a review (by reviewID, requires authentication)
-router.delete("/:orderID/:reviewID", ensureAuthenticated, async (req, res) => {
+router.delete("/reviews/:orderID/:reviewID", ensureAuthenticated, async (req, res) => {
   const { orderID, reviewID } = req.params;
 
   if (!validateOrderID(orderID) || !validateReviewID(reviewID)) {

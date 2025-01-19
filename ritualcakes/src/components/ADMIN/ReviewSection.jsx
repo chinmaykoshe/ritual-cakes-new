@@ -14,7 +14,7 @@ const ReviewSection = () => {
   // Fetch reviews from the API
   const fetchReviews = async () => {
     try {
-      const response = await fetch("https://ritual-cakes-new-ogk5.vercel.app/api/");
+      const response = await fetch("https://ritual-cakes-new-ogk5.vercel.app/api/reviews");
       const data = await response.json();
       const groupedReviews = groupReviewsByProduct(data);
       setReviews(groupedReviews);
