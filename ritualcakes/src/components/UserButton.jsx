@@ -9,6 +9,7 @@ function UserButton() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token"); // Token stored in localStorage
+  const userEmail = localStorage.getItem("user"); // User email stored in localStorage
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,7 +33,7 @@ function UserButton() {
   }, [token]);
 
   // Null check for userData before formatting dob
-  const formattedDOB = userData ? new Date(userData.dob).toLocaleDateString('en-GB') : "";
+  const formattedDOB = userData ? new Date(userData.dob).toLocaleDateString("en-GB") : "";
 
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
@@ -80,11 +81,22 @@ function UserButton() {
             <div className="mt-6 text-center">
               <button
                 onClick={() => navigate("/orders")} // Redirect to orders page
-                className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:border-4"
+                className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:bg-brown"
               >
                 Check Your Orders Here
               </button>
             </div>
+            {/* Add 'Go to Admin Panel' button */}
+            {userEmail === "ritualcake.admin@gmail.com" && userData.role === "admin" && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => navigate("/admin/dashboards")} // Redirect to admin panel page
+                  className="bg-green-300 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+                >
+                  Go to Admin Panel
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <p className="text-center">No user information available.</p>
