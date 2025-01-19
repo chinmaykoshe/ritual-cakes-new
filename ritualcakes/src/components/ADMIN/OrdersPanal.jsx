@@ -27,7 +27,7 @@ const OrdersPanel = () => {
 
       // Filter out admin orders if needed
       const filteredOrders = response.data.filter(
-        (order) => order.userEmail !== "RITUALCAKE.ADMIN@gmail.com"
+        (order) => order.userEmail !== ""
       );
 
       setOrders(filteredOrders);
