@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import Card from './Card';
 import DesignCard from './DesignCard';
 import { designnames } from '../designs/designassets';
+import '../App.css'; // Import the custom CSS file
+
 
 // Get the design keys (in this case design1, design2, etc.)
 const designKeys = Object.keys(designnames);
@@ -47,11 +49,12 @@ function Home() {
               We are a company dedicated to the preparation of cakes, providing our customers with a product always fresh from the oven.
             </p>
             <NavLink to="/cakes">
-              <button className="w-full lg:w-[500px] mt-6  px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50">
-                <span>DISCOVER MENU</span>
-                <span className="text-xl">→</span>
-              </button>
-            </NavLink>
+  <button className="custom-btn btn-11 w-full lg:w-[500px] mt-6 px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50">
+    <span>DISCOVER MENU</span>
+    <span className="text-xl">→</span>
+  </button>
+</NavLink>
+
           </div>
           <NavLink to="/cakes">
             <div className="flex-1 flex justify-center mt-8 md:mt-0">

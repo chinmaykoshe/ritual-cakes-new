@@ -61,17 +61,19 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
-
   const deleteOrder = async (orderId) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this order?");
+    if (!isConfirmed) return; // If the user cancels, don't proceed with deletion
+  
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
-
+  
       await axios.delete(`${apiUrl}/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to delete order");
@@ -79,6 +81,7 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
+  
 
   const exportToCSV = () => {
     const headers = ["Order ID", "Customer Email", "Order Date", "Total Amount", "Status"];
