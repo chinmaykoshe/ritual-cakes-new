@@ -20,8 +20,6 @@ function Customers() {
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          // Debugging: Log the full response
-          console.log('API Response:', response.data);
 
           // Check the structure of the response
           if (Array.isArray(response.data)) {

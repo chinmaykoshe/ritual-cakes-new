@@ -15,8 +15,6 @@ function Dashboard() {
   const validateAdminAccess = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-    console.log('Token:', token);
-    console.log('Role:', role);
   
     if (!token) {
       throw new Error("Token not found. Please log in again.");

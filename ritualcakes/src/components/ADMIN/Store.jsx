@@ -43,8 +43,6 @@ function Store() {
         image: selectedCake.image || 'default_image_url',
       };
 
-      console.log('Order Item:', orderItem);
-
       const totalAmount = parseFloat(orderItem.price || 0);
       const deliveryAddress = '123 Main St';
       const paymentMethod = 'COD';
@@ -61,7 +59,6 @@ function Store() {
         orderTime: new Date().toLocaleTimeString(),
       };
 
-      console.log('Order Data:', orderData);
 
       // Retrieve the token from localStorage or wherever it is stored
       const token = localStorage.getItem("token");

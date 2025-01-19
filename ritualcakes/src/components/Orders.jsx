@@ -39,31 +39,6 @@ function Orders() {
     return "bg-gray-500";
   };
 
-  const handleDeleteOrder = async (orderId) => {
-    alert("Please call +91 8169296802 before deleting");
-    try {
-      await deleteOrder(orderId);
-    } catch (err) {
-      console.error("Failed to delete order:", err.message);
-      alert(
-        "Error deleting the order. Please try again. Ensure to call +91 8169296802 before deleting"
-      );
-    }
-  };
-
-  const handleDeleteCustomization = async (customizationId) => {
-    try {
-      await fetch(
-        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
-        { method: "DELETE" }
-      );
-      setCustomizations((prev) =>
-        prev.filter((customization) => customization._id !== customizationId)
-      );
-    } catch (err) {
-      console.error("Failed to delete customization:", err.message);
-    }
-  };
 
   // Show login prompt if user is not signed in
   if (!userEmail) {
@@ -132,12 +107,20 @@ function Orders() {
                     </div>
                     <div className="flex flex-col space-y-2 mt-4">
                       <div className="flex items-center space-x-2">
-                        <span
-                          className={`w-3 h-3 rounded-full ${getStatusColor(order.status)}`}
-                        ></span>
-                        <p className="text-sm text-gray-500">Status: {order.status}</p>
+                       
+                      <span className={`ml-2 px-2 py-1 rounded ${order.status === 'Delivered' ? 'bg-blue-200 text-blue-700' : order.status === 'Pending' ? 'bg-yellow-200 text-yellow-700' : 'bg-red-200 text-red-700'}`}>
+    {order.status}
+  </span>
                       </div>
                     </div>
+                    <div className="mt-4 flex justify-center">
+                        <button
+                          onClick={() => alert('Call +91 --------- to get help related to development')}
+                          className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+                        >
+                          Delete Order
+                        </button>
+                      </div>
                   </div>
                 ))}
               </div>
@@ -196,7 +179,7 @@ function Orders() {
 
                       <div className="mt-4 flex justify-center">
                         <button
-                          onClick={() => handleDeleteCustomization(customization._id)}
+                          onClick={() => alert('Call +91 --------- to get help related to development')}
                           className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
                         >
                           Delete Customization
