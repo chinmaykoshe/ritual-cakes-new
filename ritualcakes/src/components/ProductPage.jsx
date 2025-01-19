@@ -15,12 +15,10 @@ const ProductPage = () => {
   const [activeTab, setActiveTab] = useState("description");
   const [price, setPrice] = useState(0);
   const { addToCart } = useCart(); // Use addToCart function from context
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [errorMessage, setErrorMessage] = useState(""); // State for success message
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handleWishlistClick = () => {
-    setIsInWishlist(!isInWishlist);
-    // Optionally add logic to handle backend interaction or local storage
-  };
+
 
   useEffect(() => {
     for (const category of Object.values(elements)) {
@@ -71,7 +69,18 @@ const ProductPage = () => {
     return ["Square"];
   };
 
-  const handleAddToCart = () => {
+  
+
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem('token'); // Check for token
+  
+    if (!token) {
+      // If no token, inform the user to sign in
+      setErrorMessage("Please sign in to add items to your cart");
+      setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
+      return;
+    }
+  
     const productToAdd = {
       orderID: product.orderID,
       name: product.name,
@@ -81,11 +90,12 @@ const ProductPage = () => {
       price,
       img: product.img,
     };
-    const response = addToCart(productToAdd); // Simulating backend response
+  
+    const response = await addToCart(productToAdd); // Call the async function
     if (response) {
       setSuccessMessage("Product added successfully");
       setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
-    }    
+    }
   };
 
   if (!product) {
@@ -169,8 +179,9 @@ const ProductPage = () => {
 
 
           
+          {errorMessage && <p className="text-red-500 text-center p-2">{errorMessage}</p>}
+          {successMessage && <p className="text-darkcustombg2 text-center p-2">{successMessage}</p>}
 
-{successMessage && <p className="text-white text-center p-2">{successMessage}</p>}
 
           {/* Updated Add to Cart button */}
           <button

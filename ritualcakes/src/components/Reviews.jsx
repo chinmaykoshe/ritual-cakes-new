@@ -8,22 +8,18 @@ const Reviews = ({ orderID }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // To navigate to the login page
 
-  const isLoggedIn = localStorage.getItem("user");
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://ritual-cakes-new-ogk5.vercel.app/api/reviews"
+      : "http://localhost:8084/api/reviews";
 
-  // Fetch user email from localStorage on initial render
-  useEffect(() => {
-    // No need to set the email to state
-    const email = localStorage.getItem("user"); // Retrieve email from localStorage
-    if (email) {
-      // The email is already fetched but is not necessary to store in state.
-    }
-  }, []);
+  const isLoggedIn = localStorage.getItem("user");
 
   // Fetch reviews when orderID changes
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${orderID}`);
+        const response = await fetch(`${apiUrl}/${orderID}`);
         if (!response.ok) throw new Error("Failed to fetch reviews");
         const data = await response.json();
         setReviews(data);
@@ -36,7 +32,7 @@ const Reviews = ({ orderID }) => {
     if (orderID) {
       fetchReviews();
     }
-  }, [orderID]);
+  }, [orderID, apiUrl]);
 
   // Handle new review submission
   const handleSubmit = async (e) => {
@@ -58,15 +54,15 @@ const Reviews = ({ orderID }) => {
     }
 
     try {
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${orderID}`, {
-        method: 'POST',
+      const response = await fetch(`${apiUrl}/${orderID}`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           content: newReview,
-          authorName: authorName,  // Use the form-provided authorName here
+          authorName: authorName,
         }),
       });
 
@@ -77,9 +73,9 @@ const Reviews = ({ orderID }) => {
         return;
       }
 
-      setReviews((prevReviews) => [responseData, ...prevReviews]);  // Add the new review at the top
-      setNewReview("");  // Clear the textarea
-      setError(null);  // Reset any previous error
+      setReviews((prevReviews) => [responseData, ...prevReviews]); // Add the new review at the top
+      setNewReview(""); // Clear the textarea
+      setError(null); // Reset any previous error
     } catch (error) {
       console.error("Error submitting review:", error.message);
       setError("Failed to submit review. Please try again later.");
@@ -95,7 +91,10 @@ const Reviews = ({ orderID }) => {
       {reviews.length > 0 ? (
         <ul className="mt-2 space-y-2">
           {reviews.map((review, index) => (
-            <li key={index} className="text-sm text-gray-700 bg-white px-4 py-4 rounded-lg shadow-md hover:shadow-lg transition-all">
+            <li
+              key={index}
+              className="text-sm text-gray-700 bg-white px-4 py-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+            >
               <p className="font-bold text-gray-900">{review.authorName}</p>
               <p className="italic text-gray-800 mt-2">"{review.content}"</p>
             </li>

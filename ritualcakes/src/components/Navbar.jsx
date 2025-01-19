@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "font-awesome/css/font-awesome.min.css";
 import SearchBar from "./SearchBar";
-import React, { useEffect, useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -52,7 +52,6 @@ function Navbar() {
             <NavLink to="/customization" className={({ isActive }) => `text-sm font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg`}>Customization</NavLink>
             <NavLink to="/about" className={({ isActive }) => `text-sm font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg`}>About</NavLink>
             <NavLink to="/order" className={({ isActive }) => `text-sm font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg`}>Orders</NavLink>
-            {/* Add other NavLinks as needed */}
           </div>
 
           <div className="ml-auto flex items-center space-x-4">
@@ -60,7 +59,7 @@ function Navbar() {
               <i className="fa-solid fa-magnifying-glass md:text-2xl text-lg"></i>
             </button>
 
-            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() =>{ navigate('/cart');}}>
+            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); }}}>
               <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
             </button>
 
@@ -79,6 +78,14 @@ function Navbar() {
         </div>
       </nav>
 
+      {!isLoggedIn && (
+        <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2 z-[9998]">
+          <p className="text-red-600  md:font-semibold">
+            Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to order online.
+          </p>
+        </div>
+      )}
+
       {showSearchBar && <SearchBar showSearchBar={showSearchBar} setShowSearchBar={setShowSearchBar} />}
 
       <div className={`fixed inset-0 z-40 ${isOpen ? 'block' : 'hidden'}`}>
@@ -94,8 +101,7 @@ function Navbar() {
             <NavLink to="/catalogue" onClick={toggleMenu} className={({ isActive }) => `block font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg text-m`}>Catalogue</NavLink>
             <NavLink to="/customization" onClick={toggleMenu} className={({ isActive }) => `block font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg text-m`}>Customization</NavLink>
             <NavLink to="/about" onClick={toggleMenu} className={({ isActive }) => `block font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg text-m`}>About</NavLink>
-            <NavLink to="/order" onClick={toggleMenu} className={({ isActive }) => `block font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg text-m`}>Orders  </NavLink>
-            {/* Add other NavLinks here */}
+            <NavLink to="/order" onClick={toggleMenu} className={({ isActive }) => `block font-semibold px-2 py-1 rounded-lg ${isActive ? "text-black bg-darkcustombg" : "text-gray-900"} hover:text-white hover:bg-darkcustombg text-m`}>Orders</NavLink>
           </div>
         </div>
       </div>

@@ -52,7 +52,7 @@
                   <div
                     key={index}
                     className="relative h-96"
-                    onClick={() => handleClickDesign(Object.values(design))}
+                    onClick={() => handleClickDesign(Object.values(Designs))}
                   >
                     <img
                       src={img}

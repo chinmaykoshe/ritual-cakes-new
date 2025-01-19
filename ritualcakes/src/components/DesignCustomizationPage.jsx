@@ -37,24 +37,27 @@ const DesignCustomizationPage = () => {
   const [design, setDesign] = useState(null);
   const [availableTypes, setAvailableTypes] = useState([]);
   const [selectedSize, setSelectedSize] = useState(formData.size || "");  // Initialize with formData if available
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token"); // Check for token
+    setIsLoggedIn(!!token); // Update login status
+  }, []);
+
+  useEffect(() => {
     if (designnames.hasOwnProperty(designName)) {
       const currentDesign = {
-        name: designName,  // Use the designName as the name
-        imageUrl: designnames[designName],  // Get the corresponding image URL
+        name: designName,
+        imageUrl: designnames[designName],
       };
       setDesign(currentDesign);
-      
-      // Directly set imageOrDesign without calling handleChange
-      formData.imageOrDesign = currentDesign.name; // Directly update the value here
-      
+      formData.imageOrDesign = currentDesign.name; // Update value directly
     } else {
-      console.error("Design not found in designnames!");  // Log error if design is not found
+      console.error("Design not found in designnames!");
     }
   }, [designName, formData]);
 
@@ -75,13 +78,13 @@ const DesignCustomizationPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    submitCustomization(e);  // Call submit function from context
+    submitCustomization(e); // Call submit function from context
   };
 
   return (
     <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg shadow-lg">
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Left Side: Design Image */}
+        
         <div className="flex-1">
           <img
             src={design.imageUrl}
@@ -89,28 +92,10 @@ const DesignCustomizationPage = () => {
             className="w-full h-[500px] object-contain rounded-lg shadow-md"
           />
         </div>
-
-        {/* Right Side: Customization Form */}
         <div className="flex-1">
-
-
-            {/* Image URL (Design Name) */}
-            <div className="mb-4">
-              <label htmlFor="imageOrDesign" className="block text-gray-700 font-medium mb-2">Image URL</label>
-              <input
-                type="text"
-                id="imageOrDesign"
-                name="imageOrDesign"
-                className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
-                placeholder="Enter Image URL"
-                value={formData.imageOrDesign}  // This will now be the design name
-                disabled
-              />
-            </div>
-
-
-
-          {/* Customization Form */}
+        {!isLoggedIn && (
+              <p className="text-center text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
+            )}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
@@ -121,10 +106,10 @@ const DesignCustomizationPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn} // Disable if not logged in
                 required
               />
             </div>
-
             {/* Phone */}
             <div>
               <label className="block font-bold text-sm mb-2">Phone Number</label>
@@ -134,10 +119,10 @@ const DesignCustomizationPage = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               />
             </div>
-
             {/* Address */}
             <div>
               <label className="block font-bold text-sm mb-2">Address</label>
@@ -146,10 +131,10 @@ const DesignCustomizationPage = () => {
                 value={formData.address}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               />
             </div>
-
             {/* Cake Size */}
             <div>
               <label className="block font-bold text-sm mb-2">Size</label>
@@ -158,9 +143,10 @@ const DesignCustomizationPage = () => {
                 value={selectedSize}
                 onChange={(e) => {
                   setSelectedSize(e.target.value);
-                  handleChange(e);  // Also update formData with handleChange
+                  handleChange(e);
                 }}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               >
                 <option value="">Select Size</option>
@@ -169,7 +155,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-
             {/* Cake Type */}
             <div>
               <label className="block font-bold text-sm mb-2">Cake Type</label>
@@ -178,6 +163,7 @@ const DesignCustomizationPage = () => {
                 value={formData.cakeType}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               >
                 <option value="">Select Cake Type</option>
@@ -186,7 +172,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-
             {/* Flavor */}
             <div>
               <label className="block font-bold text-sm mb-2">Flavor</label>
@@ -195,6 +180,7 @@ const DesignCustomizationPage = () => {
                 value={formData.flavor}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               >
                 <option value="">Select Flavor</option>
@@ -203,7 +189,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-
             {/* Delivery Date */}
             <div>
               <label className="block font-bold text-sm mb-2">Delivery Date</label>
@@ -213,10 +198,10 @@ const DesignCustomizationPage = () => {
                 value={formData.deliveryDate}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
                 required
               />
             </div>
-
             {/* Message on Cake */}
             <div>
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
@@ -226,19 +211,20 @@ const DesignCustomizationPage = () => {
                 value={formData.message}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!isLoggedIn}
               />
             </div>
-
-
             {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-darkcustombg text-white py-2 rounded-lg focus:outline-none hover:bg-darkcustombg-light"
-              disabled={loading}
+              disabled={!isLoggedIn || loading}
             >
               {loading ? 'Submitting...' : 'Submit Customization'}
             </button>
-
+            {!isLoggedIn && (
+              <p className="text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
+            )}
             {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
             {success && <div className="text-green-500 mt-4 text-center">Customization submitted successfully!</div>}
           </form>
@@ -246,11 +232,9 @@ const DesignCustomizationPage = () => {
       </div>
 
       <p className="text-center text-sm font-medium text-customGray mt-4 mb-8 bg-yellow-200 p-4 rounded-lg border border-yellow-400">
-  <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
-</p>
-
-
-   </div>
+        <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
+      </p>
+    </div>
   );
 };
 

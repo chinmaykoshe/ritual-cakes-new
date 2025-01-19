@@ -47,7 +47,7 @@ function Home() {
               We are a company dedicated to the preparation of cakes, providing our customers with a product always fresh from the oven.
             </p>
             <NavLink to="/cakes">
-              <button className="md:w-full lg:w-[500px] mt-6 md:px-[110px] px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50">
+              <button className="w-full lg:w-[500px] mt-6  px-16 py-4 bg-darkcustombg text-darkcustomGray rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300 bg-opacity-50">
                 <span>DISCOVER MENU</span>
                 <span className="text-xl">→</span>
               </button>
@@ -142,22 +142,20 @@ function Home() {
       </div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
-
-      {/* Subscription Section */}
-      <div className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4">
-        <h2 className="text-3xl font-bold mb-6">Stay Updated</h2>
-        <p className="text-lg">
-          Subscribe to our newsletter to get the latest updates and offers.
-        </p>
-        <button
-  type="button"
-  className="ml-4 px-6 py-2 bg-brown text-white rounded-lg mt-6"
-  onClick={() => window.location = '/signup'}
->
-  Signup now
-</button>
-
-      </div>
+{/* Subscription Section */}
+<div className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4">
+  <h2 className="text-3xl font-bold mb-6">Ready to Order Your Favorite Cake?</h2>
+  <p className="text-lg">
+    Sign up now to customize and order your delicious cake online with just a few clicks!
+  </p>
+  <button
+    type="button"
+    className="ml-4 px-6 py-2 bg-brown text-white rounded-lg mt-6"
+    onClick={() => window.location = '/signup'}
+  >
+    Sign Up to Order Now!
+  </button>
+</div>
 
       <hr className="border-2 border-brown mx-4 md:mx-20" />
 

@@ -21,7 +21,7 @@ const exampleProduct = {
  * GET Route to fetch cart items for the authenticated user
  * This route is for the user to view their cart.
  */
-router.get('/', ensureAuthenticated, async (req, res) => {
+router.get('/cart', ensureAuthenticated, async (req, res) => {
     console.log("GET /cart - Fetching cart items");
     try {
         const user = await UserModel.findById(req.user._id); 
@@ -46,7 +46,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
  * POST Route to add multiple items to the cart
  * This route is for the user to add products to their cart.
  */
-router.post('/add', ensureAuthenticated, async (req, res) => {
+router.post('/cart/add', ensureAuthenticated, async (req, res) => {
     console.log("POST /cart/add - Adding products to cart");
     const { products } = req.body; // Get products from the request body (array of product details)
 
@@ -116,7 +116,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
  * POST Route to update the quantity of a cart item
  * This route is for the user to update the quantity of a cart item.
  */
-router.post('/update', ensureAuthenticated, async (req, res) => {
+router.post('/cart/update', ensureAuthenticated, async (req, res) => {
     console.log("POST /cart/update - Updating cart item quantity");
     const { orderID, quantity } = req.body; // Get the orderID and new quantity from the request body
 
@@ -160,7 +160,7 @@ router.post('/update', ensureAuthenticated, async (req, res) => {
  * DELETE Route to remove a product from the cart
  * This route is for the user to remove a product from their cart.
  */
-router.delete('/remove/:orderID', ensureAuthenticated, async (req, res) => {
+router.delete('/cart/remove/:orderID', ensureAuthenticated, async (req, res) => {
     const { orderID } = req.params;
     if (!orderID) {
         return res.status(400).json({ message: 'Missing required fields' });

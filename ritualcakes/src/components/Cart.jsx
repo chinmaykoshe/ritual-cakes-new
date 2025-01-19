@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // Import the CartContext
 
 function Cart() {
-  const { cart, removeFromCart, updateQuantity } = useCart(); // Added updateQuantity
-  const [errorMessages, setErrorMessages] = useState(""); // State for error messages
+  const { cart, removeFromCart, updateQuantity } = useCart();
+  const [errorMessages, setErrorMessages] = useState("");
+  const [loading, setLoading] = useState(false); // State for loading
   const navigate = useNavigate();
 
+  const isLoggedIn = !!localStorage.getItem("user"); // Check if user is logged in
+
   useEffect(() => {
-    // Ensure that cart is always initialized as an empty array if it's undefine
-    if (!cart) {
-      console.error("Cart is undefined");
-    }
+    setLoading(true); // Set loading to true when component mounts
+    // Simulate data loading (e.g., fetching cart data if needed)
+    setTimeout(() => {
+      setLoading(false); // Set loading to false after data is "loaded"
+    }, 1000); // You can replace this with actual async data fetching if needed
   }, [cart]);
 
   // Calculate total price
@@ -54,7 +58,19 @@ function Cart() {
 
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
 
-        {cart?.length > 0 ? (
+        {!isLoggedIn ? (
+          <div className="text-center">
+            <p className="text-red-500 font-semibold">Please log in to add items to the cart.</p>
+            <button
+              onClick={() => navigate("/login")} // Redirect to login page
+              className="mt-4 bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+            >
+              Go to Login
+            </button>
+          </div>
+        ) : loading ? (
+          <p className="text-center p-4">Loading your cart... </p>
+        ) : cart?.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             {cart.map((item) => (
               <div

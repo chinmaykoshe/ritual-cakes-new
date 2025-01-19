@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // For navigation
 import axios from "axios"; // Ensure axios is installed
 
 function UserButton() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token"); // Token stored in localStorage
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (token) {
@@ -42,7 +45,17 @@ function UserButton() {
         </button>
         <h1 className="text-3xl font-bold mb-6 text-center">Your Information</h1>
 
-        {loading ? (
+        {!token ? (
+          <div className="text-center">
+            <p className="text-red-500 font-semibold">Please log in to view your information.</p>
+            <button
+              onClick={() => navigate("/login")} // Redirect to login page
+              className="mt-4 bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+            >
+              Go to Login
+            </button>
+          </div>
+        ) : loading ? (
           <p className="text-center">Loading...</p>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>

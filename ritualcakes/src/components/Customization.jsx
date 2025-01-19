@@ -1,9 +1,7 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCustomization } from '../context/customizeContext';  // Import the context
 
 function CustomizationForm() {
-
-  
   const {
     formData,
     handleChange,
@@ -55,8 +53,11 @@ function CustomizationForm() {
     submitCustomization(e); // Call submit function from context
   };
 
+  // Check if the user is logged in by checking for a token
+  const isLoggedIn = localStorage.getItem("token");
+
   return (
-    <div className="mx-auto max-w-4xl px-6 py-8 bg-white bg-opacity-30 rounded-lg shadow-lg">
+    <div className="mx-auto max-w-4xl px-6 py-8 lg:py-16 bg-white bg-opacity-30 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6 text-center">Customize Your Cake</h1>
       <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
         {/* Name */}
@@ -67,11 +68,11 @@ function CustomizationForm() {
             id="name"
             name="name"
             placeholder="Full Name"
-
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.name}
             onChange={handleChange} // Use handleChange from context
             required
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
@@ -86,7 +87,7 @@ function CustomizationForm() {
             value={formData.email}
             onChange={handleChange} // Use handleChange from context
             required
-            disabled
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
@@ -98,11 +99,11 @@ function CustomizationForm() {
             id="phone"
             name="phone"
             placeholder="Whatsapp Number Suggested"
-
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.phone}
             onChange={handleChange} // Use handleChange from context
             required
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
@@ -113,11 +114,11 @@ function CustomizationForm() {
             id="address"
             name="address"
             placeholder="Your address"
-
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.address}
             onChange={handleChange} // Use handleChange from context
             required
+            disabled={!isLoggedIn} // Disable if user is not logged in
           ></textarea>
         </div>
 
@@ -131,6 +132,7 @@ function CustomizationForm() {
             onChange={handleSizeChange}
             value={formData.size}
             required
+            disabled={!isLoggedIn} // Disable if user is not logged in
           >
             <option value="">Select Size</option>
             {Object.keys(availableCakeTypes).map((size) => (
@@ -147,7 +149,7 @@ function CustomizationForm() {
             name="cakeType"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             required
-            disabled={filteredCakeTypes.length === 0}
+            disabled={filteredCakeTypes.length === 0 || !isLoggedIn} // Disable if user is not logged in
             value={formData.cakeType}
             onChange={handleChange} // Use handleChange from context
           >
@@ -168,6 +170,7 @@ function CustomizationForm() {
             value={formData.flavor}
             onChange={handleChange} // Use handleChange from context
             required
+            disabled={!isLoggedIn} // Disable if user is not logged in
           >
             <option value="">Select Flavor</option>
             {flavors.map((flavor) => (
@@ -188,6 +191,7 @@ function CustomizationForm() {
             min={minDateString}
             value={formData.deliveryDate}
             onChange={handleChange} // Use handleChange from context
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
@@ -199,13 +203,14 @@ function CustomizationForm() {
             id="message"
             name="message"
             placeholder="Happy Birthday "
-
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.message}
             onChange={handleChange} // Use handleChange from context
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
+        {/* Image URL */}
         <div className="mb-4">
           <label htmlFor="imageOrDesign" className="block text-gray-700 font-medium mb-2">Image URL</label>
           <input
@@ -216,6 +221,7 @@ function CustomizationForm() {
             placeholder="Enter Image URL"
             value={formData.imageOrDesign} // Ensure formData.imageOrDesign is correctly populated
             onChange={handleChange}
+            disabled={!isLoggedIn} // Disable if user is not logged in
           />
         </div>
 
@@ -225,31 +231,35 @@ function CustomizationForm() {
           <textarea
             id="specialInstructions"
             placeholder="instructions"
-
             name="specialInstructions"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.specialInstructions}
-            onChange={handleChange} // Use handleChange from context
+            onChange={handleChange}
+            disabled={!isLoggedIn} // Disable if user is not logged in
           ></textarea>
         </div>
 
-
+        <p className="text-center text-sm font-medium text-customGray mt-4 mb-8 bg-yellow-200 p-4 rounded-lg border border-yellow-400">
+  <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
+</p>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-darkcustombg text-white py-2 rounded-lg focus:outline-none hover:bg-darkcustombg-light"
-          disabled={loading}
+          className="bg-darkcustombg text-white px-6 py-3 rounded-lg font-semibold w-full disabled:opacity-50"
+          disabled={loading || !isLoggedIn} // Disable the button if not logged in or if loading
         >
-          {loading ? 'Submitting...' : 'Submit Customization'}
+          {loading ? "Submitting..." : "Submit Customization"}
         </button>
-
-        {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
-        {success && <div className="text-green-500 mt-4 text-center">Customization submitted successfully!</div>}
       </form>
 
+      {error && (
+        <div className="text-red-500 mt-4 text-center">{error}</div>
+      )}
 
-      
+      {success && (
+        <div className="text-green-500 mt-4 text-center">{success}</div>
+      )}
     </div>
   );
 }
