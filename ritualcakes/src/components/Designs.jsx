@@ -46,7 +46,7 @@
           infiniteLoop={true}
           useKeyboardArrows={true}
           autoPlay={true}
-          interval={1500}
+          interval={2000}
               >
                 {Object.values(designnames).map((img, index) => (
                   <div
@@ -57,7 +57,7 @@
                     <img
                       src={img}
                       alt={`Cake design ${index + 1}`}
-                      className="object-cover rounded-lg w-full h-full"
+                      className="object-contain rounded-lg w-full h-full shadow-lg rounded-lg"
                     />
                   </div>
                 ))}
@@ -65,14 +65,17 @@
             </div>
 
             <div className="lg:w-1/2 h-full flex flex-col items-center justify-center text-center">
-              <p className="text-brown font-montserrat font-bold text-4xl mb-4">
+            <p className="text-brown font-montserrat font-bold text-2xl mb-4">
+            Click on crousal to see all page designs /
+              </p>
+              <p className="text-brown font-montserrat font-bold text-2xl mb-4">
                 View from Our Page
               </p>
               <NavLink
                 to="https://www.instagram.com/ritualcakes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-darkcustombg2 hover:border-2 hover:border-orange-300 text-white py-4 px-8 rounded-lg w-full transform transition duration-300 shadow-xl flex items-center justify-center gap-2"
+                className="bg-darkcustombg2 hover:text-darkcustombg2 hover:bg-white text-white py-4 px-8 rounded-lg w-full transform transition duration-300 shadow-xl flex items-center justify-center gap-2"
               >
                 <i className="fa fa-instagram text-2xl"></i>
                 <span className="font-montserrat font-medium">View</span>
