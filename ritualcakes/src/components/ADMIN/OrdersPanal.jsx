@@ -9,10 +9,7 @@ const OrdersPanel = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Set the base API URL based on the environment (production or development)
-  const apiUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://ritual-cakes-new-ogk5.vercel.app/api/orders"
-      : "http://localhost:8084/api/orders";
+  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/orders";
 
   const fetchOrders = async () => {
     setLoading(true);

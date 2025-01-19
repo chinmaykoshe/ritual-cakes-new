@@ -13,10 +13,8 @@ function Customers() {
     const fetchCustomers = async () => {
       if (token) {
         try {
-          const apiUrl =
-            process.env.NODE_ENV === 'production'
-              ? 'https://ritual-cakes-new-ogk5.vercel.app/api/users'
-              : 'http://localhost:8084/api/users';
+  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/users";
+          
 
           const response = await axios.get(apiUrl, {
             headers: { Authorization: `Bearer ${token}` },

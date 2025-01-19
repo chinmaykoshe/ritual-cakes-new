@@ -10,9 +10,8 @@ export const CartProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState("");
 
   // Determine the base URL based on the environment
-  const apiUrl = process.env.NODE_ENV === 'production'
-    ? 'https://ritual-cakes-new-ogk5.vercel.app/api/cart'
-    : 'http://localhost:8084/api/cart';
+  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/orders";
+
 
   // Load cart from backend on mount
   useEffect(() => {

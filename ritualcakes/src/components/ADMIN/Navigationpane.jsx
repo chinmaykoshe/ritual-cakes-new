@@ -5,7 +5,12 @@ import { NavLink } from 'react-router-dom';
 function NavigationPane() {
   return (
     <aside className="sticky bg-neutral-900 text-neutral-50 w-[250px] h-full pt-8 px-6 flex flex-col">
-      <p className="font-bold text-lg mb-8">Brand.</p>
+      <div className="flex items-center mb-8">
+  <img src="/titlelogo.png" className="h-8" alt="Logo" />
+  <span className="self-center text-xl font-bold text-customGray hidden md:block ml-4">RITUAL CAKES</span>
+</div>
+
+      
       <nav className="flex flex-col gap-4">
       <NavLink
           to="/admin/dashboards"

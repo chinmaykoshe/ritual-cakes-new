@@ -10,7 +10,6 @@ import Cart from './components/Cart';
 import PlaceOrder from './components/PlaceOrder';
 import Orders from './components/Orders.jsx';
 import Cakes from './components/Cakes';
-import Themes from './components/Themes';
 import Navbar from './components/Navbar';
 import Designs from './components/Designs';
 import PageDesigns from './components/PageDesigns.jsx';
@@ -97,7 +96,6 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path='/placeorder' element={<PlaceOrder />} />
               <Route path='/cakes' element={<Cakes />} />
-              <Route path='/themes' element={<Themes />} />
               <Route path='/catalogue' element={<Catalogue />} />
               <Route path='/checkout' element={<Checkout />} />
               <Route path="/login" element={<Login />} />

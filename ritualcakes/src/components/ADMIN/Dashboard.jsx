@@ -36,10 +36,8 @@ function Dashboard() {
       const token = validateAdminAccess(); // Validate role and token
 
       // API URL logic
-      const apiUrl =
-        process.env.NODE_ENV === "production"
-          ? "https://ritual-cakes-new-ogk5.vercel.app/api/orders"
-          : "http://localhost:8084/api/orders";
+  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/orders";
+      
 
       // Fetch all orders (no date filter needed here)
       const allOrdersResponse = await axios.get(apiUrl, {
