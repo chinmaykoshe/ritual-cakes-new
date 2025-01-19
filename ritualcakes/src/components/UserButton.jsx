@@ -76,6 +76,15 @@ function UserButton() {
             <p className="mb-2">
               <strong>Address:</strong> {userData.address}
             </p>
+            {/* Add 'Check your orders' button */}
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => navigate("/orders")} // Redirect to orders page
+                className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:border-4"
+              >
+                Check Your Orders Here
+              </button>
+            </div>
           </div>
         ) : (
           <p className="text-center">No user information available.</p>

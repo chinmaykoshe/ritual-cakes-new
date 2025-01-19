@@ -170,7 +170,7 @@ function Orders() {
                     <p><strong>Special Instructions:</strong> {customization.specialInstructions || 'N/A'}</p>
                     <p><strong>Delivery Date:</strong> {new Date(customization.deliveryDate).toLocaleDateString()}</p>
                     <p><strong>Approval Status:</strong> <span className={`px-2 py-1 rounded ${customization.approvalStatus === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-yellow-200 text-yellow-700'}`}>{customization.approvalStatus}</span></p>
-                    <p><strong>Price:</strong> ${customization.price}</p>
+                    <p className="text-lg"><strong>Price:</strong> ${customization.price}</p>
                     <p><strong>Image or Design:</strong></p>
                     <p className="break-all">{customization.imageOrDesign || 'No image/design provided'}</p>
                   </div>
