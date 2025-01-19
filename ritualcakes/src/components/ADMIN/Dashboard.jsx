@@ -93,7 +93,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="p-8 bg-white h-full">
+    <div className="p-8 h-full">
       <h1 className="text-3xl font-bold text-neutral-900">Dashboard</h1>
       <p className="text-neutral-500 mt-2">Welcome to the admin dashboard!</p>
 

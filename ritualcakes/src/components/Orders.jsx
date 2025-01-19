@@ -32,13 +32,6 @@ function Orders() {
     }
   }, [userEmail, setCustomizations]);
 
-  const getStatusColor = (status) => {
-    if (status === "Placed") return "bg-green-500";
-    if (status === "Pending") return "bg-yellow-500";
-    if (status === "Cancelled") return "bg-red-500";
-    return "bg-gray-500";
-  };
-
 
   // Show login prompt if user is not signed in
   if (!userEmail) {
@@ -103,22 +96,22 @@ function Orders() {
                       <p className="text-gray-500 text-sm">Shape: {item.shape}</p>
                       <p className="text-gray-500 text-sm">Weight: {item.weight}</p>
                       <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>
-                      <p className="text-gray-500 text-sm">Amount: ${item.price * item.quantity}</p>
+                      <p className="text-gray-500 text-sm">Amount: $ {item.price * item.quantity}</p>
                     </div>
                     <div className="flex flex-col space-y-2 mt-4">
                       <div className="flex items-center space-x-2">
                        
-                      <span className={`ml-2 px-2 py-1 rounded ${order.status === 'Delivered' ? 'bg-blue-200 text-blue-700' : order.status === 'Pending' ? 'bg-yellow-200 text-yellow-700' : 'bg-red-200 text-red-700'}`}>
+                      <span className={`ml-2 px-2 py-1 rounded ${order.status === 'Completed' ? 'bg-blue-200 text-blue-700' : order.status === 'Pending' ? 'bg-yellow-200 text-yellow-700' : 'bg-red-200 text-red-700'}`}>
     {order.status}
   </span>
                       </div>
                     </div>
                     <div className="mt-4 flex justify-center">
                         <button
-                          onClick={() => alert('Call +91 --------- to get help related to development')}
+                          onClick={() => alert('Call +91 --------- to cancel the order')}
                           className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
                         >
-                          Delete Order
+                          Cancel Order
                         </button>
                       </div>
                   </div>
@@ -179,10 +172,10 @@ function Orders() {
 
                       <div className="mt-4 flex justify-center">
                         <button
-                          onClick={() => alert('Call +91 --------- to get help related to development')}
+                          onClick={() => alert('Call +91 --------- to cancel the order')}
                           className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
                         >
-                          Delete Customization
+                          Cancel Customization
                         </button>
                       </div>
                     </div>

@@ -8,6 +8,9 @@ const CustomizationPanel = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCakeType, setSelectedCakeType] = useState("");
+  const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState(""); // New state for date filter
 
   // Fetch customizations from API
   const fetchCustomizations = async () => {
@@ -35,15 +38,26 @@ const CustomizationPanel = () => {
     }
   };
 
-  // Filter customizations based on the search query
-  const filteredCustomizations = customizations.filter((customization) => {
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      customization.name.toLowerCase().includes(searchLower) ||
-      customization.email.toLowerCase().includes(searchLower) ||
-      customization.cakeType.toLowerCase().includes(searchLower)
-    );
-  });
+  // Filter customizations based on the search query, cake type, and approval status
+  const filteredCustomizations = customizations
+    .filter((customization) => {
+      const searchLower = searchQuery.toLowerCase();
+      const cakeTypeFilter = selectedCakeType ? customization.cakeType === selectedCakeType : true;
+      const approvalStatusFilter = selectedApprovalStatus ? customization.approvalStatus === selectedApprovalStatus : true;
+      const dateFilter = selectedDate
+        ? moment(customization.deliveryDate).format("YYYY-MM-DD") === selectedDate
+        : true;
+
+      return (
+        (customization.name.toLowerCase().includes(searchLower) ||
+          customization.email.toLowerCase().includes(searchLower) ||
+          customization.cakeType.toLowerCase().includes(searchLower)) &&
+        cakeTypeFilter &&
+        approvalStatusFilter &&
+        dateFilter
+      );
+    })
+    .sort((a, b) => moment(b.deliveryDate).isBefore(moment(a.deliveryDate)) ? 1 : -1); // Sort by latest first
 
   // Update customization approval status
   const updateCustomizationStatus = async (customizationId, newStatus) => {
@@ -72,30 +86,6 @@ const CustomizationPanel = () => {
     }
   };
 
-  // Delete customization
-  const deleteCustomization = async (customizationId) => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found. Please log in again.");
-      }
-
-      const response = await axios.delete(
-        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setCustomizations((prevCustomizations) =>
-        prevCustomizations.filter((customization) => customization._id !== customizationId)
-      );
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to delete customization");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Update price for customization
   const updateCustomizationPrice = async (customizationId, newPrice) => {
     setLoading(true);
@@ -106,7 +96,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `https://ritual-cakes--alpha.vercel.app/api/customizations/${customizationId}`,
+        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
         { price: newPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -182,19 +172,36 @@ const CustomizationPanel = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="p-8 h-full">
       <h2 className="text-xl font-bold mb-4">Customization Panel</h2>
       <div className="flex items-center mb-4">
-      <input
+        <input
           type="text"
           placeholder="Search by name, email, or cake type"
           className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+        />  
+        <select
+          className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"
+          value={selectedApprovalStatus}
+          onChange={(e) => setSelectedApprovalStatus(e.target.value)}
+        >
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+
+        <input
+          type="date"
+          className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
         />
         <button
           onClick={exportToCSV}
-          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 "
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 ml-4"
         >
           Export to CSV
         </button>
@@ -217,7 +224,6 @@ const CustomizationPanel = () => {
             <th className="border border-gray-300 px-4 py-2">Approval Status</th>
             <th className="border border-gray-300 px-4 py-2">Price</th>
             <th className="border border-gray-300 px-4 py-2">Actions</th>
-            <th className="border border-gray-300 px-4 py-2">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -226,24 +232,40 @@ const CustomizationPanel = () => {
               <td className="border border-gray-300 px-4 py-2">{customization._id}</td>
               <td className="border border-gray-300 px-4 py-2">
                 {customization.imageOrDesign ? (
-                  customization.imageOrDesign.startsWith('http') ? (
+                  designnames[customization.imageOrDesign] ? (
+                    <img
+                      src={designnames[customization.imageOrDesign]}
+                      alt={`Design: ${customization.imageOrDesign}`}
+                      className="w-32 h-32 object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.src = "/fallback-image.jpg";
+                      }}
+                    />
+                  ) : customization.imageOrDesign.startsWith("http") && /\.(jpg|jpeg|png|gif|webp)$/i.test(customization.imageOrDesign) ? (
                     <img
                       src={customization.imageOrDesign}
                       alt={`Design: ${customization.imageOrDesign}`}
                       className="w-32 h-32 object-cover rounded-lg"
                       onError={(e) => {
-                        e.target.src = '/fallback-image.jpg';
+                        e.target.src = "/fallback-image.jpg";
                       }}
                     />
                   ) : (
-                    <img
-                      src={designnames[customization.imageOrDesign] || '/path/to/fallback-image.jpg'}
-                      alt={`Design: ${customization.imageOrDesign}`}
-                      className="w-32 h-32 object-cover rounded-lg"
-                      onError={(e) => {
-                        e.target.src = '/path/to/fallback-image.jpg';
-                      }}
-                    />
+                    <div>
+                      <span>Open in new tab</span>
+                      <span className="break-all text-blue-500">
+                        <a
+                          href={customization.imageOrDesign}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.open(customization.imageOrDesign, "_blank");
+                          }}
+                          rel="noopener noreferrer"
+                        >
+                          {customization.imageOrDesign}
+                        </a>
+                      </span>
+                    </div>
                   )
                 ) : (
                   "No image/design provided"
@@ -285,14 +307,6 @@ const CustomizationPanel = () => {
                   <option value="approved">Approved</option>
                   <option value="rejected">Rejected</option>
                 </select>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <button
-                  onClick={() => deleteCustomization(customization._id)}
-                  className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
               </td>
             </tr>
           ))}

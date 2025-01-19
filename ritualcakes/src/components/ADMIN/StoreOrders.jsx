@@ -156,7 +156,8 @@ const todayTotal = useMemo(() => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="p-8 h-full">
+
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">ORDERS FROM STORE</h2>
         <div className="flex items-center space-x-4">

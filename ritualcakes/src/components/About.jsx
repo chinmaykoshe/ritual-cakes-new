@@ -1,86 +1,80 @@
 import React from 'react';
-// import aboutImage1 from '../assets/custom-cake.jpg';  // Add your custom cake image
-// import aboutImage2 from '../assets/chocolates.jpg';   // Add your chocolates image
 
 function About() {
+  const reviews = [
+    { id: 1, name: "John Doe", text: "Amazing cakes! Highly recommend!" },
+    { id: 2, name: "Jane Smith", text: "The chocolates were incredible!" },
+    { id: 3, name: "Emily Brown", text: "Delicious cupcakes, will order again!" }
+  ];
+
   return (
-    <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8  mt-2 lg:m-top-16 shadow-lg">
+    <div className="mx-2 max-w-7xl md:mx-auto py-6 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-6 lg:px-8 mt-4 shadow-lg">
+      <div className="container mx-auto px-4 md:px-6">
+        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">About Us</h1>
 
-    <div className="container mx-auto p-2 md:py-4 md:px-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">About Us</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          {/* <img src={aboutImage1} alt="Custom Cakes" className="w-full rounded-lg mb-4" /> */}
-          <h2 className="md:text-2xl text-xl font-bold mb-2">Custom Bakes</h2>
-          <p className="md:text-lg text-sm mb-4">
-            At Ritual Cakes in Navi Mumbai, we pride ourselves on offering a variety of delicious, freshly baked treats that cater to all your special occasions. Our artisan bakers are skilled in crafting cakes of different sizes, types, and flavors, including sponge, carrot, chocolate, and more. Whether you need a custom cake with personalized icing and lettering or a specific type of flour, we tailor-make each cake to your specifications.
-          </p>
-          <p className="md:text-lg text-sm mb-4">
-            For any inquiries or to place an order, give us a call at <a href="tel:+917021482775" className="text-gray-500 hover:text-blue-700">+91 7021482775</a> or DM us on Instagram or Facebook.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
+          {/* Custom Bakes Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
+            
+            <div className="md:ml-8">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Custom Bakes</h2>
+              <p className="text-lg text-gray-700 mb-4">
+                At Ritual Cakes in Navi Mumbai, we offer a variety of freshly baked treats for all your special occasions. From sponge to chocolate cakes, we customize each cake to your preference...
+              </p>
+              <p className="text-lg text-gray-700 mb-4">
+                For inquiries or to place an order, call us at <a href="tel:+917021482775" className="text-blue-600 hover:text-blue-800">+91 7021482775</a> or DM us on Instagram or Facebook.
+              </p>
+            </div>
+            <img 
+              src="/custom-bakes.jpg" 
+              alt="Custom Cakes" 
+              className="w-full md:w-1/2 rounded-lg mb-4 mx-2 md:mb-0 shadow-md object-cover h-[300px]"
+            />
+          </div>
+
+          {/* Chocolates Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
+            <img 
+              src="/chocolates.jpg" 
+              alt="Chocolates" 
+              className="w-full md:w-1/2 rounded-lg mb-4 mx-2 md:mb-0 shadow-md object-cover h-[300px]"
+            />
+            <div className="md:mr-8 px-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Chocolates</h2>
+              <p className="text-lg text-gray-700 mb-4">
+                In addition to our custom cakes, we offer a selection of mouth-watering chocolates like wine chocolates, stuffed chocolates, and cotton candy-stuffed chocolates...
+              </p>
+              <p className="text-lg text-gray-700 mb-4">
+                Visit us to indulge in our delightful range of cakes and chocolates. Everyone loves cakes and chocolates, don’t they?
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          {/* <img src={aboutImage2} alt="Chocolates" className="w-full rounded-lg mb-4" /> */}
-          <h2 className="md:text-2xl text-xl font-bold mb-2">Chocolates</h2>
-          <p className="md:text-lg text-sm mb-4">
-            In addition to our custom bakes, we also provide a selection of mouth-watering chocolates, including wine chocolates, stuffed chocolates, and cotton candy-stuffed chocolates. Our shop also features freshly handcrafted cupcakes and muffins, ensuring that whether you're indulging yourself or buying a gift for a friend, you'll leave satisfied.
-          </p>
-          <p className="md:text-lg text-sm mb-4">
-            Visit us to experience our delightful range of cakes and chocolates, because everyone loves cakes and chocolates, don’t they?
-          </p>
-        </div>
-      </div>
-      
 
-
-      <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-6 text-center">Customer Reviews</h2>
-        
-  <div className="flex flex-col md:flex-row justify-center gap-6">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative">
-    <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
-      &ldquo;
-    </div>
-      <div className="flex items-center my-4 ">
-        <span className=" md:text-xl text-lg font-semibold">John Doe</span>
-        <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
-      </div>
-      <p className="text-gray-700 md:text-lg text-sm">
-        "Amazing cakes! The custom designs are exactly what I wanted. The taste is incredible. Highly recommend Ritual Cakes!"
-      </p>
-    </div>
-
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative">
-    <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
-      &ldquo;
-    </div>
-      <div className="flex items-center my-4 ">
-        <span className=" md:text-xl text-lg font-semibold">Jane Smith</span>
-        <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
-      </div>
-      <p className="text-gray-700 md:text-lg text-sm">
-      "I ordered a batch of chocolates for my friend's birthday, and they were a hit! Everyone loved them, especially the wine chocolates."
-      </p>
-    </div>
-
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative">
-    <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
-      &ldquo;
-    </div>
-      <div className="flex items-center my-4 ">
-        <span className=" md:text-xl text-lg font-semibold">Emily Brown</span>
-        <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
-      </div>
-      <p className="text-gray-700 md:text-lg text-sm">
-      "The cupcakes and muffins are to die for. Fresh and delicious! Will definitely order again."
-      </p>
-    </div>
+        {/* Customer Reviews Section */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-semibold mb-8 text-center text-gray-800">Customer Reviews</h2>
+          <div className="flex flex-col md:flex-row justify-center gap-8">
+            {reviews.map((review) => (
+              <div 
+                key={review.id}
+                className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 relative hover:shadow-xl transition-shadow duration-300"
+              >
+              <h1 className='text-8xl my-[-48px]'>&ldquo;</h1>
+                
+                <div className="flex items-center mb-4">
+                  <span className="text-xl font-semibold text-gray-800">{review.name}</span>
+                  <div className="text-yellow-500 ml-2">★★★★★</div>
+                </div>
+                <p className="text-gray-700 text-lg italic">
+                  "{review.text}"
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-
-    </div>
-
   );
 }
 

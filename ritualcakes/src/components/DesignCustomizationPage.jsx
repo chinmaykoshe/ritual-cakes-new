@@ -102,6 +102,7 @@ const DesignCustomizationPage = () => {
               <label className="block font-bold text-sm mb-2">Name</label>
               <input
                 type="text"
+                placeholder="Full Name of orderer"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -115,6 +116,7 @@ const DesignCustomizationPage = () => {
               <label className="block font-bold text-sm mb-2">Phone Number</label>
               <input
                 type="tel"
+                placeholder="Whatsapp no is suggested"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
@@ -128,6 +130,7 @@ const DesignCustomizationPage = () => {
               <label className="block font-bold text-sm mb-2">Address</label>
               <textarea
                 name="address"
+                placeholder="Please provide full address"
                 value={formData.address}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
@@ -207,6 +210,8 @@ const DesignCustomizationPage = () => {
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
               <input
                 type="text"
+            placeholder="also please mention time between 10 AM TO 11 PM"
+
                 name="message"
                 value={formData.message}
                 onChange={handleChange}

@@ -9,7 +9,7 @@ function AdminLayout() {
       <NavigationPane />
 
       {/* Content Area */}
-      <main className="flex-1 bg-neutral-50 overflow-y-auto p-6">
+      <main className="flex-1 bg-gray-70 overflow-y-auto p-6">
         {/* The nested route components will render here */}
         <Outlet />
       </main>

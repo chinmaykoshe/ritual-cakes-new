@@ -183,9 +183,7 @@ function Home() {
               animate={{ opacity: 1 }} 
               transition={{ delay: 3.8, duration: 0.3 }}
             >
-              <div className="absolute md:top-[-6px] top-[-28px] left-4 text-8xl text-gray-300">
-                &ldquo;
-              </div>
+              <h1 className='text-8xl my-[-48px]'>&ldquo;</h1>
               <div className="flex items-center my-4">
                 <span className="md:text-xl text-lg font-semibold text-brown">{review.name}</span>
                 <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>

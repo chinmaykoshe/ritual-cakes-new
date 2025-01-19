@@ -67,7 +67,7 @@ function CustomizationForm() {
             type="text"
             id="name"
             name="name"
-            placeholder="Full Name"
+            placeholder="Full Name of orderer"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.name}
             onChange={handleChange} // Use handleChange from context
@@ -230,7 +230,7 @@ function CustomizationForm() {
           <label htmlFor="specialInstructions" className="block text-gray-700 font-medium mb-2">Special Instructions</label>
           <textarea
             id="specialInstructions"
-            placeholder="instructions"
+            placeholder="also   please mention time between 10 AM TO 11 PM"
             name="specialInstructions"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.specialInstructions}

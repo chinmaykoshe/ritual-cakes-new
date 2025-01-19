@@ -79,7 +79,7 @@ function Customers() {
   });
 
   return (
-    <div className="p-8 bg-white">
+    <div className="p-8">
       <h2 className="text-2xl font-bold mb-4">Customers List</h2>
       <p className="text-neutral-500 text-sm mb-8">Dashboard / Customers</p>
 
