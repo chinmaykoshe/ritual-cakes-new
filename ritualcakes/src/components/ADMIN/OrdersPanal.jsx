@@ -8,6 +8,12 @@ const OrdersPanel = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Set the base API URL based on the environment (production or development)
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://ritual-cakes-new-ogk5.vercel.app/api/orders"
+      : "http://localhost:8084/api/orders";
+
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -15,11 +21,11 @@ const OrdersPanel = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
 
       // Call the API to fetch all orders (for admin)
-      const response = await axios.get("https://ritual-cakes-new-ogk5.vercel.app/api/orders", {
-        headers: { Authorization: `Bearer ${token}` }, // Send token in the request header
+      const response = await axios.get(apiUrl, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      // You can filter out admin orders if needed here
+      // Filter out admin orders if needed
       const filteredOrders = response.data.filter(
         (order) => order.userEmail !== "RITUALCAKE.ADMIN@gmail.com"
       );
@@ -39,7 +45,7 @@ const OrdersPanel = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
 
       await axios.put(
-        `https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}/status`,
+        `${apiUrl}/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -62,7 +68,7 @@ const OrdersPanel = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
 
-      await axios.delete(`https://ritual-cakes--alpha.vercel.app/api/orders/${orderId}`, {
+      await axios.delete(`${apiUrl}/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
