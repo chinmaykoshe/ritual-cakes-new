@@ -175,32 +175,33 @@ function Signup() {
               required
             />
           </div>
-          <div className="mb-6 relative">
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Create Password</label>
-            <input
-              type={passwordVisible ? "text" : "password"} // Toggle between password and text
-              id="password"
-              name="password"
-              pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$" //Ensures at least one letter and one number
-              title="Password must contain at least one letter or one number with length 8 characters"
-              value={signUpData.password}
-              onChange={handlePasswordChange}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
-              required
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute top-1/2 right-3 transform -translate-y-1/2"
-              aria-label="Toggle password visibility"
-            >
-              {passwordVisible ? (
-                <i className="fa-regular fa-eye-slash text-gray-700"></i> // Eye Slash (password hidden)
-              ) : (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye (password visible)
-              )}
-            </button>
-          </div>
+<div className="mb-6 relative">
+  <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Create Password</label>
+  <input
+    type={passwordVisible ? "text" : "password"} // Toggle between password and text
+    id="password"
+    name="password"
+    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$" //Ensures at least one letter and one number
+    title="Password must contain at least one letter or one number with length 8 characters"
+    value={signUpData.password}
+    onChange={handlePasswordChange}
+    className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none pr-10" // Added padding-right for button
+    required
+  />
+  <button
+    type="button"
+    onClick={togglePasswordVisibility}
+    className="absolute top-1/2 right-3 transform -translate-y-1/2"
+    aria-label="Toggle password visibility"
+  >
+    {passwordVisible ? (
+      <i className="fa-regular fa-eye-slash text-gray-700"></i> // Eye Slash (password hidden)
+    ) : (
+      <i className="fa-regular fa-eye text-gray-700"></i> // Eye (password visible)
+    )}
+  </button>
+</div>
+
 
           <hr className="my-6" />
 
