@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { useOrder } from "../context/OrderContext";
 import { useCustomization } from "../context/customizeContext";
 import { designnames } from "../designs/designassets";
@@ -37,18 +37,21 @@ function Orders() {
   if (!userEmail) {
     return (
       <div className="mx-2 max-w-7xl md:mx-auto py-4 py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
-        <button
-          onClick={() => navigate(-1)}
-          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 bg-opacity-80 mb-8"
+         {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          to="/" // Assuming "/designs" is your designs list page
+          className="text-brown font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
-          &#8592; Back to Shop
-        </button>
+          &larr; Back to Home
+        </Link>
+      </div>
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
           <p className="text-lg mb-4">Please log in to view your orders and customizations.</p>
           <button
             onClick={() => navigate("/login")}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
           >
             Go to Login
           </button>
@@ -60,13 +63,15 @@ function Orders() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-
-        <button
-          onClick={() => navigate("/")}
-          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 bg-opacity-80 mb-8"
+ {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          to="/" // Assuming "/designs" is your designs list page
+          className="text-brown font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
-          &#8592; Back to Shop
-        </button>
+          &larr; Back to Home
+        </Link>
+      </div>
 
         {/* Orders Section */}
         <h1 className="text-3xl font-bold mb-6 text-center">Your Orders</h1>

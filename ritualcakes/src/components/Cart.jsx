@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // Import the CartContext
 function Cart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -52,22 +52,25 @@ function Cart() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 bg-opacity-80 mb-8"
+         {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          to="/" // Assuming "/designs" is your designs list page
+          className="text-brown font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
-          &#8592; Back to Shop
-        </button>
+          &larr; Back to Home
+        </Link>
+      </div>
         <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
 
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
 
         {!isLoggedIn ? (
           <div className="text-center">
-            <p className="text-red-500 font-semibold">Please log in to add items to the cart.</p>
+            <p className="text-black font-semibold">Please log in to add items to the cart.</p>
             <button
               onClick={() => navigate("/login")} // Redirect to login page
-              className="mt-4 bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+              className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
             >
               Go to Login
             </button>

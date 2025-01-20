@@ -96,15 +96,17 @@ function Navbar() {
         </div>
       </nav>
 
-      {!isLoggedIn && (
-        <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2 z-[9998]">
+      {showSearchBar && <SearchBar showSearchBar={showSearchBar} setShowSearchBar={setShowSearchBar} />}
+
+
+      {!isLoggedIn &&  (
+        <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2 ">
           <p className="text-red-600  md:font-semibold">
             Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to order online.
           </p>
         </div>
       )}
 
-      {showSearchBar && <SearchBar showSearchBar={showSearchBar} setShowSearchBar={setShowSearchBar} />}
 
       <div className={`fixed inset-0 z-40 ${isOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black bg-opacity-50" onClick={toggleMenu}></div>

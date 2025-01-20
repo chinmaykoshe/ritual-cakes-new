@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { Link , useNavigate } from "react-router-dom"; // For navigation
 import axios from "axios"; // Ensure axios is installed
 
 function UserButton() {
@@ -38,20 +38,24 @@ function UserButton() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-        <button
-          onClick={() => window.history.back()}
-          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 bg-opacity-80 mb-8"
+        {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          to="/" // Assuming "/designs" is your designs list page
+          className="text-brown font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
-          &#8592; Back to Previous Page
-        </button>
+          &larr; Back to Home
+        </Link>
+      </div>
+      
         <h1 className="text-3xl font-bold mb-6 text-center">Your Information</h1>
 
         {!token ? (
           <div className="text-center">
-            <p className="text-red-500 font-semibold">Please log in to view your information.</p>
+            <p className="text-black-500 font-semibold">Please log in to view your information.</p>
             <button
               onClick={() => navigate("/login")} // Redirect to login page
-              className="mt-4 bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+              className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
             >
               Go to Login
             </button>
