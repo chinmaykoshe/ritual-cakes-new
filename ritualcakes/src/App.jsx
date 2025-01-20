@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, useNavigate, useLocation } from 'react-ro
 import './App.css';
 import Home from './components/Home';
 import About from './components/About';
-import Contact from './components/Contact';
 import Customization from './components/Customization';
 import Cart from './components/Cart';
 import Orders from './components/Orders.jsx';
@@ -88,7 +87,6 @@ function App() {
               {/* Other routes go here */}
               <Route path='/' element={<Home />} />
               <Route path='/about' element={<About />} />
-              <Route path='/contact' element={<Contact />} />
               <Route path='/designs' element={<Designs />} />
               <Route path='/customization' element={<Customization />} />
               <Route path='/order' element={<Orders />} />

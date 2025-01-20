@@ -53,7 +53,7 @@ const Designs = () => {
           <p className="text-gray-500 font-montserrat font-bold text-2xl mb-4">
             Click on carousel to see all page designs from our page /
           </p>
-          <p className="text-brown font-montserrat font-bold text-2xl mb-4">
+          <p className="text-darkcustombg1 font-montserrat font-bold text-2xl mb-4">
             View from Our Page
           </p>
           <NavLink

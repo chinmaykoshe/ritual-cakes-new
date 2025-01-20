@@ -129,3 +129,42 @@ body{
 .card-container.visible {
   opacity: 1;
 }
+/* Initial styling for the icons */
+.theme-toggle i {
+  cursor: pointer;
+  transition: transform 0.5s ease, opacity 0.5s ease;  /* Smooth transition for rotation and opacity */
+}
+
+/* Hide the moon icon initially */
+#moon {
+  display: none;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #030303;
+  color: rgb(169, 169, 169);
+}
+
+body.dark-mode #sun {
+  display: none;
+}
+
+body.dark-mode #moon {
+  display: block;
+}
+
+/* Rotation effect */
+body.dark-mode .theme-toggle i {
+  transform: rotate(360deg);  /* Apply rotation when dark mode is enabled */
+}
+
+/* When switching from light to dark or vice versa, rotate the icon */
+.theme-toggle i {
+  transition: transform 01.5s ease-in-out, opacity 01.5s ease-in-out;  /* Transition for both rotation and opacity */
+}
+
+/* Rotation reset on the sun icon */
+#sun {
+  transform: rotate(0deg);  /* Reset rotation to 0 for sun icon */
+}

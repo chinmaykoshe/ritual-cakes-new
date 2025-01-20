@@ -103,7 +103,7 @@ const Reviews = ({ orderID }) => {
         </div>
       )}
 
-      <hr className="border-2 border-brown m-12 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 m-12 md:mx-20" />
 
       {isLoggedIn ? (
         <>

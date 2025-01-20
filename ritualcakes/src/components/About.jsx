@@ -4,7 +4,7 @@ function About() {
   const reviews = [
     { id: 1, name: "John Doe", text: "Amazing cakes! Highly recommend!" },
     { id: 2, name: "Jane Smith", text: "The chocolates were incredible!" },
-    { id: 3, name: "Emily Brown", text: "Delicious cupcakes, will order again!" }
+    { id: 3, name: "Emily darkcustombg1", text: "Delicious cupcakes, will order again!" }
   ];
 
   return (

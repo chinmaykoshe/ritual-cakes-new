@@ -42,7 +42,7 @@ function UserButton() {
       <div className="mb-6">
         <Link
           to="/" // Assuming "/designs" is your designs list page
-          className="text-brown font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
+          className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
           &larr; Back to Home
         </Link>

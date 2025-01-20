@@ -38,7 +38,7 @@ const Catalogue = () => {
               <option
                 key={index}
                 value={category}
-                className="text-lg text-customGray hover:bg-darkcustombg hover:text-white "
+                className="text-lg text-black hover:bg-white "
               >
                 {category.replace(/([A-Z])/g, ' $1')}
               </option>
@@ -50,7 +50,7 @@ const Catalogue = () => {
             {categories.map((category, index) => (
               <li
                 key={index}
-                className={`text-lg text-customGray hover:text-white cursor-pointer px-2 py-1 rounded-lg ${
+                className={`text-lg text-brown hover:text-white cursor-pointer px-2 py-1 rounded-lg ${
                   activeCategory === category
                     ? "text-black font-bold bg-darkcustombg mr-8"
                     : "hover:bg-darkcustombg mr-8"
@@ -71,7 +71,7 @@ const Catalogue = () => {
       <div className="flex-1">
         {categories.map((category) => (
           <div key={category} id={category} className="mb-12">
-            <h1 className="text-3xl font-bold mb-6 text-darkcustombg1">{category.replace(/([A-Z])/g, ' $1')}</h1>
+            <h1 className="text-3xl font-bold mb-6 text-brown">{category.replace(/([A-Z])/g, ' $1')}</h1>
             <ul className="bg-darkcustombg rounded-lg shadow-lg p-6">
               {elements[category].map((item) => (
                 <li

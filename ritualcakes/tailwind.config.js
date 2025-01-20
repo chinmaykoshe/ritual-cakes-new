@@ -22,7 +22,6 @@ export default {
         darkcustombg:'rgb(255, 228, 208)',
         darkcustombg1:'rgb(72, 37, 11)',
         darkcustombg2:'rgb(255, 192, 143)',
-        brown:'rgb(59, 45, 34)'
        },
 
     },

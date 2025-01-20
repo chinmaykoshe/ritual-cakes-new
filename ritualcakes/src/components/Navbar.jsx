@@ -11,6 +11,7 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true : false);
   const [isOpen, setIsOpen] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false); // State to track dark mode
 
   const { cart } = useCart(); // Accessing the cart from context
 
@@ -18,11 +19,22 @@ function Navbar() {
 
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem('token') ? true : false);
+    setIsDarkMode(localStorage.getItem('darkMode') === 'true'); // Retrieve dark mode preference from localStorage
   }, []);
+
+  useEffect(() => {
+    // Set dark mode on body based on state
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'true'); // Store preference
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'false'); // Store preference
+    }
+  }, [isDarkMode]);
 
   const handleSignOut = () => {
     const isConfirmed = window.confirm('Are you sure you want to sign out?');
-    
     if (isConfirmed) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -33,7 +45,7 @@ function Navbar() {
 
   return (
     <div className="mb-14">
-      <nav className="fixed top-0 left-0 w-full border-grey-200 font-montserrat bg-orange-50  bg-opacity-80 backdrop-blur-md z-[9999]">
+      <nav className="fixed top-0 left-0 w-full border-grey-200 font-montserrat bg-orange-50 bg-opacity-80 backdrop-blur-md z-[9999]">
         <div className="w-full px-3 py-2 flex items-center justify-between mx-auto">
           <div className="flex items-center rtl:space-x-reverse">
             <div className="lg:hidden flex items-center mr-2">
@@ -63,27 +75,37 @@ function Navbar() {
             </button>
 
             <button
-  className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out"
-  onClick={() => {
-    navigate('/cart');
-    window.location.reload(); // Avoid this reload if unnecessary
-  }}
->
-  <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
-
-  {/* Badge for total items */}
-  {cart?.length > 0 && (
-    <span
-      className="absolute md:-top-2 md:-right-1 -top-1 -right-2 bg-red-500 text-white font-bold rounded-full md:w-5 md:h-5 w-4 h-4 text-xs  flex items-center justify-center"
-    >
-      {cart?.reduce((total, item) => total + item.quantity, 0)}
-    </span>
-  )}
-</button>
+              className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out"
+              onClick={() => {
+                navigate('/cart');
+                window.location.reload(); // Avoid this reload if unnecessary
+              }}
+            >
+              <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
+              {cart?.length > 0 && (
+                <span className="absolute md:-top-2 md:-right-1 -top-1 -right-2 bg-red-500 text-white font-bold rounded-full md:w-5 md:h-5 w-4 h-4 text-xs flex items-center justify-center">
+                  {cart?.reduce((total, item) => total + item.quantity, 0)}
+                </span>
+              )}
+            </button>
 
             <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() => navigate('/UserDetails')}>
               <i className="fa-solid fa-user md:text-2xl text-xl"></i>
             </button>
+    {/* Dark mode toggle icons */}
+<div className="theme-toggle relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out">
+  <i
+    className={`fa-solid fa-sun ${isDarkMode ? 'hidden' : 'block'} ${isDarkMode ? 'text-white-500' : 'text-brown'} text-xl`}
+    onClick={() => setIsDarkMode(true)}
+  ></i>
+  <i
+    className={`fa-solid fa-moon ${isDarkMode ? 'block' : 'hidden'} ${isDarkMode ? 'text-brown' : 'text-white-500'} text-xl`}
+    onClick={() => setIsDarkMode(false)}
+  ></i>
+</div>
+
+
+
 
             <button
               type="button"
@@ -96,18 +118,18 @@ function Navbar() {
         </div>
       </nav>
 
+
       {showSearchBar && <SearchBar showSearchBar={showSearchBar} setShowSearchBar={setShowSearchBar} />}
 
-
-      {!isLoggedIn &&  (
-        <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2 ">
-          <p className="text-red-600  md:font-semibold">
+      {!isLoggedIn && (
+        <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2">
+          <p className="text-red-600 md:font-semibold">
             Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to order online.
           </p>
         </div>
       )}
 
-
+      {/* Mobile menu */}
       <div className={`fixed inset-0 z-40 ${isOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black bg-opacity-50" onClick={toggleMenu}></div>
         <div className={`fixed top-0 left-0 w-64 bg-white h-full shadow-lg z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-500 ease-in-out`}>

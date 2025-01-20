@@ -54,7 +54,7 @@ function Home() {
         <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="flex-1 lg:ml-16 md:mb-8">
             <motion.h1 
-              className="text-4xl md:text-5xl lg:text-7xl font-bold font-montserrat text-brown"
+              className="text-4xl md:text-5xl lg:text-7xl font-bold font-montserrat text-darkcustombg1"
               initial={{ x: -100 }} 
               animate={{ x: 0 }} 
               transition={{ duration: 0.4 }}
@@ -99,7 +99,7 @@ function Home() {
         </div>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Specials Section */}
       <motion.div 
@@ -109,7 +109,7 @@ function Home() {
         transition={{ duration: 0.6 }}
         
       >
-        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-brown">Our Specials</h2>
+        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Our Specials</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <motion.div 
             whileInView={{ opacity: 1 }}
@@ -146,7 +146,7 @@ function Home() {
         </div>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Categories Section */}
       <motion.div 
@@ -156,7 +156,7 @@ function Home() {
         transition={{ duration: 0.6 }}
         
       >
-        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-brown">Explore Our Categories</h2>
+        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Explore Our Categories</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {randomDesigns.length > 0 ? (
             randomDesigns.map((designKey) => (
@@ -179,7 +179,7 @@ function Home() {
         </div>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Customer Reviews Section */}
       <motion.div 
@@ -189,7 +189,7 @@ function Home() {
         transition={{ duration: 0.6 }}
         
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-brown">What Our Customers Say</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-darkcustombg1">What Our Customers Say</h2>
         <div className="flex flex-col md:flex-row justify-center gap-6">
           {reviews.map((review) => (
             <motion.div 
@@ -202,7 +202,7 @@ function Home() {
             >
               <h1 className='text-8xl my-[-48px]'>&ldquo;</h1>
               <div className="flex items-center my-4">
-                <span className="md:text-xl text-lg font-semibold text-brown">{review.name}</span>
+                <span className="md:text-xl text-lg font-semibold text-darkcustombg1">{review.name}</span>
                 <div className="text-yellow-500 text-m md:text-lg ml-2">★★★★★</div>
               </div>
               <p className="text-gray-700 md:text-lg text-sm italic">
@@ -213,7 +213,7 @@ function Home() {
         </div>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Baking Process Section */}
       <motion.div 
@@ -223,7 +223,7 @@ function Home() {
         transition={{ duration: 0.6 }}
         
       >
-        <h2 className="text-4xl font-bold text-center text-brown">How We Bake</h2>
+        <h2 className="text-4xl font-bold text-center text-darkcustombg1">How We Bake</h2>
         <div className="flex flex-col md:flex-row justify-between items-center mt-8">
           <img
             src="/baking process.png"
@@ -236,7 +236,7 @@ function Home() {
         </div>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Subscription Section */}
       <motion.div 
@@ -262,7 +262,7 @@ function Home() {
         </motion.button>
       </motion.div>
 
-      <hr className="border-2 border-brown mx-4 md:mx-20" />
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
       {/* Google Maps Section */}
       <motion.div 
@@ -272,7 +272,7 @@ function Home() {
         transition={{ duration: 0.6 }}
         
       >
-        <h2 className="text-4xl font-bold text-center text-brown">Find Us Here</h2>
+        <h2 className="text-4xl font-bold text-center text-darkcustombg1">Find Us Here</h2>
         <p className="text-lg text-center mt-4 text-gray-600">
           Visit us at our location for a closer look at our delicious cakes!
         </p>
