@@ -76,8 +76,8 @@ const ProductPage = () => {
   
     if (!token) {
       // If no token, inform the user to sign in
-      setErrorMessage("Please sign in to add items to your cart");
-      setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
+      setTimeout(() => setErrorMessage("Please sign in to add items to your cart"), 3000);
+      setTimeout(() => setSuccessMessage("Product added to cart sucessfully"), 3000); // Clear the message after 3 seconds
       return;
     }
   

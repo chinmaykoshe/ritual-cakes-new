@@ -191,13 +191,13 @@ function Signup() {
   <button
     type="button"
     onClick={togglePasswordVisibility}
-    className="absolute top-1/2 right-3 transform -translate-y-1/2"
+    className="absolute mt-6 right-4 transform -translate-y-1/2"
     aria-label="Toggle password visibility"
   >
     {passwordVisible ? (
-      <i className="fa-regular fa-eye-slash text-gray-700"></i> // Eye Slash (password hidden)
+      <i className="fa-regular fa-eye text-gray-700"></i> // Eye Slash (password hidden)
     ) : (
-      <i className="fa-regular fa-eye text-gray-700"></i> // Eye (password visible)
+      <i className="fa-solid fa-eye text-gray-700"></i> // Eye (password visible)
     )}
   </button>
 </div>

@@ -1,7 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Import the CartContext
-
 function Cart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [errorMessages, setErrorMessages] = useState("");
@@ -21,6 +17,11 @@ function Cart() {
   // Calculate total price
   const calculateTotal = () => {
     return cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
+  };
+
+  // Calculate total number of items
+  const calculateTotalItems = () => {
+    return cart?.reduce((total, item) => total + item.quantity, 0) || 0;
   };
 
   const handleRemoveFromCart = (orderId) => {
@@ -72,6 +73,11 @@ function Cart() {
           <p className="text-center p-4">Loading your cart... </p>
         ) : cart?.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
+            <div className="text-right">
+              <p className="text-lg font-semibold">
+                Total Items: <span>{calculateTotalItems()}</span>
+              </p>
+            </div>
             {cart.map((item) => (
               <div
                 key={item.orderID}

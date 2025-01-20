@@ -55,11 +55,11 @@ function Navbar() {
           </div>
 
           <div className="ml-auto flex items-center space-x-4">
-            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() => setShowSearchBar(!showSearchBar)}>
+            <button className="relative text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out" onClick={() => setShowSearchBar(!showSearchBar)}>
               <i className="fa-solid fa-magnifying-glass md:text-2xl text-lg"></i>
             </button>
 
-            <button className="relative hover:text-gray-500 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); window.location.reload(); }}}>
+            <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); window.location.reload(); }}}>
               <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
             </button>
 

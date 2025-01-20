@@ -8,10 +8,7 @@ const Reviews = ({ orderID }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // To navigate to the login page
 
-  const apiUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://ritual-cakes-new-ogk5.vercel.app/api/reviews"
-      : "http://localhost:8084/api/reviews";
+  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/reviews";
 
   const isLoggedIn = localStorage.getItem("user");
 

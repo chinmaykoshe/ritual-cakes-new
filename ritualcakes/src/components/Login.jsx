@@ -81,7 +81,7 @@ function Login() {
   return (
     <div className="flex justify-center items-center min-h-screen ">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg mt-2 lg:mt-16">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Sign In</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Sign In / Log In</h2>
         <form onSubmit={handleSignInSubmit}>
           <div className="mb-6">
             <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email</label>
@@ -109,13 +109,13 @@ function Login() {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute top-1/2 right-3 transform -translate-y-1/2"
+              className="absolute mt-6 right-4 transform -translate-y-1/2"
               aria-label="Toggle password visibility"
             >
               {passwordVisible ? (
-                <i className="fa-regular fa-eye-slash text-gray-700"></i> // Eye Slash (password hidden)
+                <i className="fa-regular fa-eye text-gray-700"></i> // Eye Slash (password hidden)
               ) : (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye (password visible)
+                <i className="fa-solid fa-eye text-gray-700"></i> // Eye (password visible)
               )}
             </button>
           </div>
