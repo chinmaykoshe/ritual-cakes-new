@@ -160,10 +160,10 @@ activeCategory === "All Products"
           {visibleCount < sortedCakes.length && (
             <div className="flex justify-center mt-4 md:mt-6">
               <button
-                className="bg-blur-[50%] text-black font-bold px-4 py-2 rounded-lg hover:bg-darkcustombg2 border-4 border-orange-300"
-                onClick={handleShowMore}
+              className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+              onClick={handleShowMore}
               >
-                Show More
+                Show More 
               </button>
             </div>
           )}

@@ -74,7 +74,7 @@ function Navbar() {
   {/* Badge for total items */}
   {cart?.length > 0 && (
     <span
-      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+      className="absolute md:-top-2 md:-right-1 -top-1 -right-2 bg-red-500 text-white font-bold rounded-full md:w-5 md:h-5 w-4 h-4 text-xs  flex items-center justify-center"
     >
       {cart?.reduce((total, item) => total + item.quantity, 0)}
     </span>

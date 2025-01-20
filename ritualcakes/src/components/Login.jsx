@@ -8,6 +8,7 @@ function Login() {
     password: ''
   });
   const [errorMessages, setErrorMessages] = useState(null);
+  const [sucessMessages, setSucessMessages] = useState(null);
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // state to toggle password visibility
 
@@ -54,13 +55,6 @@ function Login() {
       if (!response.ok) {
         const errorData = await response.json();
         console.error(errorData);
-  
-        // Check for specific error related to unregistered email
-        if (errorData.error && errorData.error === 'Email not found') {
-          throw new Error('New email signup required!');
-        }
-  
-        // Otherwise, throw a generic error for incorrect credentials
         throw new Error('Incorrect credentials!');
       }
   
@@ -77,6 +71,9 @@ function Login() {
       console.error(error);
       setErrorMessages(error.message || 'An error occurred during sign-in. Please try again later.');
     } finally {
+      setTimeout(() => {
+      setSucessMessages('Sign in sucess ! Redirecting...');
+      }, 3000);
       setLoading(false);
     }
   };
@@ -121,14 +118,15 @@ function Login() {
               aria-label="Toggle password visibility"
             >
               {passwordVisible ? (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye Slash (password hidden)
+                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
               ) : (
-                <i className="fa-solid fa-eye text-gray-700"></i> // Eye (password visible)
+                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid(password visible)
               )}
             </button>
           </div>
 
           {errorMessages && <p className="text-red-500 text-center mb-4">{errorMessages}</p>}
+          {sucessMessages && <p className="text-green-500 text-center mb-4">{sucessMessages}</p>}
 
           <hr className="my-6" />
           <p className="text-m font-bold text-center">

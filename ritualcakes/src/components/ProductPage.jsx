@@ -53,9 +53,11 @@ const ProductPage = () => {
           return null;
         })
         .filter((item) => item !== null);
+  
       setRelatedProducts(related);
     }
   }, [product]);
+
 
   const handleQuantityChange = (action) => {
     setQuantity((prev) => Math.max(1, action === "increment" ? prev + 1 : prev - 1));
@@ -69,6 +71,10 @@ const ProductPage = () => {
     return ["Square"];
   };
 
+  
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   
 
   const handleAddToCart = async () => {
@@ -92,7 +98,6 @@ const ProductPage = () => {
   
     const response = await addToCart(productToAdd); // Call the async function
     if (response) {
-      
       setTimeout(() => setSuccessMessage("Product added successfully"), 3000); // Clear the message after 3 seconds
     }
   };
@@ -185,7 +190,7 @@ const ProductPage = () => {
           {/* Updated Add to Cart button */}
           <button
             onClick={handleAddToCart}
-            className="w-full py-2 md:py-3 bg-darkcustombg2 font-bold rounded-lg hover:bg-white text-sm focus:border-4 focus:border-darkcustombg md:text-base"
+            className="w-full font-bold mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
           >
             Add to Cart
           </button>
@@ -224,13 +229,19 @@ const ProductPage = () => {
       </div>
 
       <div className="mt-12">
-        <h2 className="text-xl font-semibold text-darkcustomGray">Related Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-          {relatedProducts.map((relatedProduct) => (
-            <Card key={relatedProduct.orderID} product={relatedProduct} />
-          ))}
-        </div>
-      </div>
+  <h2 className="text-xl font-semibold text-darkcustomGray">Related Products</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+    {relatedProducts.length > 0 ? (
+      relatedProducts.map((relatedProduct) => (
+        <Card key={relatedProduct.orderID} orderID={relatedProduct.orderID} />
+      ))
+    ) : (
+      <p>No related products found.</p>
+    )}
+  </div>
+</div>
+
+
     </div>
   );
 };

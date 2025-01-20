@@ -74,7 +74,7 @@ function Footer() {
           {/* Footer Bottom */}
           <div className="mt-8 border-t border-gray-700 pt-4 text-center">
             <p className="text-gray-700 text-sm">
-              © 2024 Ritual Cakes. All Rights Reserved. Designed and developed by Ritual Cakes [Chinmay Koshe].
+              © 2024 Ritual Cakes. All Rights Reserved. Designed and developed by Chinmay Koshe.
             </p>
             <div className="mt-4">
               <a href="/" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Company Information</a>

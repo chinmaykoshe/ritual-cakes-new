@@ -50,8 +50,8 @@ const Designs = () => {
         </div>
 
         <div className="lg:w-1/2 h-full flex flex-col items-center justify-center text-center">
-          <p className="text-brown font-montserrat font-bold text-2xl mb-4">
-            Click on carousel to see all page designs
+          <p className="text-gray-500 font-montserrat font-bold text-2xl mb-4">
+            Click on carousel to see all page designs from our page /
           </p>
           <p className="text-brown font-montserrat font-bold text-2xl mb-4">
             View from Our Page
