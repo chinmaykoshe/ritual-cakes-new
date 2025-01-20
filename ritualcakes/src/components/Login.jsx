@@ -30,20 +30,19 @@ function Login() {
     // Force a page reload after navigation
     window.location.reload();
   };
-
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const url = 'https://ritual-cakes-new-ogk5.vercel.app/auth/login';
-
+  
       // Convert email to lowercase before sending
       const lowercasedSignInData = {
         ...signInData,
         email: signInData.email.toLowerCase(), // Ensure email is lowercase
       };
-
+  
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -51,28 +50,37 @@ function Login() {
         },
         body: JSON.stringify(lowercasedSignInData),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Incorrect credentials!');
+        console.error(errorData);
+  
+        // Check for specific error related to unregistered email
+        if (errorData.error && errorData.error === 'Email not found') {
+          throw new Error('New email signup required!');
+        }
+  
+        // Otherwise, throw a generic error for incorrect credentials
+        throw new Error('Incorrect credentials!');
       }
-
+  
       const { token, email, role } = await response.json();
-
+  
       // Save email and role in lowercase to localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', email.toLowerCase()); // Save email as lowercase
       localStorage.setItem('role', role);
-
+  
       navigateToDashboard(role);
-
+  
     } catch (error) {
-      setErrorMessages(error.message || 'An error occurred during sign-in.');
+      console.error(error);
+      setErrorMessages(error.message || 'An error occurred during sign-in. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
-
+  
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
