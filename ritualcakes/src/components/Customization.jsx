@@ -181,7 +181,7 @@ function CustomizationForm() {
 
         {/* Delivery Date */}
         <div className="mb-4">
-          <label htmlFor="deliveryDate" className="block text-gray-700 font-medium mb-2">Delivery Date</label>
+          <label htmlFor="deliveryDate" className="block text-gray-700 font-medium mb-2"><p>Order Date</p><p className="text-xs text-gray-300">Order Date must be after 2 days</p></label>
           <input
             type="date"
             id="deliveryDate"
@@ -230,7 +230,7 @@ function CustomizationForm() {
           <label htmlFor="specialInstructions" className="block text-gray-700 font-medium mb-2">Special Instructions</label>
           <textarea
             id="specialInstructions"
-            placeholder="also   please mention time between 10 AM TO 11 PM"
+            placeholder="please mention time between 10 AM TO 11 PM"
             name="specialInstructions"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.specialInstructions}

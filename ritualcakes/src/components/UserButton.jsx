@@ -82,20 +82,20 @@ function UserButton() {
               <strong>Address:</strong> {userData.address}
             </p>
             {/* Add 'Check your orders' button */}
-            <div className="mt-6 text-center">
+            <div className="mt-6">
               <button
                 onClick={() => navigate("/orders")} // Redirect to orders page
-                className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:bg-brown"
+                className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
               >
                 Check Your Orders Here
               </button>
             </div>
             {/* Add 'Go to Admin Panel' button */}
             {userEmail === "ritualcake.admin@gmail.com" && userData.role === "admin" && (
-              <div className="mt-4 text-center">
+              <div className="mt-4">
                 <button
                   onClick={() => navigate("/admin/dashboards")} // Redirect to admin panel page
-                  className="bg-green-300 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+                  className="mt-2 bg-green-500 text-white py-2 px-6 rounded-lg hover:text-green-500 hover:bg-white hover:border-2 hover:border-green-500"
                 >
                   Go to Admin Panel
                 </button>

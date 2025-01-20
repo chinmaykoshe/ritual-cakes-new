@@ -194,7 +194,7 @@ const DesignCustomizationPage = () => {
             </div>
             {/* Delivery Date */}
             <div>
-              <label className="block font-bold text-sm mb-2">Delivery Date</label>
+              <label className="block font-bold text-sm mb-2"><p>Order Date</p><p className="text-xs text-gray-300">Order Date must be after 2 days</p></label>
               <input
                 type="date"
                 name="deliveryDate"
@@ -209,9 +209,8 @@ const DesignCustomizationPage = () => {
             <div>
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
               <input
-                type="text"
-            placeholder="also please mention time between 10 AM TO 11 PM"
-
+                type="text"            
+                placeholder="please mention time between 10 AM TO 11 PM"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}

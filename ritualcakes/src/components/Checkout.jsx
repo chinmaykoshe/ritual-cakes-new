@@ -176,7 +176,7 @@ function Checkout() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="orderDate" className="block text-sm font-semibold mb-2">Order Date</label>
+                <label htmlFor="orderDate" className="block text-sm font-semibold mb-2"><p>Order Date</p><p className="text-xs text-gray-300">Order Date must be after 2 days</p></label>
                 <input
                   type="date"
                   id="orderDateInput"

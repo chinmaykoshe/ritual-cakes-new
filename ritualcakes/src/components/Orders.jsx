@@ -151,14 +151,13 @@ function Orders() {
                     <p><strong>Special Instructions:</strong> {customization.specialInstructions || 'N/A'}</p>
                     <p><strong>Delivery Date:</strong> {new Date(customization.deliveryDate).toLocaleDateString()}</p>
                   <p>
-  <strong>Approval Status:</strong>
   <span
     className={`px-2 py-1 rounded ${
-      customization.approvalStatus === 'Approved'
+      customization.approvalStatus === 'approved'
         ? 'bg-green-200 text-green-700'
-        : customization.approvalStatus === 'Pending'
+        : customization.approvalStatus === 'pending'
         ? 'bg-blue-200 text-blue-700'
-        : customization.approvalStatus === 'Rejected'
+        : customization.approvalStatus === 'rejected'
         ? 'bg-red-200 text-red-700'
         : 'bg-yellow-200 text-yellow-700'
     }`}
