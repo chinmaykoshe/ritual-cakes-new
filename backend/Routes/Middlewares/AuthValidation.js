@@ -1,12 +1,5 @@
 const Joi = require('joi');
 
-// Sample function to check if email exists in your database
-const checkIfEmailExists = async (email) => {
-  // Replace this with your actual logic to check the email in the database
-  // For example:
-  const user = await User.findOne({ email });
-  return user ? true : false;
-};
 
 // Signup Validation Middleware
 const signupValidation = (req, res, next) => {
@@ -42,12 +35,6 @@ const loginValidation = async (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: 'Bad Request', error: error.details.map(e => e.message).join(', ') });
-  }
-
-  // Check if the email exists in the database (async)
-  const emailExists = await checkIfEmailExists(req.body.email);
-  if (!emailExists) {
-    return res.status(404).json({ message: 'Email not found', error: 'New email signup required!' });
   }
 
   next();
