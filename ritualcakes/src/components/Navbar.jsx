@@ -4,12 +4,15 @@ import assets from "../assets/assets";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "font-awesome/css/font-awesome.min.css";
 import SearchBar from "./SearchBar";
+import { useCart } from "../context/CartContext";
 
 function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true : false);
   const [isOpen, setIsOpen] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
+
+  const { cart } = useCart(); // Accessing the cart from context
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -59,9 +62,24 @@ function Navbar() {
               <i className="fa-solid fa-magnifying-glass md:text-2xl text-lg"></i>
             </button>
 
-            <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() =>{ {navigate('/cart'); window.location.reload(); }}}>
-              <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
-            </button>
+            <button
+  className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out"
+  onClick={() => {
+    navigate('/cart');
+    window.location.reload(); // Avoid this reload if unnecessary
+  }}
+>
+  <i className="fa-solid fa-cart-shopping md:text-2xl text-lg"></i>
+
+  {/* Badge for total items */}
+  {cart?.length > 0 && (
+    <span
+      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+    >
+      {cart?.reduce((total, item) => total + item.quantity, 0)}
+    </span>
+  )}
+</button>
 
             <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() => navigate('/UserDetails')}>
               <i className="fa-solid fa-user md:text-2xl text-xl"></i>

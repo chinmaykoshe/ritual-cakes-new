@@ -77,7 +77,6 @@ const ProductPage = () => {
     if (!token) {
       // If no token, inform the user to sign in
       setTimeout(() => setErrorMessage("Please sign in to add items to your cart"), 3000);
-      setTimeout(() => setSuccessMessage("Product added to cart sucessfully"), 3000); // Clear the message after 3 seconds
       return;
     }
   
@@ -93,8 +92,8 @@ const ProductPage = () => {
   
     const response = await addToCart(productToAdd); // Call the async function
     if (response) {
-      setSuccessMessage("Product added successfully");
-      setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
+      
+      setTimeout(() => setSuccessMessage("Product added successfully"), 3000); // Clear the message after 3 seconds
     }
   };
 
