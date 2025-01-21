@@ -12,8 +12,6 @@ export default {
         bebas: ['Bebas Neue', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
-        playwrite: ['Playwrite CO Guides', 'serif'],
-        playwriteNL: ['Playwrite NL Guides', 'serif'],
       },
 
       colors: { 
