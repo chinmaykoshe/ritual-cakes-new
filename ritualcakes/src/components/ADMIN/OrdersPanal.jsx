@@ -206,6 +206,7 @@ const OrdersPanel = () => {
             <tr>
               <th className="border border-gray-300 px-4 py-2">Order ID</th>
               <th className="border border-gray-300 px-4 py-2">Customer Email</th>
+              <th className="border border-gray-300 px-4 py-2">Order Items</th>
               <th className="border border-gray-300 px-4 py-2">Order Date</th>
               <th className="border border-gray-300 px-4 py-2">Order Time</th>
               <th className="border border-gray-300 px-4 py-2">Total</th>
@@ -218,6 +219,7 @@ const OrdersPanel = () => {
               <tr key={order._id}>
                 <td className="border border-gray-300 px-4 py-2">{order._id}</td>
                 <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
+                <td className="border border-gray-300 px-4 py-2">{order.orderItems}</td>
                 <td className="border border-gray-300 px-4 py-2">
                   {new Date(order.orderDate).toLocaleDateString()}
                 </td>
