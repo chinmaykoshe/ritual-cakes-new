@@ -219,10 +219,9 @@ const OrdersPanel = () => {
               <tr key={order._id}>
                 <td className="border border-gray-300 px-4 py-2">{order._id}</td>
                 <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>
-                <td className="border border-gray-300 px-4 py-2">
+                <td className="border border-gray-300 px-4 py-2 w-1/4">
   {order.orderItems.map((item, index) => (
     <div key={index} className="mb-2">
-      <div>Order ID: {item.orderID}</div>
       <div>Name: {item.name}</div>
       <div>Shape: {item.shape}</div>
       <div>Quantity: {item.quantity}</div>
