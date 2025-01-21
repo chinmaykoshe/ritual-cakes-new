@@ -225,6 +225,7 @@ const todayTotal = useMemo(() => {
               <th className="border border-gray-300 p-2">Total Amount</th>
               <th className="border border-gray-300 p-2">Order Date</th>
               <th className="border border-gray-300 p-2">Order Time</th>
+              <th className="border border-gray-300 p-2">Phone no</th>
             </tr>
           </thead>
           <tbody>
@@ -238,6 +239,9 @@ const todayTotal = useMemo(() => {
                   <td className="border border-gray-300 p-2">${order.totalAmount}</td>
                   <td className="border border-gray-300 p-2">{formatDate(order.createdAt)}</td>
                   <td className="border border-gray-300 p-2">{formatTime(order.createdAt)}</td>
+                  <td className={`border border-gray-300 p-2 ${order.cakeMessage === 'Ordered from store' ? 'text-gray-500' : 'text-black'}`}>
+                    {order.cakeMessage}
+                  </td>
                 </tr>
               ))
             )}

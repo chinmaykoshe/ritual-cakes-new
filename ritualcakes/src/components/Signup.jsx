@@ -23,6 +23,7 @@ function Signup() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignUpData((prevData) => ({ ...prevData, [name]: value }));
+    setErrorMessages(null); // Clear error messages on input
   };
 
   const handleMobileChange = (e) => {
@@ -30,12 +31,14 @@ function Signup() {
     // Allow only numbers and limit the input length to 10
     if (/^\d{0,10}$/.test(value)) {
       setSignUpData((prevData) => ({ ...prevData, mobile: value }));
+      setErrorMessages(null); // Clear error messages on input
     }
   };
 
   const validatePassword = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/; // At least one letter and one number
     return regex.test(password);
+    
   };
 
   const handlePasswordChange = (e) => {
@@ -44,6 +47,8 @@ function Signup() {
     if (!validatePassword(value)) {
       console.log("Password doesn't meet the criteria.");
     }
+
+  setErrorMessages(null); // Clear error messages on input
   };
 
   const togglePasswordVisibility = () => {
@@ -72,7 +77,7 @@ function Signup() {
 
       setTimeout(() => {
         navigate('/login');
-      }, 500);
+      }, 1000);
 
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';

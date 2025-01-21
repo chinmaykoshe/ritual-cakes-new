@@ -9,6 +9,7 @@ const cakes = Object.values(elements).flat();
 function Store() {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [customMessages, setCustomMessages] = useState({}); // For storing custom messages for each cake
 
   useEffect(() => {
     const defaultOptions = cakes.reduce((acc, cake) => {
@@ -29,6 +30,13 @@ function Store() {
     }));
   };
 
+  const handleCustomMessageChange = (orderID, message) => {
+    setCustomMessages((prevState) => ({
+      ...prevState,
+      [orderID]: message,
+    }));
+  };
+
   const placeOrder = async (selectedCake) => {
     try {
       const userEmail = 'ritualcake.admin@gmail.com';
@@ -46,7 +54,7 @@ function Store() {
       const totalAmount = parseFloat(orderItem.price || 0);
       const deliveryAddress = '123 Main St';
       const paymentMethod = 'COD';
-      const cakeMessage = 'Ordered from store';
+      const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store'; // Use custom message if available
 
       const orderData = {
         userEmail,
@@ -59,21 +67,18 @@ function Store() {
         orderTime: new Date().toLocaleTimeString(),
       };
 
-
-      // Retrieve the token from localStorage or wherever it is stored
       const token = localStorage.getItem("token");
 
       if (!token) {
         throw new Error("Token is missing. Please log in.");
       }
 
-      // Send the POST request with the Authorization header
       const response = await axios.post(
         'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
         orderData,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the bearer token here
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -127,6 +132,7 @@ function Store() {
             <th className="border border-gray-300 px-4 py-2">Weight</th>
             <th className="border border-gray-300 px-4 py-2">Selected Price</th>
             <th className="border border-gray-300 px-4 py-2">Shape</th>
+            <th className="border border-gray-300 px-4 py-2">Contact</th>
             <th className="border border-gray-300 px-4 py-2">Action</th>
           </tr>
         </thead>
@@ -163,6 +169,18 @@ function Store() {
                   <option value="heart">Heart</option>
                 </select>
               </td>
+
+              {/* Text area for custom message */}
+              <td className="border border-gray-300 px-4 py-2">
+                <input 
+                  className="border p-2 w-full"
+                  rows="3"
+                  value={customMessages[cake.orderID] || ''}
+                  onChange={(e) => handleCustomMessageChange(cake.orderID, e.target.value)}
+                  placeholder="Enter mobile number (optional)"
+                />
+              </td>
+
               <td className="border border-gray-300 px-4 py-2">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
