@@ -29,6 +29,29 @@ const OrdersPanel = () => {
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await axios.patch(
+        `${apiUrl}/${orderId}`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      fetchOrders(); // Refresh orders after updating status
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update order status");
+    }
+  };
+
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    setLoading(true);
+    await updateOrderStatus(orderId, newStatus);
+    setLoading(false);
+  };
+  
+
   const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/orders";
 
   const fetchOrders = async () => {
@@ -297,7 +320,7 @@ const OrdersPanel = () => {
                     <select
                       className="border border-gray-400 rounded px-2 py-1"
                       value={order.status}
-                      onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                      onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
