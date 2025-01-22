@@ -87,11 +87,10 @@ const [sucessMessages, setSucessMessages] = useState(null);
         return;
       }
 
-      setTimeout(() => {
-setSucessMessages("Signup Sucess !!!");
-        navigate('/login');
-
-      }, 2000);
+        setTimeout(async () => {
+    setSucessMessages("Signup Sucess !!!");
+    await navigate('/login');
+  }, 2000);
 
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';
