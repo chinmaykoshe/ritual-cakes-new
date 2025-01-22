@@ -61,7 +61,7 @@ const OrdersPanel = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
 
       const response = await axios.get(apiUrl, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `${token}` },
       });
 
       const filteredOrders = response.data.filter(
