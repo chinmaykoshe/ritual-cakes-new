@@ -58,6 +58,15 @@ function Signup() {
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+// Validate password before submitting
+    if (!validatePassword(signUpData.password)) {
+      setErrorMessages("Password must contain at least one letter, one number, and be at least 4 characters long. Special characters are optional.");
+      setLoading(false);
+      return;
+    }
+
+
     try {
       const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup";
       const response = await fetch(url, {
@@ -238,10 +247,12 @@ title="Password must contain at least one letter, one number, and be at least 8 
             </button>
           </div>
 
-          <p className="mt-4 text-center text-m font-bold">
-            Already a customer?{' '}
-            <a href="/login" className="text-blue-500 hover:text-blue-700">Sign In</a>
-          </p>
+<p className="mt-4 text-center text-m font-bold">
+  Already a customer?{' '}
+  <a href="/login" className="text-blue-500 hover:text-blue-700">Sign In</a>
+</p>
+
+
         </form>
       </div>
     </div>
@@ -249,3 +260,4 @@ title="Password must contain at least one letter, one number, and be at least 8 
 }
 
 export default Signup;
+
