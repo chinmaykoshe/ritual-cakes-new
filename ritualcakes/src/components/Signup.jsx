@@ -36,10 +36,10 @@ function Signup() {
   };
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/; // At least one letter and one number
-    return regex.test(password);
-    
-  };
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{4,}$/;
+  return regex.test(password);
+};
+
 
   const handlePasswordChange = (e) => {
     const { value } = e.target;
@@ -186,8 +186,6 @@ function Signup() {
   type={passwordVisible ? "text" : "password"} // Toggle between password and text
   id="password"
   name="password"
-  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{8,}$"
-title="Password must contain at least one letter, one number, and be at least 8 characters long. Special characters are optional."
 
   value={signUpData.password}
   onChange={handlePasswordChange}
