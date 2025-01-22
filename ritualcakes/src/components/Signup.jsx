@@ -13,6 +13,9 @@ function Signup() {
     password: ''
   });
   const [errorMessages, setErrorMessages] = useState(null);
+
+const [sucessMessages, setSucessMessages] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // state for password visibility toggle
 
@@ -85,8 +88,10 @@ function Signup() {
       }
 
       setTimeout(() => {
+setSucessMessages("Signup Sucess !!!");
         navigate('/login');
-      }, 1000);
+
+      }, 2000);
 
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';
@@ -226,6 +231,12 @@ title="Password must contain at least one letter, one number, and be at least 8 
           {errorMessages && (
             <>
               <p className="text-red-500 text-center mb-4">{errorMessages}</p>
+            </>
+          )}
+
+ {sucessMessages && (
+            <>
+              <p className="text-green-500 text-center mb-4">{sucessMessages}</p>
             </>
           )}
 
