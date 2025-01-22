@@ -66,14 +66,15 @@ function Login() {
       localStorage.setItem('role', role);
   
       navigateToDashboard(role);
+
+setTimeout(() => {
+      setSucessMessages('Sign in sucess ! Redirecting...');
+      }, 3000);
   
     } catch (error) {
       console.error(error);
       setErrorMessages(error.message || 'An error occurred during sign-in. Please try again later.');
     } finally {
-      setTimeout(() => {
-      setSucessMessages('Sign in sucess ! Redirecting...');
-      }, 3000);
       setLoading(false);
     }
   };

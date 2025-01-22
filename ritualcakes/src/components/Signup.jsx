@@ -13,6 +13,9 @@ function Signup() {
     password: ''
   });
   const [errorMessages, setErrorMessages] = useState(null);
+
+const [sucessMessages, setSucessMessages] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // state for password visibility toggle
 
@@ -36,10 +39,10 @@ function Signup() {
   };
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/; // At least one letter and one number
-    return regex.test(password);
-    
-  };
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{4,}$/;
+  return regex.test(password);
+};
+
 
   const handlePasswordChange = (e) => {
     const { value } = e.target;
@@ -58,6 +61,15 @@ function Signup() {
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+// Validate password before submitting
+    if (!validatePassword(signUpData.password)) {
+      setErrorMessages("Password must contain at least one letter, one number, and be at least 4 characters long. Special characters are optional.");
+      setLoading(false);
+      return;
+    }
+
+
     try {
       const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup";
       const response = await fetch(url, {
@@ -75,9 +87,10 @@ function Signup() {
         return;
       }
 
-      setTimeout(() => {
-        navigate('/login');
-      }, 1000);
+        setTimeout(async () => {
+    setSucessMessages("Signup Sucess !!!");
+    await navigate('/login');
+  }, 2000);
 
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';
@@ -186,8 +199,11 @@ function Signup() {
   type={passwordVisible ? "text" : "password"} // Toggle between password and text
   id="password"
   name="password"
-  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{4,}$" // Allows special chars optionally
-  title="Password must contain at least one letter, one number, and be at least 4 characters long"
+
+pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{8,}$"
+title="Password must contain at least one letter, one number, and be at least 8 characters long. Special characters are optional."
+
+
   value={signUpData.password}
   onChange={handlePasswordChange}
   className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none pr-10" // Added padding-right for button
@@ -217,6 +233,12 @@ function Signup() {
             </>
           )}
 
+ {sucessMessages && (
+            <>
+              <p className="text-green-500 text-center mb-4">{sucessMessages}</p>
+            </>
+          )}
+
           <div className="flex justify-between items-center mt-6 md:gap-6 gap-4">
             <button
               type="submit"
@@ -235,10 +257,12 @@ function Signup() {
             </button>
           </div>
 
-          <p className="mt-4 text-center text-m font-bold">
-            Already a customer?{' '}
-            <a href="/login" className="text-blue-500 hover:text-blue-700">Sign In</a>
-          </p>
+<p className="mt-4 text-center text-m font-bold">
+  Already a customer?{' '}
+  <a href="/login" className="text-blue-500 hover:text-blue-700">Sign In</a>
+</p>
+
+
         </form>
       </div>
     </div>
@@ -246,3 +270,4 @@ function Signup() {
 }
 
 export default Signup;
+

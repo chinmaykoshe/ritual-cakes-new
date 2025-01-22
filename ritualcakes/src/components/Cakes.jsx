@@ -8,10 +8,10 @@ const categoryMapping = {
   "Extras(specials)": "ExtrasSpecial",
   "Chocolate": "ChocolateCakes",
   "Truffle": "Truffle",
-  "darkcustombg1ie": "darkcustombg1ie",
+  "Brownie Cakes": "Brownie",
   "More...": "OnlyFlavoured",
-  "Real fruits": "RealFruits",
-  "Cheese cake": "CheeseCakes",
+  "Real Fruits": "RealFruits",
+  "Cheese Cakes": "CheeseCakes",
   "Extra Products": "ExtraProducts",
 };
 
