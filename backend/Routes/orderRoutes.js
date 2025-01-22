@@ -82,37 +82,6 @@ router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) 
   res.status(200).json(req.userOrders);
 });
 
-// Update tracking info for an order (Admin only)
-router.put('/orders/:orderID/tracking', ensureAuthenticated, async (req, res) => {
-  try {
-    const { orderID } = req.params;
-    const { trackingNumber, deliveryStatus } = req.body;
-
-    const validStatuses = ['In Transit', 'Out for Delivery', 'Delivered', 'Delayed', 'Failed'];
-    if (deliveryStatus && !validStatuses.includes(deliveryStatus)) {
-      return res.status(400).json({ message: 'Invalid delivery status' });
-    }
-
-    const updatedOrder = await OrderModel.findByIdAndUpdate(
-      orderID,
-      {
-        $set: {
-          'trackingInfo.trackingNumber': trackingNumber,
-          'trackingInfo.deliveryStatus': deliveryStatus,
-        },
-      },
-      { new: true }
-    );
-
-    if (!updatedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    res.status(200).json({ message: 'Tracking info updated', order: updatedOrder });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error', error: error.message });
-  }
-});
 
 // Delete an order by ID (Admin only)
 router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
@@ -137,7 +106,7 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    const validStatuses = ['Pending', 'Completed', 'Cancelled'];
+    const validStatuses = ['Pending','Completed','Cancelled','Accepted'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }

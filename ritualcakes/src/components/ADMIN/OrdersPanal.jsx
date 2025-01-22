@@ -11,6 +11,9 @@ const OrdersPanel = () => {
   const [filterDate, setFilterDate] = useState("");
   const [filterAmount, setFilterAmount] = useState("");
   const [minAmount, setMinAmount] = useState("");
+
+const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating status
+
   const [hideAdminOrders, setHideAdminOrders] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     orderId: true,
@@ -32,8 +35,8 @@ const OrdersPanel = () => {
   
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await axios.patch(
-        `${apiUrl}/${orderId}`,
+      await axios.put(
+        `${apiUrl}/${orderId}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -46,9 +49,9 @@ const OrdersPanel = () => {
   };
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
-    setLoading(true);
+    setUpdatingOrderId(orderId); // Set the updating order ID
     await updateOrderStatus(orderId, newStatus);
-    setLoading(false);
+    setUpdatingOrderId(null); // Clear the updating order ID after completion
   };
   
 
@@ -61,7 +64,7 @@ const OrdersPanel = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
 
       const response = await axios.get(apiUrl, {
-        headers: { Authorization: `${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const filteredOrders = response.data.filter(
@@ -118,6 +121,17 @@ const OrdersPanel = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const getStatusClass = (status) => {
+    const statusClasses = {
+      Pending: "bg-gray-100", // Explicit background for Pending
+      Completed: "bg-green-100",
+      Accepted: "bg-yellow-100",
+      Cancelled: "bg-red-100",
+    };
+  
+    // Default to no background if the status is not recognized
+    return statusClasses[status] || "";
+  };
   
 
   const handleCheckboxChange = (column) => {
@@ -197,6 +211,7 @@ const OrdersPanel = () => {
           <option value="Pending">Pending</option>
           <option value="Completed">Completed</option>
           <option value="Cancelled">Cancelled</option>
+          <option value="Cancelled">Accepted</option>
         </select>
         {/* Filter by Date */}
         <input
@@ -301,35 +316,94 @@ const OrdersPanel = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedOrders.map((order) =>
-              order.orderItems.map((item, index) => (
-                <tr key={`${order._id}-${index}`}>
-                  {visibleColumns.orderId && <td className="border border-gray-300 px-4 py-2">{order._id}</td>}
-                  {visibleColumns.email && <td className="border border-gray-300 px-4 py-2">{order.userEmail}</td>}
-                  {visibleColumns.itemName && <td className="border border-gray-300 px-4 py-2">{item.name}</td>}
-                  {visibleColumns.shape && <td className="border border-gray-300 px-4 py-2">{item.shape}</td>}
-                  {visibleColumns.quantity && <td className="border border-gray-300 px-4 py-2">{item.quantity}</td>}
-                  {visibleColumns.price && <td className="border border-gray-300 px-4 py-2">₹{item.price}</td>}
-                  {visibleColumns.weight && <td className="border border-gray-300 px-4 py-2">{item.weight}</td>}
-                  {visibleColumns.message && <td className="border border-gray-300 px-4 py-2">{order.cakeMessage}</td>}
-                  {visibleColumns.orderDate && <td className="border border-gray-300 px-4 py-2">{new Date(order.orderDate).toLocaleDateString()}</td>}
-                  {visibleColumns.orderTime && <td className="border border-gray-300 px-4 py-2">{order.orderTime}</td>}
-                  {visibleColumns.totalAmount && <td className="border border-gray-300 px-4 py-2">₹{order.totalAmount}</td>}
-                  {visibleColumns.status && <td className="border border-gray-300 px-4 py-2">{order.status}</td>}
-                  {visibleColumns.actions && <td className="border border-gray-300 px-4 py-2">
-                    <select
-                      className="border border-gray-400 rounded px-2 py-1"
-                      value={order.status}
-                      onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Completed">Completed</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
-                  </td>}
-                </tr>
-              ))
-            )}
+
+          {sortedOrders.map((order, orderIndex) =>
+  order.orderItems.map((item, itemIndex) => (
+    <tr
+      key={`${order._id}-${itemIndex}`}
+      className={getStatusClass(order.status)}
+    >
+      {/* Merge Order ID */}
+      {itemIndex === 0 && visibleColumns.orderId && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {order._id}
+        </td>
+      )}
+      {/* Merge Customer Email */}
+      {itemIndex === 0 && visibleColumns.email && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {order.userEmail}
+        </td>
+      )}
+      {/* Individual Items */}
+      {visibleColumns.itemName && (
+        <td className="border border-gray-300 px-4 py-2">{item.name}</td>
+      )}
+      {visibleColumns.shape && (
+        <td className="border border-gray-300 px-4 py-2">{item.shape}</td>
+      )}
+      {visibleColumns.quantity && (
+        <td className="border border-gray-300 px-4 py-2">{item.quantity}</td>
+      )}
+      {visibleColumns.price && (
+        <td className="border border-gray-300 px-4 py-2">₹{item.price}</td>
+      )}
+      {visibleColumns.weight && (
+        <td className="border border-gray-300 px-4 py-2">{item.weight}</td>
+      )}
+      {/* Merge Order Message */}
+      {itemIndex === 0 && visibleColumns.message && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {order.cakeMessage}
+        </td>
+      )}
+      {/* Merge Order Date */}
+      {itemIndex === 0 && visibleColumns.orderDate && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {new Date(order.orderDate).toLocaleDateString()}
+        </td>
+      )}
+      {/* Merge Order Time */}
+      {itemIndex === 0 && visibleColumns.orderTime && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {order.orderTime}
+        </td>
+      )}
+      {/* Merge Total Amount */}
+      {itemIndex === 0 && visibleColumns.totalAmount && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          ₹{order.totalAmount}
+        </td>
+      )}
+      {/* Merge Order Status */}
+      {itemIndex === 0 && visibleColumns.status && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          {order.status}
+        </td>
+      )}
+      {/* Merge Actions */}
+      {itemIndex === 0 && visibleColumns.actions && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          <select
+            className="border border-gray-400 rounded px-2 py-1"
+            value={order.status}
+            onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
+            disabled={updatingOrderId === order._id}
+          >
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Accepted">Accepted</option>
+          </select>
+          {updatingOrderId === order._id && (
+            <span className="text-blue-500 ml-2">Updating...</span>
+          )}
+        </td>
+      )}
+    </tr>
+  ))
+)}
+
           </tbody>
         </table>
       )}
