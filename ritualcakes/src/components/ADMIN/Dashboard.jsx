@@ -34,7 +34,7 @@ function Dashboard() {
       const token = validateAdminAccess(); // Validate role and token
 
       // API URL logic
-  const apiUrl = `${process.env.REACT_APP_API_URL}/orders`;
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
       
 
       // Fetch all orders (no date filter needed here)

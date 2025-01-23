@@ -26,7 +26,7 @@ export const OrderProvider = ({ children }) => {
           throw new Error('Missing authentication details');
         }
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/orders/${userEmail}`, {
+        const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -52,7 +52,7 @@ export const OrderProvider = ({ children }) => {
         setLoading(false);
         return;
       }
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/orders`, orderData, {
+      const response = await axios.post(`https://ritual-cakes-new-ogk5.vercel.app/api/orders`, orderData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
 
@@ -69,7 +69,7 @@ export const OrderProvider = ({ children }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${process.env.REACT_APP_API_URL}/orders/${orderID}`, {
+      await axios.delete(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${orderID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -13,7 +13,7 @@ function Customers() {
     const fetchCustomers = async () => {
       if (token) {
         try {
-  const apiUrl = `${process.env.REACT_APP_API_URL}/users`;
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users`;
           
 
           const response = await axios.get(apiUrl, {
@@ -49,7 +49,7 @@ function Customers() {
     const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
     if (confirmDelete) {
       try {
-        const apiUrl = `${process.env.REACT_APP_API_URL}`;
+        const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api`;
 
         await axios.delete(apiUrl, {
           headers: { Authorization: `Bearer ${token}` },

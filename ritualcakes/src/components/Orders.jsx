@@ -15,7 +15,7 @@ function Orders() {
     const fetchCustomizations = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/customizations/${userEmail}`
+          `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${userEmail}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch customizations");

@@ -21,7 +21,7 @@ const CustomizationPanel = () => {
         throw new Error("Token not found. Please log in again.");
       }
 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/customizations`, {
+      const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,7 +69,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/customizations/${customizationId}`,
+        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
         { approvalStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +96,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/customizations/${customizationId}`,
+        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
         { price: newPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -71,7 +71,7 @@ const [sucessMessages, setSucessMessages] = useState(null);
 
 
     try {
-      const url = process.env.REACT_APP_AUTH_SIGNUP_URL;
+      const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: {

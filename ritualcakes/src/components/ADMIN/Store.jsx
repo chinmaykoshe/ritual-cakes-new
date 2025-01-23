@@ -74,7 +74,7 @@ function Store() {
       }
 
       const response = await axios.post(
-        'http://localhost:8084/api/orders',
+        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
         orderData,
         {
           headers: {

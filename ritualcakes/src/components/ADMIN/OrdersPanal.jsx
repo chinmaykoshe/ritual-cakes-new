@@ -32,7 +32,7 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const apiUrl = `${process.env.REACT_APP_API_URL}`;
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api`;
 
   const updateOrderStatus = async (orderId, newStatus) => {
   try {

@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
       if (userEmail && token) {
         setLoading(true);
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userEmail}`, {
+          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user/${userEmail}`, {
             headers: {
               Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
             },
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/user`, updatedData, {
+      const response = await axios.put(`https://ritual-cakes-new-ogk5.vercel.app/api/user`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
           'Content-Type': 'application/json', // Set content type

@@ -21,7 +21,7 @@ function UserButton() {
       if (token) {
         try {
           setLoading(true);
-          const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
+          const { data } = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUserData(data);
