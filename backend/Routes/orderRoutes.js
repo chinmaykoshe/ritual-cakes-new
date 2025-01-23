@@ -185,7 +185,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     const mailOptionsAdmin = {
       from: 'ritualcakes2019@gmail.com',
       to: 'ritualcakes2019@gmail.com',
-      subject: `New Order Placed: ${newOrder._id}`,
+      subject: `New Order ${userEmail} Placed: ${newOrder._id}`,
       html: orderDetailsHtml,
     };
 
