@@ -29,32 +29,64 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
     totalAmount: true,
     status: true,
     actions: true,
+    delete: false,
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const token = localStorage.getItem("token");
+
 
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
 
   const updateOrderStatus = async (orderId, newStatus) => {
-  try {
-    await axios.put(
-      `${apiUrl}/${orderId}/status`,
-      { status: newStatus },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    fetchOrders(); // Refresh orders after updating status
-  } catch (err) {
-    console.error(err);
-    setError(err.response?.data?.message || "Failed to update order status");
-  }
+    try {
+      await axios.put(
+        `${apiUrl}/${orderId}/status`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      fetchOrders(); // Refresh orders after updating status
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to update order status");
+    }
+  };
+  
+const handleUpdateOrderStatus = async (orderId, newStatus) => {
+  setUpdatingOrderId(orderId); // Set the updating order ID
+  await updateOrderStatus(orderId, newStatus);
+  setUpdatingOrderId(null); // Clear the updating order ID after completion
 };
 
-
-  const handleUpdateOrderStatus = async (orderId, newStatus) => {
-    setUpdatingOrderId(orderId); // Set the updating order ID
-    await updateOrderStatus(orderId, newStatus);
-    setUpdatingOrderId(null); // Clear the updating order ID after completion
+  
+  const deleteOrder = async (orderId) => {
+    // Confirmation alert
+    const confirmed = window.confirm("Are you sure you want to delete this order?");
+    if (!confirmed) return; // If user cancels, exit the function
+  
+    setLoading(true);
+  
+    try {
+      if (!token) throw new Error("Token not found. Please log in again.");
+      setLoading(true);
+      // Delete the order via API
+      await axios.delete(`${apiUrl}/${orderId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // Update the orders list
+      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+  
+      // Success alert
+      alert("Order deleted successfully!");
+    } catch (err) {
+      // Error alert
+      alert(err.response?.data?.message || err.message || "Failed to delete order");
+      setError(err.response?.data?.message || err.message || "Failed to delete order");
+    } finally {
+      setLoading(false);
+    }
   };
   
 
@@ -256,6 +288,25 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
   </label>
 </div>
 
+{/* Toggle for Hide/Show Delete Column */}
+<div
+  className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
+  title="Show or hide delete column" // Tooltip text
+>
+  <input
+    type="checkbox"
+    id="toggleDeleteColumn"
+    checked={visibleColumns.delete}
+    onChange={(e) =>
+      setVisibleColumns((prev) => ({ ...prev, delete: e.target.checked }))
+    }
+    className="h-4 w-4"
+  />
+  <label htmlFor="toggleDeleteColumn" className="text-sm cursor-pointer">
+    <i className="fa-solid fa-trash"></i> Delete Column
+  </label>
+</div>
+
 
 
         {/* Dropdown for Show/Hide Columns */}
@@ -332,7 +383,6 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
             </tr>
           </thead>
           <tbody>
-
           {sortedOrders.map((order, orderIndex) =>
   order.orderItems.map((item, itemIndex) => (
     <tr
@@ -416,9 +466,22 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
           )}
         </td>
       )}
+      {/* Merge Delete Order */}
+      {itemIndex === 0 && visibleColumns.delete && (
+        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+          <button
+            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+            onClick={() => deleteOrder(order._id)}
+            disabled={loading}
+          >
+            Delete
+          </button>
+        </td>
+      )}
     </tr>
   ))
 )}
+
 
           </tbody>
         </table>
