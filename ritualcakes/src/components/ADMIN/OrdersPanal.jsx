@@ -14,7 +14,7 @@ const OrdersPanel = () => {
 
 const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating status
 
-  const [hideAdminOrders, setHideAdminOrders] = useState(false);
+  const [hideAdminOrders, setHideAdminOrders] = useState(true);
   const [visibleColumns, setVisibleColumns] = useState({
     orderId: true,
     email: true,
@@ -292,6 +292,20 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
 </button>
 
       </div>
+      
+<button
+      className="bg-blue-500 text-white px-4 py-1 my-4 rounded hover:bg-red-600"
+      onClick={() => {
+        setSearchQuery("");
+        setFilterStatus("");
+        setFilterDate("");
+        setMinAmount("");
+        setFilterAmount("");
+        setHideAdminOrders("true");
+      }}
+    >
+      Clear All Filters
+    </button>
 
       {/* Orders Table */}
       {sortedOrders.length === 0 ? (

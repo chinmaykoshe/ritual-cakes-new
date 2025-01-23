@@ -19,12 +19,6 @@ const StoreOrders = () => {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("user");
       const role = localStorage.getItem("role");
-      console.log(role); // Ensure this prints 'admin' or the expected role
-
-
-      // Debug: Check local storage values
-      console.log("[DEBUG] Token:", token);
-      console.log("[DEBUG] User Email:", userEmail);
 
       if (!token) throw new Error("Token not found. Please log in again.");
       if (!userEmail) throw new Error("User email not found.");

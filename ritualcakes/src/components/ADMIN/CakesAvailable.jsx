@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { assets } from '../../assets/assets'; // Adjust the path as needed
+import { elements } from '../../assets/assets'; // Adjust the path as needed
 
 function CakesAvailable() {
-  // Array of cake names (you can create this dynamically if you have an array of names)
-  const cakeNames = Object.entries(assets); // Get [name, image] pairs from the assets object
+  // Flattening the elements to access all cakes
+  const allCakes = Object.values(elements).flat(); // Flattens the elements to get all cakes
 
   const [searchQuery, setSearchQuery] = useState(""); // To manage search input
+  
+// Filter cakes based on search query for both name and orderID
+const filteredCakes = allCakes.filter((cake) =>
+  cake.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Match query case-insensitively for name
+  cake.orderID.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively for orderID
+);
 
-  // Filter cakes based on search query
-  const filteredCakes = cakeNames.filter(([name]) =>
-    name.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively
-  );
 
   // Split cakes into two halves
   const half = Math.ceil(filteredCakes.length / 2);
@@ -38,22 +40,24 @@ function CakesAvailable() {
             <thead className='bg-neutral-100'>
               <tr>
                 <th className="border px-4 py-2">Cake Name</th>
+                <th className="border px-4 py-2">Order ID</th>
                 <th className="border px-4 py-2">Image</th>
               </tr>
             </thead>
             <tbody>
               {firstHalf.length > 0 ? (
-                firstHalf.map(([name, image], index) => (
+                firstHalf.map((cake, index) => (
                   <tr key={index}>
-                    <td className="border px-4 py-2">{name}</td>
+                    <td className="border px-4 py-2">{cake.name}</td>
+                    <td className="border px-4 py-2">{cake.orderID}</td>
                     <td className="border px-4 py-2">
-                      <img src={image} alt={name} className="w-[150px] h-full object-cover" />
+                      <img src={cake.img} alt={cake.name} className="w-[150px] h-full object-cover" />
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="2" className="border px-4 py-2 text-center">No cakes found</td>
+                  <td colSpan="3" className="border px-4 py-2 text-center">No cakes found</td>
                 </tr>
               )}
             </tbody>
@@ -66,22 +70,24 @@ function CakesAvailable() {
             <thead className='bg-neutral-100'>
               <tr>
                 <th className="border px-4 py-2">Cake Name</th>
+                <th className="border px-4 py-2">Order ID</th>
                 <th className="border px-4 py-2">Image</th>
               </tr>
             </thead>
             <tbody>
               {secondHalf.length > 0 ? (
-                secondHalf.map(([name, image], index) => (
+                secondHalf.map((cake, index) => (
                   <tr key={index}>
-                    <td className="border px-4 py-2">{name}</td>
+                    <td className="border px-4 py-2">{cake.name}</td>
+                    <td className="border px-4 py-2">{cake.orderID}</td>
                     <td className="border px-4 py-2">
-                      <img src={image} alt={name} className="w-[150px] h-full object-cover" />
+                      <img src={cake.img} alt={cake.name} className="w-[150px] h-full object-cover" />
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="2" className="border px-4 py-2 text-center">No cakes found</td>
+                  <td colSpan="3" className="border px-4 py-2 text-center">No cakes found</td>
                 </tr>
               )}
             </tbody>
