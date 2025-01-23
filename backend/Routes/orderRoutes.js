@@ -170,8 +170,8 @@ const orderDetailsHtml = `
     <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
 
     <footer>
-      <p>Sincerely,<br>The Cake Store Team</p>
-      <p>&copy; ${new Date().getFullYear()} The Cake Store. All rights reserved.</p>
+      <p>Sincerely,<br>Ritual Cakes</p>
+      <p>&copy; ${new Date().getFullYear()} The  Ritual Cakes. All rights reserved.</p>
     </footer>
   </body>
 </html>
@@ -357,8 +357,8 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
     <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
 
     <footer>
-      <p>Sincerely,<br>The Cake Store Team</p>
-      <p>&copy; ${new Date().getFullYear()} The Cake Store. All rights reserved.</p>
+      <p>Sincerely,<br> Ritual Cakes </p>
+      <p>&copy; ${new Date().getFullYear()} Ritual Cakes. All rights reserved.</p>
     </footer>
   </body>
 </html>
