@@ -36,18 +36,40 @@ const OrdersPanel = () => {
 
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
 
-  // Function to update the order status
+  
+
   const updateOrderStatus = async (orderId, status) => {
     if (!token) {
       console.error("Token not found");
       return;
     }
-
+  
+    // Assuming the `order` object is available in your context or state
+    const order = orders.find((order) => order._id === orderId); // Fetch the specific order by ID
+    const userEmail = order ? order.userEmail : null;  // Get the userEmail from the order
+    const itemName = order ? order.orderItems[0].name : "Unknown Item"; // Fetch item name (assuming first item)
+    const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight"; // Fetch item weight (assuming first item)
+  
+    if (!userEmail) {
+      console.error("User email not found");
+      return;
+    }
+  
+    // Confirmation dialog before proceeding with the status update
+    const confirmationMessage = `Are you sure you want to set ${userEmail}'s order of ${itemName} (Weight: ${itemWeight}) status to ${status}?`;
+    const isConfirmed = window.confirm(confirmationMessage);
+  
+    if (!isConfirmed) {
+      console.log("Order status update canceled");
+      return;  // User canceled the operation
+    }
+  
     try {
       const response = await axios.put(
         `${apiUrl}/${orderId}/status`,
         {
-          status: status,  // status needs to be passed
+          status: status,  // Order status
+          userEmail: userEmail,  // Include the user email here
         },
         {
           headers: {
@@ -55,19 +77,20 @@ const OrdersPanel = () => {
           },
         }
       );
+  
       return response.data; // Return response data if update is successful
     } catch (error) {
       console.error("Error updating order status:", error.response ? error.response.data : error.message);
       setError("Failed to update order status.");
     }
   };
-
+  
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     setUpdatingOrderId(orderId); // Set the updating order ID
-
+  
     // Update the order status via API
     const updatedOrder = await updateOrderStatus(orderId, newStatus);
-
+  
     if (updatedOrder) {
       // Update the state with the updated status
       setOrders((prevOrders) =>
@@ -78,9 +101,11 @@ const OrdersPanel = () => {
         )
       );
     }
-
+  
     setUpdatingOrderId(null); // Clear the updating order ID after completion
   };
+  
+
 
   // Function to delete the order
   const deleteOrder = async (orderId) => {
