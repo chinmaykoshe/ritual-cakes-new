@@ -51,27 +51,26 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     if (cakeMessage && cakeMessage.length > 100) {
       return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
     }
+// Assuming you have userName or userDetails that contain orderer's info
+const userEmailNormalized = userEmail.toLowerCase();
 
-    // Normalize userEmail
-    const userEmailNormalized = userEmail.toLowerCase();
+const newOrder = new OrderModel({
+  userEmail: userEmailNormalized,
+  orderItems,
+  totalAmount,
+  deliveryAddress,
+  paymentMethod,
+  cakeMessage,
+  orderDate,
+  orderTime,
+  status: 'Pending',
+  createdAt: new Date(),
+});
 
-    const newOrder = new OrderModel({
-      userEmail: userEmailNormalized,
-      orderItems,
-      totalAmount,
-      deliveryAddress,
-      paymentMethod,
-      cakeMessage,
-      orderDate,
-      orderTime,
-      status: 'Pending', // Default status
-      createdAt: new Date(),
-    });
+await newOrder.save();
 
-    await newOrder.save();
-
-    // Send email notification
-    const orderDetailsHtml = `
+// Order Details HTML with user details included
+const orderDetailsHtml = `
 <!DOCTYPE html>
 <html>
   <head>
@@ -133,9 +132,12 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     <p>Your order <strong>${newOrder._id}</strong> has been completed and is being shipped.</p>
 
     <p><strong>Order Number:</strong> ${newOrder._id}</p>
+    
+    <h3>Orderer's Information:</h3>
+    <p><strong>Name:</strong> ${userName}</p>
+    <p><strong>Email:</strong> ${userEmail}</p>
 
     <h3>Order Details:</h3>
-
     <p><strong>Date:</strong> ${new Date(orderDate).toDateString()}</p>
 
     <table>
@@ -173,21 +175,21 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     </footer>
   </body>
 </html>
-    `;
+`;
 
-    const mailOptionsUser = {
-      from: 'ritualcakes2019@gmail.com',
-      to: userEmail,
-      subject: `NEW ORDER PLACED FROM RITUAL CAKES: ${newOrder._id}`,
-      html: orderDetailsHtml,
-    };
+const mailOptionsUser = {
+  from: 'ritualcakes2019@gmail.com',
+  to: userEmail,
+  subject: `NEW ORDER PLACED FROM RITUAL CAKES: ${newOrder._id}`,
+  html: orderDetailsHtml,
+};
 
-    const mailOptionsAdmin = {
-      from: 'ritualcakes2019@gmail.com',
-      to: 'ritualcakes2019@gmail.com',
-      subject: `New Order ${userEmail} Placed: ${newOrder._id}`,
-      html: orderDetailsHtml,
-    };
+const mailOptionsAdmin = {
+  from: 'ritualcakes2019@gmail.com',
+  to: 'ritualcakes2019@gmail.com',
+  subject: `New Order from ${userEmail} orderID: ${newOrder._id}`,
+  html: orderDetailsHtml,
+};
 
     try {
       await transporter.sendMail(mailOptionsUser);
