@@ -8,13 +8,64 @@ router.get('/user', ensureAuthenticated, async (req, res) => {
   try {
     const user = await UserModel.findById(req.user._id); // or use findByEmail if necessary
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found', success: false });
     }
-    res.json(user); // Respond with user data
+    res.json({
+      success: true,
+      user: {
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        mobile: user.mobile,
+        dob: user.dob,
+        address: user.address,
+      },
+    }); // Respond with user data
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user data' });
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ message: 'Error fetching user data', success: false });
   }
 });
+
+// Route to update user data (Authenticated user can update their own data)
+router.put('/user', ensureAuthenticated, async (req, res) => {
+  try {
+    const { name, surname, email, password, address, mobile, dob } = req.body;
+    const user = await UserModel.findById(req.user._id); // or use findByEmail if necessary
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', success: false });
+    }
+
+    // Update user details
+    if (name) user.name = name;
+    if (surname) user.surname = surname;
+    if (address) user.address = address;
+    if (mobile) user.mobile = mobile;
+    if (dob) user.dob = dob;
+    if (password) user.password = await bcrypt.hash(password, 10);
+
+    await user.save();
+
+    res.status(200).json({
+      message: `User details updated successfully at ${new Date().toLocaleString()}`,
+      success: true,
+      user: {
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        mobile: user.mobile,
+        dob: user.dob,
+        address: user.address,
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(500).json({ message: 'Error updating user data', success: false });
+  }
+});
+
+
 
 // Route to fetch all users (Admin only)
 router.get('/users', ensureAuthenticated, async (req, res) => {

@@ -36,7 +36,7 @@ function Login() {
     setLoading(true);
   
     try {
-      const url = 'https://ritual-cakes-new-ogk5.vercel.app/auth/login';
+      const url = process.env.REACT_APP_AUTH_LOGIN_URL;
   
       // Convert email to lowercase before sending
       const lowercasedSignInData = {

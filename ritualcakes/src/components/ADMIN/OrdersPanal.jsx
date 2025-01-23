@@ -32,21 +32,24 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  
+  const apiUrl = `${process.env.REACT_APP_API_URL}`;
+
   const updateOrderStatus = async (orderId, newStatus) => {
-    try {
-      await axios.put(
-        `${apiUrl}/${orderId}/status`,
-        { status: newStatus },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      fetchOrders(); // Refresh orders after updating status
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update order status");
-    }
-  };
+  try {
+    await axios.put(
+      `${apiUrl}/${orderId}/status`,
+      { status: newStatus },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+    fetchOrders(); // Refresh orders after updating status
+  } catch (err) {
+    console.error(err);
+    setError(err.response?.data?.message || "Failed to update order status");
+  }
+};
+
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     setUpdatingOrderId(orderId); // Set the updating order ID
@@ -55,7 +58,6 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
   };
   
 
-  const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api/orders";
 
   const fetchOrders = async () => {
     setLoading(true);

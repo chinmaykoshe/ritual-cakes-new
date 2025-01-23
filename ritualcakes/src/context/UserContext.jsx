@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
       if (userEmail && token) {
         setLoading(true);
         try {
-          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/user/${userEmail}`, {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${userEmail}`, {
             headers: {
               Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
             },
@@ -47,8 +47,34 @@ export const UserProvider = ({ children }) => {
     fetchUserData();
   }, []); // Runs once when the component is mounted
 
+  // Update user data
+  const updateUser = async (updatedData) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("No token found. Please log in again.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/user`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
+          'Content-Type': 'application/json', // Set content type
+        },
+      });
+      setUser(response.data.user); // Update user data
+      setLoading(false); // Stop loading
+    } catch (error) {
+      setLoading(false); // Stop loading
+      setError("Error updating user data");
+      console.error("Error updating user data:", error);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout, loading, error }}>
+    <UserContext.Provider value={{ user, login, logout, loading, error, updateUser }}>
       {children}
     </UserContext.Provider>
   );

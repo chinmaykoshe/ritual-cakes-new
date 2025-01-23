@@ -74,12 +74,14 @@ function Store() {
       }
 
       const response = await axios.post(
-        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
+        'http://localhost:8084/api/orders',
         orderData,
         {
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
+          
         }
       );
 
