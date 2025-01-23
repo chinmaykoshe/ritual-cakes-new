@@ -17,35 +17,34 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null); // Reset user state when logging out
   };
+// Inside your UserContext
+useEffect(() => {
+  const fetchUserData = async () => {
+    const userEmail = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
-  // Fetch user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userEmail = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
-
-      if (userEmail && token) {
-        setLoading(true);
-        try {
-          const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user/${userEmail}`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // Ensure "Bearer " is added to the token
-            },
-          });
-          setUser(response.data); // Set user data
-          setLoading(false); // Stop loading
-        } catch (error) {
-          setLoading(false); // Stop loading
-          setError("Error fetching user data");
-          console.error("Error fetching user data:", error);
-        }
-      } else {
-        setError("No user data found in localStorage");
+    if (userEmail && token) {
+      setLoading(true);
+      try {
+        const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data); // Set user data
+        setLoading(false); // Stop loading
+      } catch (error) {
+        setLoading(false); // Stop loading
+        setError("Error fetching user data");
+        console.error("Error fetching user data:", error);
       }
-    };
+    } else {
+      setError("No user data found in localStorage");
+    }
+  };
 
-    fetchUserData();
-  }, []); // Runs once when the component is mounted
+  fetchUserData();
+}, []); // Runs once when the component is mounted
 
   // Update user data
   const updateUser = async (updatedData) => {

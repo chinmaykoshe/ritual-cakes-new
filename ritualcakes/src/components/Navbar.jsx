@@ -92,7 +92,8 @@ function Navbar() {
             <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() => navigate('/UserDetails')}>
               <i className="fa-solid fa-user md:text-2xl text-xl"></i>
             </button>
-    {/* Dark mode toggle icons */}
+
+{/*    
 <div className="theme-toggle relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out">
   <i
     className={`fa-solid fa-sun ${isDarkMode ? 'hidden' : 'block'} ${isDarkMode ? 'text-white-500' : 'text-brown'} text-xl`}
@@ -103,7 +104,7 @@ function Navbar() {
     onClick={() => setIsDarkMode(false)}
   ></i>
 </div>
-
+ */}
 
 
 

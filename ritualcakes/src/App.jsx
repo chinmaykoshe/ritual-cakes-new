@@ -35,6 +35,7 @@ import AdminLayout from './components/ADMIN/AdminLayout';
 import Checkout from './components/Checkout.jsx';
 import { CustomizationProvider } from './context/customizeContext';
 import { OrderProvider } from './context/OrderContext';
+import { UserProvider } from "./context/UserContext";
 import CustomizePanal from './components/ADMIN/CustomizePanal.jsx';
 import CakesAvailable from './components/ADMIN/CakesAvailable.jsx';
 import StoreOrders from './components/ADMIN/StoreOrders.jsx';
@@ -63,6 +64,7 @@ function App() {
       <CustomizationProvider> 
       <OrderProvider>
         <CartProvider>
+        <UserProvider>
           {!isAdminPath && (
             <div className='z-[1] relative'>
               <Navbar />
@@ -109,6 +111,7 @@ function App() {
               <Footer />
             </div>
           )}
+          </UserProvider>
         </CartProvider>
       </OrderProvider>
       </CustomizationProvider>  
