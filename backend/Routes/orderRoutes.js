@@ -239,10 +239,13 @@ router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
   }
 });
 
+
+
+
 router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { status, userEmail } = req.body;  // Extract userEmail from the request body
+    const { status, userEmail } = req.body;  // Extract userEmail and status from the request body
 
     if (!userEmail) {
       return res.status(400).json({ message: 'userEmail is required' });  // Ensure email is provided
@@ -253,10 +256,11 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
+    // Find and update the order
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       orderId,
       { status },
-      { new: true }
+      { new: true }  // This ensures the updated document is returned
     );
 
     if (!updatedOrder) {
@@ -266,8 +270,7 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
     // No need to fetch userEmail from updatedOrder since it's passed from the frontend
     console.log("User email received:", userEmail);
 
-
-
+    // Construct HTML for the email
     const orderDetailsHtml = `
     <!DOCTYPE html>
     <html>
@@ -316,14 +319,15 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
     </html>
     `;
 
-
+    // Email options to send to the user
     const mailOptionsUser = {
-      from: 'ritualcakes2019@gmail.com',
-      to: userEmail,  // Use the userEmail received from the frontend
-      subject: `ORDER WAS ${status} FOR ${updatedOrder._id}`,
-      html: orderDetailsHtml,
+      from: 'ritualcakes2019@gmail.com', // Sender email
+      to: userEmail,  // Use the userEmail passed from the frontend
+      subject: `ORDER WAS ${status} FOR ${updatedOrder._id}`,  // Subject line
+      html: orderDetailsHtml,  // The HTML content of the email
     };
 
+    // Send email to the user
     try {
       await transporter.sendMail(mailOptionsUser);
       console.log('Email sent to user successfully');
@@ -331,11 +335,14 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
       console.error('Error sending email to user:', error.message);
     }
 
+    // Respond back with success message and updated order
     res.status(200).json({ message: 'Order status updated successfully', order: updatedOrder });
   } catch (error) {
+    // In case of any errors, send a 500 status with error message
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
+
 
 
 module.exports = router;

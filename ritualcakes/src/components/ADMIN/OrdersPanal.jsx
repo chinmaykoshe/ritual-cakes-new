@@ -12,7 +12,7 @@ const OrdersPanel = () => {
   const [filterAmount, setFilterAmount] = useState("");
   const [minAmount, setMinAmount] = useState("");
 
-const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating status
+  const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating status
 
   const [hideAdminOrders, setHideAdminOrders] = useState(true);
   const [visibleColumns, setVisibleColumns] = useState({
@@ -34,78 +34,88 @@ const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating st
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const token = localStorage.getItem("token");
 
-
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
 
-  const updateOrderStatus = async (orderId, newStatus) => {
+  // Function to update the order status
+  const updateOrderStatus = async (orderId, status) => {
+    if (!token) {
+      console.error("Token not found");
+      return;
+    }
+
     try {
-      await axios.put(
+      const response = await axios.put(
         `${apiUrl}/${orderId}/status`,
-        { status: newStatus },
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          status: status,  // status needs to be passed
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      fetchOrders(); // Refresh orders after updating status
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Failed to update order status");
+      return response.data; // Return response data if update is successful
+    } catch (error) {
+      console.error("Error updating order status:", error.response ? error.response.data : error.message);
+      setError("Failed to update order status.");
     }
   };
-  
-const handleUpdateOrderStatus = async (orderId, newStatus) => {
-  setUpdatingOrderId(orderId); // Set the updating order ID
-  await updateOrderStatus(orderId, newStatus);
-  setUpdatingOrderId(null); // Clear the updating order ID after completion
-};
 
-  
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    setUpdatingOrderId(orderId); // Set the updating order ID
+
+    // Update the order status via API
+    const updatedOrder = await updateOrderStatus(orderId, newStatus);
+
+    if (updatedOrder) {
+      // Update the state with the updated status
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId
+            ? { ...order, status: newStatus }  // Update the status of the order
+            : order
+        )
+      );
+    }
+
+    setUpdatingOrderId(null); // Clear the updating order ID after completion
+  };
+
+  // Function to delete the order
   const deleteOrder = async (orderId) => {
-    // Confirmation alert
     const confirmed = window.confirm("Are you sure you want to delete this order?");
-    if (!confirmed) return; // If user cancels, exit the function
-  
+    if (!confirmed) return;
+
     setLoading(true);
-  
+
     try {
       if (!token) throw new Error("Token not found. Please log in again.");
-      setLoading(true);
-      // Delete the order via API
       await axios.delete(`${apiUrl}/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       // Update the orders list
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
-  
-      // Success alert
+
       alert("Order deleted successfully!");
     } catch (err) {
-      // Error alert
       alert(err.response?.data?.message || err.message || "Failed to delete order");
       setError(err.response?.data?.message || err.message || "Failed to delete order");
     } finally {
       setLoading(false);
     }
   };
-  
 
-
+  // Fetch the orders
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
-
       const response = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      const filteredOrders = response.data.filter(
-        (order) => order.userEmail !== ""
-      );
-
-      setOrders(filteredOrders);
+      setOrders(response.data);
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to fetch orders");
     } finally {
@@ -117,7 +127,7 @@ const handleUpdateOrderStatus = async (orderId, newStatus) => {
     fetchOrders();
   }, []);
 
-
+  // Apply filters to orders
   const filteredOrders = orders.filter((order) => {
     const matchesSearchQuery =
       !searchQuery ||
@@ -132,12 +142,10 @@ const handleUpdateOrderStatus = async (orderId, newStatus) => {
     const matchesMinAmount = (minAmount === "" || parseFloat(minAmount) === 0) ||
       (minAmount && !isNaN(minAmount) && order.totalAmount >= parseFloat(minAmount));
 
-      const notFromAdmin = hideAdminOrders ? order.userEmail !== "ritualcake.admin@gmail.com" : true;
+    const notFromAdmin = hideAdminOrders ? order.userEmail !== "ritualcake.admin@gmail.com" : true;
 
-    return matchesSearchQuery && matchesStatus && matchesDate && matchesMaxAmount && matchesMinAmount && notFromAdmin ;
+    return matchesSearchQuery && matchesStatus && matchesDate && matchesMaxAmount && matchesMinAmount && notFromAdmin;
   });
-
-
 
   const sortedOrders = filteredOrders.sort((a, b) =>
     new Date(b.orderDate) - new Date(a.orderDate)
