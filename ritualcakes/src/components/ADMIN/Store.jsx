@@ -37,76 +37,74 @@ function Store() {
     }));
   };
 
-  const placeOrder = async (selectedCake) => {
-    try {
-      const userEmail = 'ritualcake.admin@gmail.com';
-      const selectedOption = selectedOptions[selectedCake.orderID];
 
-      const orderItem = {
-        name: selectedCake.name,
-        weight: selectedOption?.weight,
-        shape: selectedOption?.shape,
-        price: selectedCake.prices[selectedOption?.weight] || 'N/A',
-        orderID: selectedCake.orderID,
-        image: selectedCake.image || 'default_image_url',
-      };
+const placeOrder = async (selectedCake) => {
+  try {
+    const userEmail = 'ritualcake.admin@gmail.com'; // Replace with dynamic user email
+    const selectedOption = selectedOptions[selectedCake.orderID];
 
-      const totalAmount = parseFloat(orderItem.price || 0);
-      const deliveryAddress = '123 Main St';
-      const paymentMethod = 'COD';
-      const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store'; // Use custom message if available
+    const orderItem = {
+      name: selectedCake.name,
+      weight: selectedOption?.weight,
+      shape: selectedOption?.shape,
+      price: selectedCake.prices[selectedOption?.weight] || 'N/A',
+      orderID: selectedCake.orderID,
+      image: selectedCake.image || 'default_image_url',
+    };
 
-      const orderData = {
-        userEmail,
-        orderItems: [orderItem],
-        totalAmount,
-        deliveryAddress,
-        paymentMethod,
-        cakeMessage,
-        orderDate: new Date().toISOString(),
-        orderTime: new Date().toLocaleTimeString(),
-      };
+    const totalAmount = parseFloat(orderItem.price || 0);
+    const deliveryAddress = '123 Main St'; // Replace with dynamic address
+    const paymentMethod = 'COD'; // Replace with selected payment method
+    const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store';
 
-      const token = localStorage.getItem("token");
+    const orderData = {
+      userEmail,
+      orderItems: [orderItem],
+      totalAmount,
+      deliveryAddress,
+      paymentMethod,
+      cakeMessage,
+      orderDate: new Date().toISOString(),
+      orderTime: new Date().toLocaleTimeString(),
+    };
 
-      if (!token) {
-        throw new Error("Token is missing. Please log in.");
-      }
+    const token = localStorage.getItem('token');
 
-      const response = await axios.post(
-        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
-        orderData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          
-        }
-      );
-
-      if (response.status === 201) {
-        const successMessage = `Order for "${selectedCake.name}" placed successfully!`;
-        toast.success(successMessage);
-      } else {
-        const errorMessage = 'Failed to place order.';
-        toast.error(errorMessage);
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Failed to place order.';
-      toast.error(errorMessage);
-      console.error('Error placing order:', errorMessage);
+    if (!token) {
+      throw new Error('Token is missing. Please log in.');
     }
-  };
 
-  const handlePlaceOrder = (cake) => {
-    const confirmation = window.confirm(
-      `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
+    const response = await axios.post(
+      'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
+      orderData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    if (confirmation) {
-      placeOrder(cake);
+
+    if (response.status === 201) {
+      toast.success(`Order for "${selectedCake.name}" placed successfully!`);
+    } else {
+      throw new Error('Failed to place order.');
     }
-  };
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || 'Failed to place order.';
+    toast.error(errorMessage);
+    console.error('Error placing order:', errorMessage);
+  }
+};
+
+const handlePlaceOrder = (cake) => {
+  const confirmation = window.confirm(
+    `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
+  );
+  if (confirmation) {
+    placeOrder(cake);
+  }
+};
 
   const filteredCakes = cakes.filter((cake) =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase())
