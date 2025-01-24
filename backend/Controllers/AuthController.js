@@ -123,14 +123,14 @@ const signup = async (req, res) => {
                 from: 'ritualcakes2019@gmail.com',
                 to: user.email,
                 subject: `Welcome to RITUAL CAKES`,
-                html: orderDetailsHtml,
+                html: sendSignupEmail,
               };
           
               const mailOptionsAdmin = {
                 from: 'ritualcakes2019@gmail.com',
                 to: 'ritualcakes2019@gmail.com',
-                subject: `New SIGN UP`,
-                html: orderDetailsHtml,
+                subject: `New SIGN UP FROM ${user.email}`,
+                html: sendSignupEmail,
               };
           
               try {
