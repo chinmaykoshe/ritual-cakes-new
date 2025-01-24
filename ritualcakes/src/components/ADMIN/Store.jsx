@@ -37,75 +37,78 @@ function Store() {
     }));
   };
 
+  const token = localStorage.getItem('token');
 
-const token = localStorage.getItem{"token"};
+  const placeOrder = async (selectedCake) => {
+    try {
+      const userEmail = 'ritualcake.admin@gmail.com'; // Replace with dynamic user email
+      const selectedOption = selectedOptions[selectedCake.orderID];
 
-const placeOrder = async (selectedCake) => {
-  try {
-    const userEmail = 'ritualcake.admin@gmail.com'; // Replace with dynamic user email
-    const selectedOption = selectedOptions[selectedCake.orderID];
+      const orderItem = {
+        name: selectedCake.name,
+        weight: selectedOption?.weight,
+        shape: selectedOption?.shape,
+        price: selectedCake.prices[selectedOption?.weight] || 'N/A',
+        orderID: selectedCake.orderID,
+        image: selectedCake.image || 'default_image_url',
+      };
 
-    const orderItem = {
-      name: selectedCake.name,
-      weight: selectedOption?.weight,
-      shape: selectedOption?.shape,
-      price: selectedCake.prices[selectedOption?.weight] || 'N/A',
-      orderID: selectedCake.orderID,
-      image: selectedCake.image || 'default_image_url',
-    };
+      const totalAmount = parseFloat(orderItem.price || 0);
+      const deliveryAddress = '123 Main St'; // Replace with dynamic address
+      const paymentMethod = 'COD'; // Replace with selected payment method
+      const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store';
 
-    const totalAmount = parseFloat(orderItem.price || 0);
-    const deliveryAddress = '123 Main St'; // Replace with dynamic address
-    const paymentMethod = 'COD'; // Replace with selected payment method
-    const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store';
-
-    const orderData = {
-      userEmail,
-      orderItems: [orderItem],
-      totalAmount,
-      deliveryAddress,
-      paymentMethod,
-      cakeMessage,
-      orderDate: new Date().toISOString(),
-      orderTime: new Date().toLocaleTimeString(),
-    };
-
-
-    if (!token) {
-      throw new Error('Token is missing. Please log in.');
-    }
-
-    const response = await axios.post(
-      'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
-      orderData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+      if (!token) {
+        throw new Error('Token is missing. Please log in.');
       }
-    );
 
-    if (response.status === 201) {
-      toast.success(`Order for "${selectedCake.name}" placed successfully!`);
-    } else {
-      throw new Error('Failed to place order.');
+      if (!orderItem.weight || !orderItem.price) {
+        toast.error('Please select a valid weight and price.');
+        return;
+      }
+
+      const orderData = {
+        userEmail,
+        orderItems: [orderItem],
+        totalAmount,
+        deliveryAddress,
+        paymentMethod,
+        cakeMessage,
+        orderDate: new Date().toISOString(),
+        orderTime: new Date().toLocaleTimeString(),
+      };
+
+      const response = await axios.post(
+        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
+        orderData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success(`Order for "${selectedCake.name}" placed successfully!`);
+      } else {
+        throw new Error('Failed to place order.');
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to place order.';
+      toast.error(errorMessage);
+      console.error('Error placing order:', errorMessage);
     }
-  } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Failed to place order.';
-    toast.error(errorMessage);
-    console.error('Error placing order:', errorMessage);
-  }
-};
+  };
 
-const handlePlaceOrder = (cake) => {
-  const confirmation = window.confirm(
-    `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
-  );
-  if (confirmation) {
-    placeOrder(cake);
-  }
-};
+  const handlePlaceOrder = (cake) => {
+    const confirmation = window.confirm(
+      `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
+    );
+    if (confirmation) {
+      placeOrder(cake);
+    }
+  };
 
   const filteredCakes = cakes.filter((cake) =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -170,18 +173,14 @@ const handlePlaceOrder = (cake) => {
                   <option value="heart">Heart</option>
                 </select>
               </td>
-
-              {/* Text area for custom message */}
               <td className="border border-gray-300 px-4 py-2">
-                <input 
+                <input
                   className="border p-2 w-full"
-                  rows="3"
                   value={customMessages[cake.orderID] || ''}
                   onChange={(e) => handleCustomMessageChange(cake.orderID, e.target.value)}
                   placeholder="Enter mobile number (optional)"
                 />
               </td>
-
               <td className="border border-gray-300 px-4 py-2">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
