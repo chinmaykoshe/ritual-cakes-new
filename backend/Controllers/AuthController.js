@@ -118,14 +118,6 @@ const signup = async (req, res) => {
               </body>
             </html>
             `;
-          
-            const mailOptions = {
-              from: 'support@ourplatform.com',
-              to: `${user.email},ritualcakes2019@gmail.com`,
-              subject: 'Welcome to RITUALCAKES',
-              html: signupEmailHtml,
-            };
-          
 
             const mailOptionsUser = {
                 from: 'ritualcakes2019@gmail.com',
