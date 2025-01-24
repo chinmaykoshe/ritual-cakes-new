@@ -37,36 +37,54 @@ function Store() {
     }));
   };
 
+
   const token = localStorage.getItem('token');
 
   const placeOrder = async (selectedCake) => {
     try {
-      const userEmail = 'ritualcake.admin@gmail.com'; // Replace with dynamic user email
+      // Fetch user details and token from local storage
+      const userEmail = localStorage.getItem('user') || 'ritualcake.admin@gmail.com'; // Replace with dynamic user retrieval
+      if (!token) {
+        toast.error('Token is missing. Please log in.');
+        throw new Error('Authentication token is missing.');
+      }
+  
+      // Validate the selected options (weight and shape)
       const selectedOption = selectedOptions[selectedCake.orderID];
-
+      if (!selectedOption?.weight || !selectedOption?.shape) {
+        toast.error('Please select a valid weight and shape.');
+        return;
+      }
+  
+      // Prepare the order item data
       const orderItem = {
         name: selectedCake.name,
-        weight: selectedOption?.weight,
-        shape: selectedOption?.shape,
-        price: selectedCake.prices[selectedOption?.weight] || 'N/A',
+        weight: selectedOption.weight,
+        shape: selectedOption.shape,
+        price: selectedCake.prices[selectedOption.weight] || 'N/A',
         orderID: selectedCake.orderID,
         image: selectedCake.image || 'default_image_url',
       };
-
+  
+      // Calculate total amount from price
       const totalAmount = parseFloat(orderItem.price || 0);
-      const deliveryAddress = '123 Main St'; // Replace with dynamic address
-      const paymentMethod = 'COD'; // Replace with selected payment method
-      const cakeMessage = customMessages[selectedCake.orderID] || 'Ordered from store';
-
-      if (!token) {
-        throw new Error('Token is missing. Please log in.');
-      }
-
-      if (!orderItem.weight || !orderItem.price) {
-        toast.error('Please select a valid weight and price.');
+      if (isNaN(totalAmount) || totalAmount <= 0) {
+        toast.error('Invalid total amount. Please check the price and try again.');
         return;
       }
-
+  
+      // Static or dynamic values
+      const deliveryAddress = '123 Main St'; // Replace with the user's actual address if available
+      const paymentMethod = 'COD'; // Replace with dynamic value if needed
+      const cakeMessage = customMessages[selectedCake.orderID]?.trim() || 'Ordered from store';
+  
+      // Validate custom message length
+      if (cakeMessage.length > 100) {
+        toast.error('Custom message must be 100 characters or less.');
+        return;
+      }
+  
+      // Prepare the order data payload
       const orderData = {
         userEmail,
         orderItems: [orderItem],
@@ -77,7 +95,8 @@ function Store() {
         orderDate: new Date().toISOString(),
         orderTime: new Date().toLocaleTimeString(),
       };
-
+  
+      // Send the order data to the backend API
       const response = await axios.post(
         'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
         orderData,
@@ -88,19 +107,19 @@ function Store() {
           },
         }
       );
-
+  
       if (response.status === 201) {
         toast.success(`Order for "${selectedCake.name}" placed successfully!`);
       } else {
         throw new Error('Failed to place order.');
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Failed to place order.';
-      toast.error(errorMessage);
-      console.error('Error placing order:', errorMessage);
+      console.error('Error placing order:', error.response?.data || error.message);
+      toast.error('Error placing order: ' + (error.response?.data?.message || error.message));
     }
   };
-
+  
+  // Confirmation before placing the order
   const handlePlaceOrder = (cake) => {
     const confirmation = window.confirm(
       `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
@@ -109,6 +128,8 @@ function Store() {
       placeOrder(cake);
     }
   };
+  
+  
 
   const filteredCakes = cakes.filter((cake) =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase())

@@ -16,7 +16,9 @@ function UserButton() {
 
   const userEmail = localStorage.getItem("user");
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
+console.log(user);
 
   // Null check for userData before formatting dob
   const formattedDOB = user && user.user ? new Date(user.user.dob).toLocaleDateString("en-GB") : "";
@@ -193,7 +195,7 @@ function UserButton() {
               </button>
             </div>
             {/* Add 'Go to Admin Panel' button */}
-            {userEmail === "ritualcake.admin@gmail.com" && user.user.role === "admin" && (
+            {userEmail === "ritualcake.admin@gmail.com" && role === "admin" && (
               <div className="mt-4">
                 <button
                   onClick={() => navigate("/admin/dashboards")} // Redirect to admin panel page

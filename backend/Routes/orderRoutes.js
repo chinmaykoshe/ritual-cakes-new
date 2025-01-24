@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const OrderModel = require('../Models/Order');
+const UserModel = require('../Models/User');
 const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
 const transporter = require('../Controllers/mailer'); // Import mailer configuration
 
