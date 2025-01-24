@@ -49,7 +49,7 @@ function Customers() {
     const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
     if (confirmDelete) {
       try {
-        const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users/${customer._id}`;
+        const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users/${id}`;
 
         await axios.delete(apiUrl, {
           headers: { Authorization: `Bearer ${token}` },
