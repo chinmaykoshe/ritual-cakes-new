@@ -5,155 +5,158 @@ const transporter = require('../Controllers/mailer'); // Import mailer configura
 
 
 // Signup function
-const signup = async (req, res) => {
-    try {
-        let { name, surname, email, password, address, mobile, dob, role } = req.body;
+Const signup = async (req, res) => {
+    Try {
+        Let { name, surname, email, password, address, mobile, dob, role } = req.body;
 
-        role = role || "user";
+        // Default role as “user” if not provided
+        Role = role || “user”;
 
-        const user = await UserModel.findOne({ email });
-        if (user) {
-            return res.status(409).json({ message: "User already exists...", success: false });
+        // Check if the user already exists
+        Const user = await UserModel.findOne({ email });
+        If (user) {
+            Return res.status(409).json({ message: “User already exists…”, success: false });
         }
-        const userModel = new UserModel({ name, surname, email, password, address, mobile, dob, role });
+
+        // Create and save the new user
+        Const userModel = new UserModel({ name, surname, email, password, address, mobile, dob, role });
         userModel.password = await bcrypt.hash(password, 10);
         await userModel.save();
-        res.status(201).json({ message: "Signup successfully", success: true });
 
-        const sendSignupEmail = async (user) => {
-            const signupEmailHtml = `
+        // Send success response
+        Res.status(201).json({ message: “Signup successfully”, success: true });
+
+        // Function to send signup email
+        Const sendSignupEmail = async (user) => {
+            Const signupEmailHtml = `
             <!DOCTYPE html>
             <html>
-              <head>
+            <head>
                 <title>Signup Confirmation</title>
                 <style>
-                  body {
-                    padding: 25px;
-                    font-family: Arial, sans-serif;
-                    background-color: rgb(255, 228, 208);
-                    color: rgb(44, 44, 44);
-                    line-height: 1.6;
-                  }
-          
-                  h1, h3 {
-                    color: rgb(72, 37, 11);
-                  }
-          
-                  p {
-                    margin: 10px 0;
-                  }
-          
-                  table {
-                    border-collapse: collapse;
-                    width: 100%;
-                    margin: 20px 0;
-                    background-color: #fff;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                  }
-          
-                  th, td {
-                    padding: 12px;
-                    text-align: left;
-                    border: 1px solid rgb(77, 77, 77);
-                  }
-          
-                  th {
-                    background-color: rgb(72, 37, 11);
-                    color: white;
-                  }
-          
-                  strong {
-                    color: rgb(72, 37, 11);
-                  }
-          
-                  footer {
-                    margin-top: 20px;
-                    font-size: 0.9em;
-                    color: rgb(77, 77, 77);
-                    text-align: center;
-                  }
-          
-                  a {
-                    color: rgb(72, 37, 11);
-                  }
+                    Body {
+                        Padding: 25px;
+                        Font-family: Arial, sans-serif;
+                        Background-color: rgb(255, 228, 208);
+                        Color: rgb(44, 44, 44);
+                        Line-height: 1.6;
+                    }
+                    H1, h3 {
+                        Color: rgb(72, 37, 11);
+                    }
+                    P {
+                        Margin: 10px 0;
+                    }
+                    Table {
+                        Border-collapse: collapse;
+                        Width: 100%;
+                        Margin: 20px 0;
+                        Background-color: #fff;
+                        Box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    }
+                    Th, td {
+                        Padding: 12px;
+                        Text-align: left;
+                        Border: 1px solid rgb(77, 77, 77);
+                    }
+                    Th {
+                        Background-color: rgb(72, 37, 11);
+                        Color: white;
+                    }
+                    Strong {
+                        Color: rgb(72, 37, 11);
+                    }
+                    Footer {
+                        Margin-top: 20px;
+                        Font-size: 0.9em;
+                        Color: rgb(77, 77, 77);
+                        Text-align: center;
+                    }
+                    A {
+                        Color: rgb(72, 37, 11);
+                    }
                 </style>
-              </head>
-              <body>
-                <h1>Welcome to Our Platform!</h1>
+            </head>
+            <body>
+                <h1>Welcome to RITUAL CAKES!</h1>
                 <p>Dear <strong>${user.name}</strong>,</p>
-                <p>Thank you for signing up at our platform. We are thrilled to have you on board!</p>
-          
+                <p>Thank you for signing up at RITUAL CAKES. We are thrilled to have you on board!</p>
                 <h3>Your Details:</h3>
                 <table>
-                  <tbody>
-                    <tr>
-                      <td><strong>Name:</strong></td>
-                      <td>${user.name} ${user.surname}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Email:</strong></td>
-                      <td>${user.email}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>${user.address}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Mobile:</strong></td>
-                      <td>${user.mobile}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Date of Birth:</strong></td>
-                      <td>${new Date(user.dob).toDateString()}</td>
-                    </tr>
-                  </tbody>
+                    <tbody>
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td>${user.name} ${user.surname}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email:</strong></td>
+                            <td>${user.email}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address:</strong></td>
+                            <td>${user.address}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile:</strong></td>
+                            <td>${user.mobile}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of Birth:</strong></td>
+                            <td>${new Date(user.dob).toDateString()}</td>
+                        </tr>
+                    </tbody>
                 </table>
-          
-                <p>If you have any questions, feel free to <a href="mailto:support@ourplatform.com">contact us</a>.</p>
-          
+                <p>If you have any questions, feel free to <a href=mailto:support@ritualcakes.com>contact us</a>.</p>
                 <footer>
-                  <p>Sincerely,<br>The Our Platform Team</p>
-                  <p>&copy; ${new Date().getFullYear()} Our Platform. All rights reserved.</p>
+                    <p>Sincerely,<br>The RITUAL CAKES Team</p>
+                    <p>&copy; ${new Date().getFullYear()} RITUAL CAKES. All rights reserved.</p>
                 </footer>
-              </body>
+            </body>
             </html>
             `;
 
-            const mailOptionsUser = {
-                from: 'ritualcakes2019@gmail.com',
-                to: user.email,
-                subject: `Welcome to RITUAL CAKES`,
-                html: sendSignupEmail,
-              };
-          
-              const mailOptionsAdmin = {
-                from: 'ritualcakes2019@gmail.com',
-                to: 'ritualcakes2019@gmail.com',
-                subject: `New SIGN UP FROM ${user.email}`,
-                html: sendSignupEmail,
-              };
-          
-              try {
-                await transporter.sendMail(mailOptionsUser);
-                console.log('Email sent to user successfully');
-              } catch (error) {
-                console.error('Error sending email to user:', error.message);
-              }
-          
-              try {
-                await transporter.sendMail(mailOptionsAdmin);
-                console.log('Email sent to admin successfully');
-              } catch (error) {
-                console.error('Error sending email to admin:', error.message);
-              }
+            // Email options for the user
+            Const mailOptionsUser = {
+                From: ‘ritualcakes2019@gmail.com’,
+                To: user.email,
+                Subject: `Welcome to RITUAL CAKES`,
+                Html: signupEmailHtml,
+            };
 
+            // Email options for the admin
+            Const mailOptionsAdmin = {
+                From: ‘ritualcakes2019@gmail.com’,
+                To: ‘ritualcakes2019@gmail.com’,
+                Subject: `New SIGN UP FROM ${user.email}`,
+                Html: signupEmailHtml,
+            };
 
-          };
-          
+            // Send email to user
+            Try {
+                Await transporter.sendMail(mailOptionsUser);
+                Console.log(‘Email sent to user successfully’);
+            } catch (error) {
+                Console.error(‘Error sending email to user:’, error.message);
+            }
+
+            // Send email to admin
+            Try {
+                Await transporter.sendMail(mailOptionsAdmin);
+                Console.log(‘Email sent to admin successfully’);
+            } catch (error) {
+                Console.error(‘Error sending email to admin:’, error.message);
+            }
+        };
+
+        // Call the email function
+        Await sendSignupEmail(userModel);
+
     } catch (err) {
-        res.status(500).json({ message: "Internal server error", success: false });
+        Res.status(500).json({ message: “Internal server error”, success: false });
+        Console.error(‘Signup error:’, err.message);
     }
 };
+
 // Login function with enhancements
 const login = async (req, res) => {
     try {
