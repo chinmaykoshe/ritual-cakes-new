@@ -38,6 +38,8 @@ function Store() {
   };
 
 
+const token = localStorage.getItem{"token"};
+
 const placeOrder = async (selectedCake) => {
   try {
     const userEmail = 'ritualcake.admin@gmail.com'; // Replace with dynamic user email
@@ -68,7 +70,6 @@ const placeOrder = async (selectedCake) => {
       orderTime: new Date().toLocaleTimeString(),
     };
 
-    const token = localStorage.getItem('token');
 
     if (!token) {
       throw new Error('Token is missing. Please log in.');
