@@ -20,7 +20,7 @@ import 'react-toastify/ReactToastify.css';
 import './index.css';
 import { CartProvider } from './context/CartContext.jsx';
 import axios from 'axios';
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`; // Set Authorization token
 import UserDetails from './components/UserButton.jsx'; 
 import PrivateRoute from './PrivateRoute.jsx';
 import Customers from './components/ADMIN/Customers.jsx';
@@ -40,13 +40,14 @@ import CustomizePanal from './components/ADMIN/CustomizePanal.jsx';
 import CakesAvailable from './components/ADMIN/CakesAvailable.jsx';
 import StoreOrders from './components/ADMIN/StoreOrders.jsx';
 import ReviewSection from './components/ADMIN/ReviewSection.jsx';
+import useAxiosInterceptor from './axios.jsx';
 
-// InvalidRouteRedirect component
+// Redirect to homepage for invalid routes
 function InvalidRouteRedirect() {
   const navigate = useNavigate();
   
   useEffect(() => {
-    navigate('/', { replace: true });
+    navigate('/', { replace: true }); // Navigate to homepage
   }, [navigate]);
 
   return null;
@@ -54,71 +55,71 @@ function InvalidRouteRedirect() {
 
 function App() {
   const location = useLocation();
+  useAxiosInterceptor(); // Initialize Axios interceptor for handling authentication
 
-  // Check if the current path is for the admin dashboard
-  const isAdminPath = location.pathname.startsWith('/admin');
+  const isAdminPath = location.pathname.startsWith('/admin'); // Check if the route is for the admin panel
 
   return (
     <div className='container mx-auto max-w-none relative'>
       <React.StrictMode>
-      <CustomizationProvider> 
-      <OrderProvider>
-        <CartProvider>
-        <UserProvider>
-          {!isAdminPath && (
-            <div className='z-[1] relative'>
-              <Navbar />
-            </div>
-          )}
-          
-          <div className='z-[0] relative'>
-            <Routes>
-              {/* Admin routes */}
-              <Route path="/admin" element={<PrivateRoute element={<AdminLayout />} />} >
-                <Route path="/admin/dashboards" element={<PrivateRoute element={<Dashboard />} />} />
-                <Route path="/admin/customers" element={<PrivateRoute element={<Customers />} />} />
-                <Route path="/admin/orderspanel" element={<PrivateRoute element={<OrdersPanal />} />} />
-                <Route path="/admin/adminproducts" element={<PrivateRoute element={<AdminProducts />} />} />
-                <Route path="/admin/store" element={<PrivateRoute element={<Store />} />} />
-                <Route path="/admin/customizedpanal" element={<PrivateRoute element={<CustomizePanal />} />} />
-                <Route path="/admin/CakesAvailable" element={<PrivateRoute element={<CakesAvailable />} />} />
-                <Route path="/admin/orderscollection" element={<PrivateRoute element={<StoreOrders />} />} />
-                <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
-              </Route>
+        <CustomizationProvider> 
+          <OrderProvider>
+            <CartProvider>
+              <UserProvider>
+                {/* Show Navbar for non-admin routes */}
+                {!isAdminPath && (
+                  <div className='z-[1] relative'>
+                    <Navbar />
+                  </div>
+                )}
 
-              {/* Other routes go here */}
-              <Route path='/' element={<Home />} />
-              <Route path='/about' element={<About />} />
-              <Route path='/designs' element={<Designs />} />
-              <Route path='/customization' element={<Customization />} />
-              <Route path='/order' element={<Orders />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path='/cakes' element={<Cakes />} />
-              <Route path='/catalogue' element={<Catalogue />} />
-              <Route path='/checkout' element={<Checkout />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/product/:orderId" element={<ProductPage />} />
-              <Route path="/design/:designName" element={<DesignCustomizationPage />} />
-              <Route path="/pagedesigns" element={<PageDesigns />} />
-              <Route path="*" element={<InvalidRouteRedirect />} />
-              <Route path="/UserDetails" element={<UserDetails />} />
-            </Routes>
-          </div>
+                <div className='z-[0] relative'>
+                  <Routes>
+                    {/* Admin routes, all protected by PrivateRoute */}
+                    <Route path="/admin" element={<PrivateRoute element={<AdminLayout />} />} >
+                      <Route path="/admin/dashboards" element={<PrivateRoute element={<Dashboard />} />} />
+                      <Route path="/admin/customers" element={<PrivateRoute element={<Customers />} />} />
+                      <Route path="/admin/orderspanel" element={<PrivateRoute element={<OrdersPanal />} />} />
+                      <Route path="/admin/adminproducts" element={<PrivateRoute element={<AdminProducts />} />} />
+                      <Route path="/admin/store" element={<PrivateRoute element={<Store />} />} />
+                      <Route path="/admin/customizedpanal" element={<PrivateRoute element={<CustomizePanal />} />} />
+                      <Route path="/admin/CakesAvailable" element={<PrivateRoute element={<CakesAvailable />} />} />
+                      <Route path="/admin/orderscollection" element={<PrivateRoute element={<StoreOrders />} />} />
+                      <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
+                    </Route>
 
-          {!isAdminPath && (
-            <div className='z-[-1] relative'>
-              <Footer />
-            </div>
-          )}
-          </UserProvider>
-        </CartProvider>
-      </OrderProvider>
-      </CustomizationProvider>  
+                    {/* Public routes */}
+                    <Route path='/' element={<Home />} />
+                    <Route path='/about' element={<About />} />
+                    <Route path='/designs' element={<Designs />} />
+                    <Route path='/customization' element={<Customization />} />
+                    <Route path='/order' element={<Orders />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path='/cakes' element={<Cakes />} />
+                    <Route path='/catalogue' element={<Catalogue />} />
+                    <Route path='/checkout' element={<Checkout />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/product/:orderId" element={<ProductPage />} />
+                    <Route path="/design/:designName" element={<DesignCustomizationPage />} />
+                    <Route path="/pagedesigns" element={<PageDesigns />} />
+                    <Route path="*" element={<InvalidRouteRedirect />} />
+                    <Route path="/UserDetails" element={<UserDetails />} />
+                  </Routes>
+                </div>
 
+                {/* Show Footer for non-admin routes */}
+                {!isAdminPath && (
+                  <div className='z-[-1] relative'>
+                    <Footer />
+                  </div>
+                )}
+              </UserProvider>
+            </CartProvider>
+          </OrderProvider>
+        </CustomizationProvider>  
       </React.StrictMode>
     </div>
-    
   );
 }
 

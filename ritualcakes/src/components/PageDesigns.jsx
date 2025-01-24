@@ -34,7 +34,7 @@ function PageDesigns() {
       {/* Back Button */}
       <div className="mb-6">
         <Link
-          to="/designs" // Assuming "/designs" is your designs list page
+          to="/designs"
           className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
         >
           &larr; Back to All Designs

@@ -17,31 +17,24 @@ function Navbar() {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    setIsLoggedIn(localStorage.getItem('token') ? true : false);
-    setIsDarkMode(localStorage.getItem('darkMode') === 'true'); // Retrieve dark mode preference from localStorage
-  }, []);
-
-  useEffect(() => {
-    // Set dark mode on body based on state
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('darkMode', 'true'); // Store preference
-    } else {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('darkMode', 'false'); // Store preference
-    }
-  }, [isDarkMode]);
-
   const handleSignOut = () => {
     const isConfirmed = window.confirm('Are you sure you want to sign out?');
     if (isConfirmed) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.clear();
       setIsLoggedIn(false);
       navigate('/'); // Navigate to home page after sign-out
     }
   };
+
+    // Check if the token exists and sign out if missing
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        localStorage.clear();
+      } else {
+        setIsLoggedIn(true); // Token exists, user is logged in
+      }
+    }, []);
 
   return (
     <div className="mb-14">
@@ -92,21 +85,6 @@ function Navbar() {
             <button className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out" onClick={() => navigate('/UserDetails')}>
               <i className="fa-solid fa-user md:text-2xl text-xl"></i>
             </button>
-
-{/*    
-<div className="theme-toggle relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out">
-  <i
-    className={`fa-solid fa-sun ${isDarkMode ? 'hidden' : 'block'} ${isDarkMode ? 'text-white-500' : 'text-brown'} text-xl`}
-    onClick={() => setIsDarkMode(true)}
-  ></i>
-  <i
-    className={`fa-solid fa-moon ${isDarkMode ? 'block' : 'hidden'} ${isDarkMode ? 'text-brown' : 'text-white-500'} text-xl`}
-    onClick={() => setIsDarkMode(false)}
-  ></i>
-</div>
- */}
-
-
 
             <button
               type="button"

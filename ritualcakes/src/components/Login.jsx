@@ -54,7 +54,6 @@ function Login() {
   
       if (!response.ok) {
         const errorData = await response.json();
-        console.error(errorData);
         throw new Error('Incorrect credentials!');
       }
   
@@ -72,7 +71,6 @@ setTimeout(() => {
       }, 3000);
   
     } catch (error) {
-      console.error(error);
       setErrorMessages(error.message || 'An error occurred during sign-in. Please try again later.');
     } finally {
       setLoading(false);

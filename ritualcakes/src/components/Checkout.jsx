@@ -91,7 +91,6 @@ function Checkout() {
         status: "Pending",
       };
 
-      console.log("Submitting order data:", orderData);
 
       await createOrder(orderData);
       setSuccessMessage("Order placed successfully!");
@@ -102,7 +101,6 @@ function Checkout() {
     }, 2000); // Wait for 2 seconds before navigating to allow the success message to be visible
 
     } catch (error) {
-      console.error("Order creation error:", error);
       setErrorMessages(error.response?.data?.message || "Error placing order, please try again.");
     }
   };

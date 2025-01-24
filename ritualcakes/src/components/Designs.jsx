@@ -14,10 +14,6 @@ const Designs = () => {
     navigate("/pagedesigns", { state: { designImages } });
   };
 
-  // Handle zoom-in functionality
-  const handleZoomIn = (designKey) => {
-    console.log("Zoom in on:", designKey);  // You can implement the actual zoom-in logic here
-  };
 
   return (
     <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg lg:p-8 lg:m-top-16 shadow-lg">
@@ -73,55 +69,55 @@ const Designs = () => {
         title="Engagement Theme"
         categoryPrefix="theme_engagement_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}  // Passing handleZoomIn
+  // Passing handleZoomIn
       />
       <ThemeSection
         title="Mom Theme"
         categoryPrefix="theme_mom_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Dad Theme"
         categoryPrefix="theme_dad_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Anniversary Theme"
         categoryPrefix="theme_anniversary_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Boy Theme"
         categoryPrefix="theme_boy_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Cute Cake Theme"
         categoryPrefix="theme_cute_cake_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Girl Theme"
         categoryPrefix="theme_girl_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Profession Theme"
         categoryPrefix="theme_profession_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
       <ThemeSection
         title="Retirement Theme"
         categoryPrefix="theme_retirement_design_"
         designnames={designnames}
-        handleZoomIn={handleZoomIn}
+
       />
     </div>
   );

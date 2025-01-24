@@ -18,7 +18,6 @@ function UserButton() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
-console.log(user);
 
   // Null check for userData before formatting dob
   const formattedDOB = user && user.user ? new Date(user.user.dob).toLocaleDateString("en-GB") : "";
@@ -59,7 +58,7 @@ console.log(user);
         {/* Back Button */}
         <div className="mb-6">
           <Link
-            to="/" // Assuming "/designs" is your designs list page
+            to="/" 
             className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
           >
             &larr; Back to Home

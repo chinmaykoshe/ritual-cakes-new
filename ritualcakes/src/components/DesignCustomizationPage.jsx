@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate , useParams } from "react-router-dom";
-import { useCustomization } from "../context/customizeContext";  // Using your context
-import { designnames } from "../designs/designassets"; // Assuming you have some predefined designs
+import { useCustomization } from "../context/customizeContext";  
+import { designnames } from "../designs/designassets"; 
 
 // Define available cake types based on size
 const availableCakeTypes = {
@@ -57,7 +57,6 @@ const DesignCustomizationPage = () => {
       setDesign(currentDesign);
       formData.imageOrDesign = currentDesign.name; // Update value directly
     } else {
-      console.error("Design not found in designnames!");
     }
   }, [designName, formData]);
 

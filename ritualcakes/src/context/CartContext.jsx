@@ -1,115 +1,78 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-// Create a context for Cart
+// Create context for Cart
 const CartContext = createContext();    
 
-// Create a provider component
+// Provider component
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-
-  // Determine the base URL based on the environment
-  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/cart`;
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/cart`; // Base URL
 
 
-  // Load cart from backend on mount
+  const token = localStorage.getItem('token');
+
+  
+  // Load cart on mount
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get the token if needed
-        const response = await axios.get(`${apiUrl}`, {  // Use the apiUrl here
-          headers: {
-            'Authorization': `Bearer ${token}`, // Attach token to request header
-          },
+        const response = await axios.get(`${apiUrl}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
         });
-        const cartItems = response.data.cartItems; // Assuming 'cartItems' is the key in the response
-        setCart(cartItems);
+        setCart(response.data.cartItems); // Set cart items
       } catch (error) {
         console.error('Error fetching cart items:', error.response?.data || error.message);
       }
     };
-
     fetchCart();
-    
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []); // Runs only once
 
-// Function to add product to cart
-const addToCart = async (product) => {
-  try {
-    const token = localStorage.getItem('token'); // Fetch the token if needed
-    const response = await axios.post(
-      `${apiUrl}/add`,  // Use the apiUrl here with the endpoint
-      { products: [product] }, // Wrap the single product in an array
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Attach token
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log('Product added successfully:', response.data);
-    return response.data; // Return response to handleAddToCart
-  } catch (error) {
-    console.error('Error adding product to cart:', error.response?.data || error.message);
-    setSuccessMessage("Failed to add product to cart"); // Notify the user of failure
-    setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
-    return null;
-  }
-};
-
-// Function to update product quantity in cart
-const updateQuantity = async (orderID, quantity) => {
-  try {
-    const token = localStorage.getItem('token'); // Fetch the token if needed
-    const response = await axios.post(
-      `${apiUrl}/update`,  // Use the apiUrl here with the endpoint
-      { orderID, quantity },
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`, // Include token if authentication is required
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    console.log('Backend response:', response.data);
-
-    // If successful, update the state
-    setCart((prevCart) => {
-      return prevCart.map((item) =>
-        item.orderID === orderID ? { ...item, quantity } : item
+  // Add product to cart
+  const addToCart = async (product) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${apiUrl}/add`, 
+        { products: [product] }, 
+        { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
-    });
-  } catch (error) {
-    console.error('Error updating quantity:', error.response?.data || error.message);
-  }
-};
+      return response.data; // Return added product details
+    } catch (error) {
+      setSuccessMessage("Failed to add product to cart");
+      setTimeout(() => setSuccessMessage(""), 3000); // Reset message after 3s
+      return null;
+    }
+  };
 
-// Function to remove product from cart
-const removeFromCart = async (orderID) => {
-  try {
-    const token = localStorage.getItem('token'); // Fetch the token if needed
-    const response = await axios.delete(`${apiUrl}/remove/${orderID}`, {  // Use the apiUrl here with the endpoint
-      headers: {
-        'Authorization': `Bearer ${token}`, // Attach token
-      },
-    });
-    console.log('Product removed successfully:', response.data);
+  // Update product quantity
+  const updateQuantity = async (orderID, quantity) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${apiUrl}/update`,
+        { orderID, quantity },
+        { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+      );
+      setCart((prevCart) => prevCart.map(item => item.orderID === orderID ? { ...item, quantity } : item));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    // Update the local state after successful removal
-    setCart((prevCart) => {
-      const updatedCart = prevCart.filter((item) => item.orderID !== orderID);
-
-      // Update localStorage to reflect the change
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-      return updatedCart;
-    });
-  } catch (error) {
-    console.error('Error removing product from cart:', error.response?.data || error.message);
-  }
-};
+  // Remove product from cart
+  const removeFromCart = async (orderID) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${apiUrl}/remove/${orderID}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      setCart((prevCart) => prevCart.filter(item => item.orderID !== orderID));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
@@ -118,5 +81,5 @@ const removeFromCart = async (orderID) => {
   );
 };
 
-// Hook to use cart context
+// Custom hook to use cart context
 export const useCart = () => useContext(CartContext);

@@ -21,7 +21,6 @@ const Reviews = ({ orderID }) => {
         const data = await response.json();
         setReviews(data);
       } catch (err) {
-        console.error(err);
         setError("Unable to load reviews. Please try again later.");
       }
     };
@@ -66,7 +65,6 @@ const Reviews = ({ orderID }) => {
       const responseData = await response.json();
       if (!response.ok) {
         setError(responseData.message || "Failed to submit review.");
-        console.error("Error Response:", responseData);
         return;
       }
 
@@ -74,7 +72,6 @@ const Reviews = ({ orderID }) => {
       setNewReview(""); // Clear the textarea
       setError(null); // Reset any previous error
     } catch (error) {
-      console.error("Error submitting review:", error.message);
       setError("Failed to submit review. Please try again later.");
     }
   };

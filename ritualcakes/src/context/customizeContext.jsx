@@ -1,6 +1,6 @@
 import React, { useEffect, createContext, useState, useContext } from 'react';
 
-// Create a context for customization
+// Create a context for customizations
 const CustomizationContext = createContext();
 
 // Custom hook to use customization context
@@ -22,15 +22,14 @@ export const CustomizationProvider = ({ children }) => {
     deliveryDate: '',
     imageOrDesign: '',
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading status
+  const [error, setError] = useState(''); // State for error messages
+  const [success, setSuccess] = useState(''); // State for success messages
+  const [customizations, setCustomizations] = useState([]); // State for storing customizations
 
+  const yourToken = localStorage.getItem('token'); // Get token from localStorage
 
-  const yourToken = localStorage.getItem('token');
-  const [customizations, setCustomizations] = useState([]);
-
-  // Define fetchCustomizations function
+  // Fetch customizations from the backend
   const fetchCustomizations = async () => {
     setLoading(true);
     setError('');
@@ -44,6 +43,7 @@ export const CustomizationProvider = ({ children }) => {
     }
 
     try {
+      // Fetch customization data from API
       const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${userEmail}`, {
         method: 'GET',
         headers: {
@@ -57,17 +57,16 @@ export const CustomizationProvider = ({ children }) => {
       }
 
       const result = await response.json();
-      setCustomizations(result);  // Store the fetched data
+      setCustomizations(result); // Store the fetched data in state
       setSuccess('Customization data fetched successfully!');
     } catch (err) {
-      console.error('Error fetching data:', err);
       setError('There was an error fetching the customization data.');
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading after data fetch
     }
   };
 
-  // Handle form change (used for input fields)
+  // Handle form changes (input field updates)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -76,16 +75,15 @@ export const CustomizationProvider = ({ children }) => {
     }));
   };
 
-  // Handle form submission (Create)
+  // Handle form submission (Create new customization)
   const submitCustomization = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccess('');
 
-    console.log("Submitting customization with data:", formData); // Debugging line
-
     try {
+      // Submit the customization data via POST request
       const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations`, {
         method: 'POST',
         headers: {
@@ -97,7 +95,6 @@ export const CustomizationProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error response:', errorText);
         setError('There was an error with your submission. Please try again.');
         return;
       }
@@ -106,9 +103,9 @@ export const CustomizationProvider = ({ children }) => {
       setSuccess('Customization submitted successfully!');
       
       // Fetch updated customizations list
-      fetchCustomizations(); // Now this will work as fetchCustomizations is defined
+      fetchCustomizations(); 
 
-      // Reset form data
+      // Reset form data after successful submission
       setFormData({
         name: '',
         email: '',
@@ -123,20 +120,20 @@ export const CustomizationProvider = ({ children }) => {
         imageOrDesign: '',
       });
     } catch (err) {
-      console.error(err);
       setError('There was an error with your submission. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Update customization (Edit)
+  // Update existing customization (Edit)
   const updateCustomization = async (id, updatedData) => {
     setLoading(true);
     setError('');
     setSuccess('');
 
     try {
+      // Send PUT request to update the customization
       const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${id}`, {
         method: 'PUT',
         headers: {
@@ -152,9 +149,8 @@ export const CustomizationProvider = ({ children }) => {
 
       const result = await response.json();
       setSuccess('Customization updated successfully!');
-      setFormData(updatedData);
+      setFormData(updatedData); // Update the form data with the new customization
     } catch (err) {
-      console.error(err);
       setError('There was an error updating the customization. Please try again.');
     } finally {
       setLoading(false);
@@ -168,6 +164,7 @@ export const CustomizationProvider = ({ children }) => {
     setSuccess('');
 
     try {
+      // Send DELETE request to remove the customization
       const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${id}`, {
         method: 'DELETE',
         headers: {
@@ -182,7 +179,6 @@ export const CustomizationProvider = ({ children }) => {
       setSuccess('Customization deleted successfully!');
       fetchCustomizations(); // Re-fetch customizations after deletion
     } catch (err) {
-      console.error(err);
       setError('There was an error deleting the customization. Please try again.');
     } finally {
       setLoading(false);
@@ -192,20 +188,20 @@ export const CustomizationProvider = ({ children }) => {
   return (
     <CustomizationContext.Provider
       value={{
-        customizations,
-        setCustomizations,
-        formData,
-        handleChange,
-        submitCustomization,
-        updateCustomization,
-        deleteCustomization,
-        fetchCustomizations,
-        loading,
-        error,
-        success,
+        customizations, // Provide customizations state
+        setCustomizations, // Function to manually update customizations
+        formData, // Provide form data state
+        handleChange, // Handle input field changes
+        submitCustomization, // Function to submit a new customization
+        updateCustomization, // Function to update a customization
+        deleteCustomization, // Function to delete a customization
+        fetchCustomizations, // Function to fetch customizations
+        loading, // Provide loading state
+        error, // Provide error state
+        success, // Provide success state
       }}
     >
-      {children}
+      {children} {/* Render the child components */}
     </CustomizationContext.Provider>
   );
 };

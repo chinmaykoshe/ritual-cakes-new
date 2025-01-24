@@ -44,11 +44,10 @@ const OrdersPanel = () => {
       return;
     }
   
-    // Assuming the `order` object is available in your context or state
     const order = orders.find((order) => order._id === orderId); // Fetch the specific order by ID
     const userEmail = order ? order.userEmail : null;  // Get the userEmail from the order
-    const itemName = order ? order.orderItems[0].name : "Unknown Item"; // Fetch item name (assuming first item)
-    const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight"; // Fetch item weight (assuming first item)
+    const itemName = order ? order.orderItems[0].name : "Unknown Item"; // Fetch item name 
+    const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight"; // Fetch item weight 
   
     if (!userEmail) {
       console.error("User email not found");
