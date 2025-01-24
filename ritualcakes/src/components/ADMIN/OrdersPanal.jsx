@@ -57,10 +57,8 @@ const OrdersPanel = () => {
   
     // Confirmation dialog before proceeding with the status update
     const confirmationMessage = `Are you sure you want to set ${userEmail}'s order of ${itemName} (Weight: ${itemWeight}) status to ${status}?`;
-    const isConfirmed = window.confirm(confirmationMessage);
-  
+    const isConfirmed = window.confirm(confirmationMessage);  
     if (!isConfirmed) {
-      console.log("Order status update canceled");
       return;  // User canceled the operation
     }
   
@@ -122,8 +120,6 @@ const OrdersPanel = () => {
 
       // Update the orders list
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
-
-      alert("Order deleted successfully!");
     } catch (err) {
       alert(err.response?.data?.message || err.message || "Failed to delete order");
       setError(err.response?.data?.message || err.message || "Failed to delete order");
