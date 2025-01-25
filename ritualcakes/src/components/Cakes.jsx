@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { elements } from "../assets/assets"; // Import elements
 import Card from "./Card"; // Import the Card component
 
@@ -20,7 +20,6 @@ const CakesPage = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [sortOrder, setSortOrder] = useState("recommended");
   const [visibleCount, setVisibleCount] = useState(8); // Initial visible count for small screens
-  const [isExpanded, setIsExpanded] = useState(false); // Track if the section is expanded
 
   // Filter cakes based on the selected category
   const filteredCakes =
@@ -59,13 +58,12 @@ const CakesPage = () => {
 
   // Function to handle the "Show More" and "Show Less" button click
   const handleToggleVisibility = () => {
-    if (isExpanded) {
-      setVisibleCount(8); // Reset to initial count when collapsing
+    const increment = 8; // Always increment by 8
+    if (visibleCount < sortedCakes.length) {
+      setVisibleCount((prevCount) => Math.min(prevCount + increment, sortedCakes.length)); // Increment by 8, but not exceed total cakes
     } else {
-      const increment = window.innerWidth >= 1024 ? 8 : 6; // 8 for large screens, 6 for small screens
-      setVisibleCount((prevCount) => prevCount + increment); // Show more cakes
+      setVisibleCount(8); // Reset to 8 when collapsing
     }
-    setIsExpanded((prev) => !prev); // Toggle the expanded state
   };
 
   return (
@@ -99,11 +97,10 @@ const CakesPage = () => {
                 {categories.map((category, index) => (
                   <li
                     key={index}
-                    className={`text-lg text-black hover:text-white cursor-pointer px-2 py-1 rounded-lg ${
-                      activeCategory === category
-                        ? "text-black font-bold bg-darkcustombg mr-8"
-                        : "hover:bg-darkcustombg mr-8"
-                    }`}
+                    className={`text-lg text-black hover:text-white cursor-pointer px-2 py-1 rounded-lg ${activeCategory === category
+                      ? "text-black font-bold bg-darkcustombg mr-8"
+                      : "hover:bg-darkcustombg mr-8"
+                      }`}
                     onClick={() => setActiveCategory(category)}
                   >
                     {category}
@@ -146,26 +143,35 @@ const CakesPage = () => {
 
             {/* Product Grid */}
             <div
-              className={`grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4 md:gap-6 ${
-                activeCategory === "Extra Products" ? "justify-items-center" : ""
-              }`}
+              className={`grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4 md:gap-6 ${activeCategory === "Extra Products" ? "justify-items-center" : ""
+                }`}
             >
               {sortedCakes.slice(0, visibleCount).map((cake) => (
                 <Card key={cake.orderID} orderID={cake.orderID} />
               ))}
             </div>
 
-            {/* Show More/Show Less Button */}
-            {visibleCount < sortedCakes.length && (
+
+            {visibleCount < sortedCakes.length ? (
               <div className="flex justify-center mt-4 md:mt-6">
                 <button
                   className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
                   onClick={handleToggleVisibility}
                 >
-                  {isExpanded ? "Show Less" : "Show More"}
+                  Show More
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-center mt-4 md:mt-6">
+                <button
+                  className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+                  onClick={handleToggleVisibility}
+                >
+                  Show Less
                 </button>
               </div>
             )}
+
           </div>
         </div>
       </div>
