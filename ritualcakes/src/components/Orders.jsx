@@ -1,16 +1,30 @@
-import React, { useEffect } from "react";
-import { Link , useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useOrder } from "../context/OrderContext";
 import { useCustomization } from "../context/customizeContext";
 import { designnames } from "../designs/designassets";
 
-
 function Orders() {
-  const { orders, deleteOrder, error, loading } = useOrder();
+  const { orders } = useOrder();
   const { customizations, setCustomizations, error: customizationError } = useCustomization();
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("user");
+  
+const [loading, setLoading] = useState(true);
+const [hasLoaded, setHasLoaded] = useState(false);
+const [loadError, setLoadError] = useState(false);
 
+  const handleImageLoad = () => {
+    setLoading(false);
+    setHasLoaded(true);
+  };
+  
+  const handleImageError = (e) => {
+    e.target.src = "/fallback-image.jpg";
+    setLoading(false);
+    setHasLoaded(true);
+    setLoadError(true); // Track that error has occurred
+  };
   useEffect(() => {
     const fetchCustomizations = async () => {
       try {
@@ -23,6 +37,7 @@ function Orders() {
         const data = await response.json();
         setCustomizations(data);
       } catch (err) {
+        console.error(err);
       }
     };
 
@@ -31,20 +46,18 @@ function Orders() {
     }
   }, [userEmail, setCustomizations]);
 
-
-  // Show login prompt if user is not signed in
   if (!userEmail) {
     return (
       <div className="mx-2 max-w-7xl md:mx-auto py-4 py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
-         {/* Back Button */}
-      <div className="mb-6">
-        <Link
-          to="/"
-          className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
-        >
-          &larr; Back to Home
-        </Link>
-      </div>
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
+          >
+            &larr; Back to Home
+          </Link>
+        </div>
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
           <p className="text-lg mb-4">Please log in to view your orders and customizations.</p>
@@ -62,15 +75,15 @@ function Orders() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
- {/* Back Button */}
-      <div className="mb-6">
-        <Link
-          to="/" 
-          className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
-        >
-          &larr; Back to Home
-        </Link>
-      </div>
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
+          >
+            &larr; Back to Home
+          </Link>
+        </div>
 
         {/* Orders Section */}
         <h1 className="text-3xl font-bold mb-6 text-center">Your Orders</h1>
@@ -104,20 +117,26 @@ function Orders() {
                     </div>
                     <div className="flex flex-col space-y-2 mt-4">
                       <div className="flex items-center space-x-2">
-                       
-                      <span className={`ml-2 px-2 py-1 rounded ${order.status === 'Completed' ? 'bg-blue-200 text-blue-700' : order.status === 'Pending' ? 'bg-yellow-200 text-yellow-700' : 'bg-red-200 text-red-700'}`}>
-    {order.status}
-  </span>
+                        <span
+                          className={`ml-2 px-2 py-1 rounded ${order.status === "Completed"
+                            ? "bg-blue-200 text-blue-700"
+                            : order.status === "Pending"
+                              ? "bg-yellow-200 text-yellow-700"
+                              : "bg-red-200 text-red-700"
+                            }`}
+                        >
+                          {order.status}
+                        </span>
                       </div>
                     </div>
                     <div className="mt-4 flex justify-center">
-                        <button
-                          onClick={() => alert('Call +91 --------- to cancel the order')}
-                          className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
-                        >
-                          Cancel Order
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => alert("Call +91 --------- to cancel the order")}
+                        className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+                      >
+                        Cancel Order
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -147,58 +166,60 @@ function Orders() {
                     <p><strong>Cake Type:</strong> {customization.cakeType}</p>
                     <p><strong>Flavor:</strong> {customization.flavor}</p>
                     <p><strong>Message:</strong> {customization.message}</p>
-                    <p><strong>Special Instructions:</strong> {customization.specialInstructions || 'N/A'}</p>
+                    <p><strong>Special Instructions:</strong> {customization.specialInstructions || "N/A"}</p>
                     <p><strong>Delivery Date:</strong> {new Date(customization.deliveryDate).toLocaleDateString()}</p>
-                  <p>
-  <span
-    className={`px-2 py-1 rounded ${
-      customization.approvalStatus === 'approved'
-        ? 'bg-green-200 text-green-700'
-        : customization.approvalStatus === 'pending'
-        ? 'bg-blue-200 text-blue-700'
-        : customization.approvalStatus === 'rejected'
-        ? 'bg-red-200 text-red-700'
-        : 'bg-yellow-200 text-yellow-700'
-    }`}
-  >
-    {customization.approvalStatus}
-  </span>
-</p>
+                    <p>
+                      <span
+                        className={`px-2 py-1 rounded ${customization.approvalStatus === "approved"
+                          ? "bg-green-200 text-green-700"
+                          : customization.approvalStatus === "pending"
+                            ? "bg-blue-200 text-blue-700"
+                            : customization.approvalStatus === "rejected"
+                              ? "bg-red-200 text-red-700"
+                              : "bg-yellow-200 text-yellow-700"
+                          }`}
+                      >
+                        {customization.approvalStatus}
+                      </span>
+                    </p>
 
-                    <p className="text-lg"><strong>Price:</strong> ${customization.price}</p>
+                    <p className="text-lg"><strong>Price:</strong> Rs. {customization.price}</p>
                     <p><strong>Image or Design:</strong></p>
-                    <p className="break-all">{customization.imageOrDesign || 'No image/design provided'}</p>
+                    <p className="break-all overflow-hidden text-ellipsis line-clamp-3">{customization.imageOrDesign || "No image/design provided"}</p>
                   </div>
 
                   {/* Image Section */}
-                  {customization.imageOrDesign ? (
-                    <div className="m-4 md:mt-0 md:ml-8 md:w-1/3 lg:w-1/3 w-full">
-                      {customization.imageOrDesign.startsWith('http') ? (
+                  <div className="m-4 md:mt-0 md:ml-8 md:w-1/3 lg:w-1/3 w-full">
+                    {loading && !hasLoaded && !loadError && <div className="spinner">Loading...</div>}
+                    {customization.imageOrDesign && !hasLoaded ? (
+                      customization.imageOrDesign.startsWith("http") ? (
                         <img
                           src={customization.imageOrDesign}
                           alt={`Design: ${customization.imageOrDesign}`}
                           className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => (e.target.src = '/fallback-image.jpg')}
+                          onLoad={handleImageLoad}
+                          onError={handleImageError}
                         />
                       ) : (
                         <img
-                          src={designnames[customization.imageOrDesign] || '/fallback-image.jpg'}
+                          src={designnames[customization.imageOrDesign] || "/fallback-image.jpg"}
                           alt={`Design: ${customization.imageOrDesign}`}
                           className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => (e.target.src = '/fallback-image.jpg')}
+                          onLoad={handleImageLoad}
+                          onError={handleImageError}
                         />
-                      )}
+                      )
+                    ) : null}
+                  </div>
 
-                      <div className="mt-4 flex justify-center">
-                        <button
-                          onClick={() => alert('Call +91 --------- to cancel the order')}
-                          className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
-                        >
-                          Cancel Customization
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
+                  <div className="mt-4 flex justify-center">
+                    <button
+                      onClick={() => alert("Call +91 --------- to cancel the order")}
+                      className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+                    >
+                      Cancel Customization
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
