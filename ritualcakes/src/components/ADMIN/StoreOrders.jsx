@@ -11,8 +11,7 @@ const StoreOrders = () => {
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
   const isFetching = useRef(false); // Prevent redundant API calls
-  const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
-
+  
   // Function to fetch orders
   const fetchAdminOrders = async () => {
     setLoading(true);
@@ -24,7 +23,7 @@ const StoreOrders = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
       if (!userEmail) throw new Error("User email not found.");
 
-      const apiUrl = `${apiUrl}/orders/${userEmail}`;
+      const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`;
 
       const response = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
