@@ -125,6 +125,15 @@ function Navbar() {
           onClick={toggleMenu}
         ></div>
 
+
+        {!isLoggedIn && (
+          <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2">
+            <p className="text-red-600 md:font-semibold">
+              Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to order online.
+            </p>
+          </div>
+        )}
+
         {/* Sidebar */}
         <div
           className={`fixed top-0 left-0 w-64 bg-white h-full shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
@@ -157,6 +166,11 @@ function Navbar() {
           </div>
         </div>
       </div>
+
+      {
+        isLoggedIn ?? <div>please signin to place orders! </div>
+
+      }
 
     </div>
   );
