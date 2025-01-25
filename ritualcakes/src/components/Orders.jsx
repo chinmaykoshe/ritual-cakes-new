@@ -15,16 +15,7 @@ function Orders() {
   const [loadError, setLoadError] = useState(false);
 
   const handleImageLoad = () => {
-    setLoadedCount((prevCount) => {
-      const newCount = prevCount + 1;
-
-      if (newCount === 4) {
-        setLoading(false);
-        setHasLoaded(true); // All 4 images have loaded
-      }
-
-      return newCount;
-    });
+    setLoading(false);
   };
 
   const handleImageError = (e) => {
