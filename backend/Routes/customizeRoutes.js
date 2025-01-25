@@ -3,12 +3,6 @@ const Customization = require('../Models/Customizationdb');
 const moment = require('moment');
 const transporter = require('../Controllers/mailer');
 
-// -------------------------- USER ROUTES --------------------------
-
-/**
- * POST route to create a new customization
- * This route allows users to submit a customization request.
- */
 router.post('/customizations', async (req, res) => {
   try {
     // Destructure form data from request body
@@ -40,12 +34,62 @@ router.post('/customizations', async (req, res) => {
     // Save the customization to the database
     await customization.save();
 
-    // Prepare email content for the user
     const customizationDetailsHtml = `
     <!DOCTYPE html>
     <html>
       <head>
         <title>Order Confirmation</title>
+        <style>
+          body {
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 228, 208);
+            color: rgb(44, 44, 44);
+            line-height: 1.6;
+          }
+    
+          h1, h3 {
+            color: rgb(72, 37, 11);
+          }
+    
+          p {
+            margin: 10px 0;
+          }
+    
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+    
+          th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgb(77, 77, 77);
+          }
+    
+          th {
+            background-color: rgb(72, 37, 11);
+            color: white;
+          }
+    
+          strong {
+            color: rgb(72, 37, 11);
+          }
+    
+          footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: rgb(77, 77, 77);
+            text-align: center;
+          }
+    
+          a {
+            color: rgb(72, 37, 11);
+          }
+        </style>
       </head>
       <body>
         <h1>Thank You for Your Order!</h1>
@@ -110,15 +154,11 @@ router.get('/customizations', async (req, res) => {
   }
 });
 
-/**
- * GET route to fetch a single customization by email
- * This route allows users to view their specific customization by email.
- */
 router.get('/customizations/:email', async (req, res) => {
   try {
     // Find customization by email instead of id
     const customizations = await Customization.find({ email: req.params.email });
-    
+
     if (customizations.length === 0) {
       return res.status(404).json({ message: "Customization not found" });
     }
@@ -129,15 +169,9 @@ router.get('/customizations/:email', async (req, res) => {
   }
 });
 
-// -------------------------- ADMIN ROUTES --------------------------
-
-/**
- * PUT route to update the price and approval status (for admin)
- * This route allows the admin to approve or reject a customization and set its price.
- */
 router.put('/customizations/:id', async (req, res) => {
   const { approvalStatus, price } = req.body;
-  
+
   // Validate that price and approvalStatus are provided for update
   if (approvalStatus && !['pending', 'approved', 'rejected'].includes(approvalStatus)) {
     return res.status(400).json({ message: "Invalid approval status" });
@@ -156,12 +190,62 @@ router.put('/customizations/:id', async (req, res) => {
 
     res.status(200).json({ message: "Customization updated successfully", customization });
 
-    // Prepare email content for the user
     const orderDetailsHtml = `
     <!DOCTYPE html>
     <html>
       <head>
         <title>Order Status Update</title>
+        <style>
+          body {
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 228, 208);
+            color: rgb(44, 44, 44);
+            line-height: 1.6;
+          }
+    
+          h1, h3 {
+            color: rgb(72, 37, 11);
+          }
+    
+          p {
+            margin: 10px 0;
+          }
+    
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+    
+          th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgb(77, 77, 77);
+          }
+    
+          th {
+            background-color: rgb(72, 37, 11);
+            color: white;
+          }
+    
+          strong {
+            color: rgb(72, 37, 11);
+          }
+    
+          footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: rgb(77, 77, 77);
+            text-align: center;
+          }
+    
+          a {
+            color: rgb(72, 37, 11);
+          }
+        </style>
       </head>
       <body>
         <h1>Order Status Update</h1>
