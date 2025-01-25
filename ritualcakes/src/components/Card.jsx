@@ -29,7 +29,7 @@ function Card({ orderID }) {
         <img
           src={product.img}
           alt={product.name}
-          onError={(e) => (e.target.src = elements.fallbackImage)} 
+          onError={(e) => (e.target.src = elements.fallbackImage)}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-95 rounded-lg"
         />
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Navigate , useParams } from "react-router-dom";
-import { useCustomization } from "../context/customizeContext";  
-import { designnames } from "../designs/designassets"; 
+import { Navigate, useParams } from "react-router-dom";
+import { useCustomization } from "../context/customizeContext";
+import { designnames } from "../designs/designassets";
 
 // Define available cake types based on size
 const availableCakeTypes = {
@@ -83,7 +83,7 @@ const DesignCustomizationPage = () => {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg shadow-lg">
       <div className="flex flex-col md:flex-row gap-8">
-        
+
         <div className="flex-1">
           <img
             src={design.imageUrl}
@@ -92,9 +92,9 @@ const DesignCustomizationPage = () => {
           />
         </div>
         <div className="flex-1">
-        {!isLoggedIn && (
-              <p className="text-center text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
-            )}
+          {!isLoggedIn && (
+            <p className="text-center text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
@@ -208,7 +208,7 @@ const DesignCustomizationPage = () => {
             <div>
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
               <input
-                type="text"            
+                type="text"
                 placeholder="please mention time between 10 AM TO 11 PM"
                 name="message"
                 value={formData.message}

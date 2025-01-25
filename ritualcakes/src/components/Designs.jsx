@@ -69,7 +69,7 @@ const Designs = () => {
         title="Engagement Theme"
         categoryPrefix="theme_engagement_design_"
         designnames={designnames}
-  // Passing handleZoomIn
+      // Passing handleZoomIn
       />
       <ThemeSection
         title="Mom Theme"

@@ -136,9 +136,9 @@ function Navbar() {
             </button>
           </div>
           <div className="space-y-4 p-4">
-          <span className="self-center text-xl font-bold text-customGray hidden md:block ml-1">
-                RITUAL CAKES
-              </span>
+            <span className="self-center text-xl font-bold text-customGray hidden md:block ml-1">
+              RITUAL CAKES
+            </span>
             {["Home", "Designs", "Cakes", "Catalogue", "Customization", "About", "Orders"].map(
               (item, index) => (
                 <NavLink

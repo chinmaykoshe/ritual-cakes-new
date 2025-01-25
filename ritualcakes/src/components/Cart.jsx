@@ -52,15 +52,15 @@ function Cart() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-         {/* Back Button */}
-      <div className="mb-6">
-        <Link
-          to="/" 
-          className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
-        >
-          &larr; Back to Home
-        </Link>
-      </div>
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
+          >
+            &larr; Back to Home
+          </Link>
+        </div>
         <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
 
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}

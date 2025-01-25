@@ -25,7 +25,7 @@ function Checkout() {
 
     // Update the min date for the date input (2 days later)
     const minDate = formattedDate;
-    
+
     const orderDateInput = document.getElementById("orderDateInput");
     if (orderDateInput) {
       orderDateInput.setAttribute("min", minDate);
@@ -95,10 +95,10 @@ function Checkout() {
       await createOrder(orderData);
       setSuccessMessage("Order placed successfully!");
 
-    // Redirect to home page after successful order placement
-    setTimeout(() => {
-      navigate("/"); // Navigate to the home page
-    }, 2000); // Wait for 2 seconds before navigating to allow the success message to be visible
+      // Redirect to home page after successful order placement
+      setTimeout(() => {
+        navigate("/"); // Navigate to the home page
+      }, 2000); // Wait for 2 seconds before navigating to allow the success message to be visible
 
     } catch (error) {
       setErrorMessages(error.response?.data?.message || "Error placing order, please try again.");
@@ -239,7 +239,7 @@ function Checkout() {
                   className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
                   disabled={loading}
                 >
-                  {loading ? 'Placing Order...' : 'Place Order' }
+                  {loading ? 'Placing Order...' : 'Place Order'}
                 </button>
               </div>
             </div>

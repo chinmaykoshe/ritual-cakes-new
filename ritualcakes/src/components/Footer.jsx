@@ -5,12 +5,12 @@ function Footer() {
   return (
     <div className="mt-28 flex flex-col min-h">
       {/* Main Content */}
-      
+
       {/* Footer */}
       <footer className="bg-orange-50 bg-opacity-85 text-darkcustombg1 pt-4 pb-8">
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap md:flex-nowrap justify-between">
-            
+
             {/* About the Company */}
             <div className="w-full md:w-1/3 mb-6 md:mb-0 pl-4 pr-20 ">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>

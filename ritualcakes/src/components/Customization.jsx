@@ -240,8 +240,8 @@ function CustomizationForm() {
         </div>
 
         <p className="text-center text-sm font-medium text-customGray mt-4 mb-8 bg-yellow-200 p-4 rounded-lg border border-yellow-400">
-  <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
-</p>
+          <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
+        </p>
 
         {/* Submit Button */}
         <button
