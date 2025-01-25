@@ -41,7 +41,9 @@ function Card({ orderID }) {
         </h3>
         <div className="flex items-center space-x-1 text-sm">
           <span className="text-gray-800 font-bold">Rs</span>
-          <span className="text-gray-800 font-bold">{product.prices["500g"] || "N/A"}</span>
+          <span className="text-gray-800 font-bold">
+            {product.prices["500g"] || product.prices["6 pieces"] || product.prices["1 jar"] || product.prices["1 serving"] || "N/A"}
+          </span>
         </div>
       </div>
     </div>
