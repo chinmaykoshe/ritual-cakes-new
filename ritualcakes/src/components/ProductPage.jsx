@@ -230,7 +230,7 @@ const ProductPage = () => {
 
       <div className="mt-12">
   <h2 className="text-xl font-semibold text-darkcustomGray">Related Products</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
     {relatedProducts.length > 0 ? (
       relatedProducts.map((relatedProduct) => (
         <Card key={relatedProduct.orderID} orderID={relatedProduct.orderID} />
