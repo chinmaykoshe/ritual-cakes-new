@@ -133,6 +133,11 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
         <p><strong>Total:</strong> ${totalAmount}</p>
         <h3>Shipping Address:</h3>
         <p>${deliveryAddress}</p>
+        <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
+        <footer>
+          <p>Sincerely,<br> Ritual Cakes </p>
+          <p>&copy; ${new Date().getFullYear()} Ritual Cakes. All rights reserved.</p>
+        </footer>
       </body>
     </html>`;
 

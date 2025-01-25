@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { elements } from '../../assets/assets'; // Adjust the path as needed
+import { elements } from '../../assets/assets';
 
 function CakesAvailable() {
   // Flattening the elements to access all cakes

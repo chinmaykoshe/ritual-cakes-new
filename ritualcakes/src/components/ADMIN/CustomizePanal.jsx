@@ -11,6 +11,7 @@ const CustomizationPanel = () => {
   const [selectedCakeType, setSelectedCakeType] = useState("");
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState(""); // New state for date filter
+  const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
 
   // Fetch customizations from API
   const fetchCustomizations = async () => {
@@ -21,7 +22,7 @@ const CustomizationPanel = () => {
         throw new Error("Token not found. Please log in again.");
       }
 
-      const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations`, {
+      const response = await axios.get(`${apiUrl}/customizations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,7 +70,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
+        `${apiUrl}/customizations/${customizationId}`,
         { approvalStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +97,7 @@ const CustomizationPanel = () => {
       }
 
       const response = await axios.put(
-        `https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${customizationId}`,
+        `${apiUrl}/customizations/${customizationId}`,
         { price: newPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -181,7 +182,7 @@ const CustomizationPanel = () => {
           className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-        />  
+        />
         <select
           className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"
           value={selectedApprovalStatus}

@@ -15,7 +15,7 @@ function AdminDashboard() {
     <div className="w-full h-full bg-neutral-50 flex bg-white">
       {/* Fixed Navigation Pane */}
       <NavigationPane />
-      
+
       <main className="flex-1 p-6">
         {/* Navigation links for routing */}
 

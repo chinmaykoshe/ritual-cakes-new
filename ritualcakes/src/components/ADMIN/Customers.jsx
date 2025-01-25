@@ -8,12 +8,12 @@ function Customers() {
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   const token = localStorage.getItem('token');
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users`;
 
   useEffect(() => {
     const fetchCustomers = async () => {
       if (token) {
         try {
-  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users`;
           
 
           const response = await axios.get(apiUrl, {
@@ -49,7 +49,6 @@ function Customers() {
     const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
     if (confirmDelete) {
       try {
-        const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users/${id}`;
 
         await axios.delete(apiUrl, {
           headers: { Authorization: `Bearer ${token}` },

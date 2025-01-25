@@ -47,11 +47,7 @@ router.get('/cart', ensureAuthenticated, async (req, res) => {
  * This route is for the user to add products to their cart.
  */
 router.post('/cart/add', ensureAuthenticated, async (req, res) => {
-    console.log("POST /cart/add - Adding products to cart");
     const { products } = req.body; // Get products from the request body (array of product details)
-
-    console.log("Products received:", products);
-
     // Check if products is an array and has at least one product
     if (!Array.isArray(products) || products.length === 0) {
         return res.status(400).json({ message: 'Please provide an array of products' });

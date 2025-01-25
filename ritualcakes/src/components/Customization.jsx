@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useCustomization } from '../context/customizeContext';  // Import the context
 
 function CustomizationForm() {

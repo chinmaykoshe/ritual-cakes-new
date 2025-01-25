@@ -26,8 +26,8 @@ export const CustomizationProvider = ({ children }) => {
   const [error, setError] = useState(''); // State for error messages
   const [success, setSuccess] = useState(''); // State for success messages
   const [customizations, setCustomizations] = useState([]); // State for storing customizations
-
   const yourToken = localStorage.getItem('token'); // Get token from localStorage
+  const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
 
   // Fetch customizations from the backend
   const fetchCustomizations = async () => {
@@ -35,7 +35,7 @@ export const CustomizationProvider = ({ children }) => {
     setError('');
 
     const userEmail = localStorage.getItem('user');
-  
+
     if (!userEmail) {
       setError('User email not found.');
       setLoading(false);
@@ -44,7 +44,7 @@ export const CustomizationProvider = ({ children }) => {
 
     try {
       // Fetch customization data from API
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${userEmail}`, {
+      const response = await fetch(`${apiUrl}/customizations/${userEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const CustomizationProvider = ({ children }) => {
 
     try {
       // Submit the customization data via POST request
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations`, {
+      const response = await fetch(`${apiUrl}/customizations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export const CustomizationProvider = ({ children }) => {
 
     try {
       // Send PUT request to update the customization
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${id}`, {
+      const response = await fetch(`${apiUrl}/customizations/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export const CustomizationProvider = ({ children }) => {
 
     try {
       // Send DELETE request to remove the customization
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/customizations/${id}`, {
+      const response = await fetch(`${apiUrl}/customizations/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${yourToken}`,
