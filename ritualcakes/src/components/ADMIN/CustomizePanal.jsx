@@ -254,7 +254,7 @@ const CustomizationPanel = () => {
                   ) : (
                     <div>
                       <span>Open in new tab</span>
-                      <span className="break-all text-blue-500">
+                      <span className="break-all text-blue-500 overflow-hidden text-ellipsis line-clamp-3">
                         <a
                           href={customization.imageOrDesign}
                           onClick={(e) => {
