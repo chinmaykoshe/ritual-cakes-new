@@ -272,101 +272,101 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
 
     // Construct HTML for the email
     const orderDetailsHtml = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Order Status Update</title>
-    <style>
-      body {
-        padding: 25px;
-        font-family: Arial, sans-serif;
-        background-color: rgb(255, 228, 208);
-        color: rgb(44, 44, 44);
-        line-height: 1.6;
-      }
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Order Status Update</title>
+        <style>
+          body {
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 228, 208);
+            color: rgb(44, 44, 44);
+            line-height: 1.6;
+          }
 
-      h1, h3 {
-        color: rgb(72, 37, 11);
-      }
+          h1, h3 {
+            color: rgb(72, 37, 11);
+          }
 
-      p {
-        margin: 10px 0;
-      }
+          p {
+            margin: 10px 0;
+          }
 
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin: 20px 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
 
-      th, td {
-        padding: 12px;
-        text-align: left;
-        border: 1px solid rgb(77, 77, 77);
-      }
+          th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgb(77, 77, 77);
+          }
 
-      th {
-        background-color: rgb(72, 37, 11);
-        color: white;
-      }
+          th {
+            background-color: rgb(72, 37, 11);
+            color: white;
+          }
 
-      strong {
-        color: rgb(72, 37, 11);
-      }
+          strong {
+            color: rgb(72, 37, 11);
+          }
 
-      footer {
-        margin-top: 20px;
-        font-size: 0.9em;
-        color: rgb(77, 77, 77);
-        text-align: center;
-      }
+          footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: rgb(77, 77, 77);
+            text-align: center;
+          }
 
-      a {
-        color: rgb(72, 37, 11);
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Order Status Update</h1>
-    <p>The status of your order <strong>${updatedOrder._id}</strong> has been updated to <strong>${status}</strong>.</p>
-    <p><strong>Order Number:</strong> ${updatedOrder._id}</p>
-    <h3>Order Details:</h3>
-    <p><strong>Date:</strong> ${new Date(updatedOrder.orderDate).toDateString()}</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Quantity</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${updatedOrder.orderItems.map(item => `
-          <tr>
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
-            <td>${item.price}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-    <p><strong>Subtotal:</strong> ${updatedOrder.totalAmount}</p>
-    <p><strong>Payment Method:</strong> ${updatedOrder.paymentMethod}</p>
-    <p><strong>Total:</strong> ${updatedOrder.totalAmount}</p>
-    <p><strong>Note:</strong> ${updatedOrder.cakeMessage || 'No additional note provided.'}</p>
-    <h3>Shipping Address:</h3>
-    <p>${updatedOrder.deliveryAddress}</p>
-    <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
-    <footer>
-      <p>Sincerely,<br> Ritual Cakes </p>
-      <p>&copy; ${new Date().getFullYear()} Ritual Cakes. All rights reserved.</p>
-    </footer>
-  </body>
-</html>`;
-
-
+          a {
+            color: rgb(72, 37, 11);
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Order Status Update</h1>
+        <p>The status of your order <strong>${updatedOrder._id}</strong> has been updated to <strong>${status}</strong>.</p>
+        <p><strong>Order Number:</strong> ${updatedOrder._id}</p>
+        <h3>Order Details:</h3>
+        <p><strong>Date:</strong> ${new Date(updatedOrder.orderDate).toDateString()}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${updatedOrder.orderItems.map(item => `
+              <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>${item.price}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <p><strong>Subtotal:</strong> ${updatedOrder.totalAmount}</p>
+        <p><strong>Payment Method:</strong> ${updatedOrder.paymentMethod}</p>
+        <p><strong>Total:</strong> ${updatedOrder.totalAmount}</p>
+        <p><strong>Note:</strong> ${updatedOrder.cakeMessage || 'No additional note provided.'}</p>
+        <h3>Shipping Address:</h3>
+        <p>${updatedOrder.deliveryAddress}</p>
+        <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
+        <footer>
+          <p>Sincerely,<br> Ritual Cakes </p>
+          <p>&copy; ${new Date().getFullYear()} Ritual Cakes. All rights reserved.</p>
+        </footer>
+      </body>
+    </html>`;
+            
+            
     // Email options to send to the user
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com', // Sender email
