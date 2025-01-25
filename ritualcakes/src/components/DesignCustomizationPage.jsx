@@ -225,9 +225,7 @@ const DesignCustomizationPage = () => {
             >
               {loading ? 'Submitting...' : 'Submit Customization'}
             </button>
-            {!isLoggedIn && (
-              <p className="text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
-            )}
+            
             {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
             {success && <div className="text-green-500 mt-4 text-center">Customization submitted successfully!</div>}
           </form>
