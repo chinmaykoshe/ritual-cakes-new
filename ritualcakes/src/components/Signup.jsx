@@ -37,7 +37,7 @@ function Signup() {
   };
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{4,}$/;
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{8,}$/;
     return regex.test(password); // Validate password format
   };
 
@@ -60,7 +60,7 @@ function Signup() {
 
     // Validate password before submitting
     if (!validatePassword(signUpData.password)) {
-      setErrorMessages("Password must contain at least one letter, one number, and be at least 4 characters long. Special characters are optional.");
+      setErrorMessages("Password must contain at least one letter, one number, and be at least 8 characters long. Special characters are optional.");
       setLoading(false); // Reset loading state
       return;
     }
