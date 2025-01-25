@@ -12,7 +12,7 @@ function NavigationPane() {
           RITUAL CAKES
         </span>
       </div>
-      <hr className='mb-4'/>
+      <hr className='mb-4' />
 
       <nav className="flex flex-col gap-4">
         <NavLink

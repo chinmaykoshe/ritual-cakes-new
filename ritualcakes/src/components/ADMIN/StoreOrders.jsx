@@ -11,6 +11,7 @@ const StoreOrders = () => {
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
   const isFetching = useRef(false); // Prevent redundant API calls
+  const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
 
   // Function to fetch orders
   const fetchAdminOrders = async () => {
@@ -23,7 +24,7 @@ const StoreOrders = () => {
       if (!token) throw new Error("Token not found. Please log in again.");
       if (!userEmail) throw new Error("User email not found.");
 
-      const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`;
+      const apiUrl = `${apiUrl}/orders/${userEmail}`;
 
       const response = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
@@ -77,7 +78,7 @@ const StoreOrders = () => {
         const matchesShapeFilter = shapeFilter ? item.shape === shapeFilter : true;
         const matchesDateFilter = dateFilter
           ? new Date(order.createdAt).toLocaleDateString("en-US") ===
-            new Date(dateFilter).toLocaleDateString("en-US")
+          new Date(dateFilter).toLocaleDateString("en-US")
           : true;
         const matchesMinAmount = minAmount ? order.totalAmount >= Number(minAmount) : true;
         const matchesMaxAmount = maxAmount ? order.totalAmount <= Number(maxAmount) : true;
@@ -94,18 +95,18 @@ const StoreOrders = () => {
 
   const today = new Date().toLocaleDateString("en-US");
   // Inside your component function
-const todayTotal = useMemo(() => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Reset time to midnight for today's date comparison
+  const todayTotal = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to midnight for today's date comparison
 
-  return adminOrders
-    .filter((order) => {
-      const orderDate = new Date(order.createdAt);
-      orderDate.setHours(0, 0, 0, 0); // Reset time to midnight for each order
-      return orderDate.getTime() === today.getTime(); // Compare date parts only
-    })
-    .reduce((total, order) => total + order.totalAmount, 0); // Sum totalAmount for today's orders
-}, [adminOrders]); // Recalculate when adminOrders changes
+    return adminOrders
+      .filter((order) => {
+        const orderDate = new Date(order.createdAt);
+        orderDate.setHours(0, 0, 0, 0); // Reset time to midnight for each order
+        return orderDate.getTime() === today.getTime(); // Compare date parts only
+      })
+      .reduce((total, order) => total + order.totalAmount, 0); // Sum totalAmount for today's orders
+  }, [adminOrders]); // Recalculate when adminOrders changes
 
   // Export orders to CSV
   const exportToCSV = () => {

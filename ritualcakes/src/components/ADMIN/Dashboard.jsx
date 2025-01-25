@@ -15,18 +15,18 @@ function Dashboard() {
   const validateAdminAccess = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-  
+
     if (!token) {
       throw new Error("Token not found. Please log in again.");
     }
-  
+
     if (role !== "admin") {
       throw new Error("Access restricted. Only admins can view this data.");
     }
-  
+
     return token; // Return the token if validated
   };
-  
+
 
   // Fetch data from API
   const fetchDashboardData = async () => {
@@ -34,8 +34,8 @@ function Dashboard() {
       const token = validateAdminAccess(); // Validate role and token
 
       // API URL logic
-  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
-      
+      const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
+
 
       // Fetch all orders (no date filter needed here)
       const allOrdersResponse = await axios.get(apiUrl, {

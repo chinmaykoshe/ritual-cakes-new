@@ -6,12 +6,12 @@ function CakesAvailable() {
   const allCakes = Object.values(elements).flat(); // Flattens the elements to get all cakes
 
   const [searchQuery, setSearchQuery] = useState(""); // To manage search input
-  
-// Filter cakes based on search query for both name and orderID
-const filteredCakes = allCakes.filter((cake) =>
-  cake.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Match query case-insensitively for name
-  cake.orderID.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively for orderID
-);
+
+  // Filter cakes based on search query for both name and orderID
+  const filteredCakes = allCakes.filter((cake) =>
+    cake.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Match query case-insensitively for name
+    cake.orderID.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively for orderID
+  );
 
 
   // Split cakes into two halves

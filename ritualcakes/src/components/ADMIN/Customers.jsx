@@ -14,7 +14,7 @@ function Customers() {
     const fetchCustomers = async () => {
       if (token) {
         try {
-          
+
 
           const response = await axios.get(apiUrl, {
             headers: { Authorization: `Bearer ${token}` },

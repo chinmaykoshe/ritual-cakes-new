@@ -6,6 +6,8 @@ const ReviewSection = () => {
   const [editedContent, setEditedContent] = useState("");
   const [error, setError] = useState(""); // To store error messages
   const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
+
 
   useEffect(() => {
     fetchReviews();
@@ -14,7 +16,7 @@ const ReviewSection = () => {
   // Fetch reviews from the API
   const fetchReviews = async () => {
     try {
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews`);
+      const response = await fetch(`${apiUrl}/reviews`);
       const data = await response.json();
       const groupedReviews = groupReviewsByProduct(data);
       setReviews(groupedReviews);
@@ -60,7 +62,7 @@ const ReviewSection = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${orderID}/${reviewID}`, {
+      const response = await fetch(`${apiUrl}/reviews/${orderID}/${reviewID}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -87,7 +89,7 @@ const ReviewSection = () => {
   const handleSaveEdit = async (reviewID) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://ritual-cakes-new-ogk5.vercel.app/api/reviews/${reviewID}`, {
+      const response = await fetch(`${apiUrl}/reviews/${reviewID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

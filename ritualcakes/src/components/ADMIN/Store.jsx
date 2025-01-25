@@ -48,14 +48,14 @@ function Store() {
         toast.error('Token is missing. Please log in.');
         throw new Error('Authentication token is missing.');
       }
-  
+
       // Validate the selected options (weight and shape)
       const selectedOption = selectedOptions[selectedCake.orderID];
       if (!selectedOption?.weight || !selectedOption?.shape) {
         toast.error('Please select a valid weight and shape.');
         return;
       }
-  
+
       // Prepare the order item data
       const orderItem = {
         name: selectedCake.name,
@@ -65,25 +65,26 @@ function Store() {
         orderID: selectedCake.orderID,
         image: selectedCake.image || 'default_image_url',
       };
-  
+
       // Calculate total amount from price
       const totalAmount = parseFloat(orderItem.price || 0);
       if (isNaN(totalAmount) || totalAmount <= 0) {
         toast.error('Invalid total amount. Please check the price and try again.');
         return;
       }
-  
+
       // Static or dynamic values
       const deliveryAddress = '123 Main St'; // Replace with the user's actual address if available
       const paymentMethod = 'COD'; // Replace with dynamic value if needed
       const cakeMessage = customMessages[selectedCake.orderID]?.trim() || 'Ordered from store';
-  
+      const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
+
       // Validate custom message length
       if (cakeMessage.length > 100) {
         toast.error('Custom message must be 100 characters or less.');
         return;
       }
-  
+
       // Prepare the order data payload
       const orderData = {
         userEmail,
@@ -95,10 +96,10 @@ function Store() {
         orderDate: new Date().toISOString(),
         orderTime: new Date().toLocaleTimeString(),
       };
-  
+
       // Send the order data to the backend API
       const response = await axios.post(
-        'https://ritual-cakes-new-ogk5.vercel.app/api/orders',
+        `${apiUrl}/orders`,
         orderData,
         {
           headers: {
@@ -107,7 +108,7 @@ function Store() {
           },
         }
       );
-  
+
       if (response.status === 201) {
         toast.success(`Order for "${selectedCake.name}" placed successfully!`);
       } else {
@@ -118,7 +119,7 @@ function Store() {
       toast.error('Error placing order: ' + (error.response?.data?.message || error.message));
     }
   };
-  
+
   // Confirmation before placing the order
   const handlePlaceOrder = (cake) => {
     const confirmation = window.confirm(
@@ -128,8 +129,8 @@ function Store() {
       placeOrder(cake);
     }
   };
-  
-  
+
+
 
   const filteredCakes = cakes.filter((cake) =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase())

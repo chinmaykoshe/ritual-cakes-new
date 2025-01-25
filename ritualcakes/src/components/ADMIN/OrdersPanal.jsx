@@ -36,31 +36,31 @@ const OrdersPanel = () => {
 
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
 
-  
+
 
   const updateOrderStatus = async (orderId, status) => {
     if (!token) {
       console.error("Token not found");
       return;
     }
-  
+
     const order = orders.find((order) => order._id === orderId); // Fetch the specific order by ID
     const userEmail = order ? order.userEmail : null;  // Get the userEmail from the order
     const itemName = order ? order.orderItems[0].name : "Unknown Item"; // Fetch item name 
     const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight"; // Fetch item weight 
-  
+
     if (!userEmail) {
       console.error("User email not found");
       return;
     }
-  
+
     // Confirmation dialog before proceeding with the status update
     const confirmationMessage = `Are you sure you want to set ${userEmail}'s order of ${itemName} (Weight: ${itemWeight}) status to ${status}?`;
-    const isConfirmed = window.confirm(confirmationMessage);  
+    const isConfirmed = window.confirm(confirmationMessage);
     if (!isConfirmed) {
       return;  // User canceled the operation
     }
-  
+
     try {
       const response = await axios.put(
         `${apiUrl}/${orderId}/status`,
@@ -74,20 +74,20 @@ const OrdersPanel = () => {
           },
         }
       );
-  
+
       return response.data; // Return response data if update is successful
     } catch (error) {
       console.error("Error updating order status:", error.response ? error.response.data : error.message);
       setError("Failed to update order status.");
     }
   };
-  
+
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     setUpdatingOrderId(orderId); // Set the updating order ID
-  
+
     // Update the order status via API
     const updatedOrder = await updateOrderStatus(orderId, newStatus);
-  
+
     if (updatedOrder) {
       // Update the state with the updated status
       setOrders((prevOrders) =>
@@ -98,10 +98,10 @@ const OrdersPanel = () => {
         )
       );
     }
-  
+
     setUpdatingOrderId(null); // Clear the updating order ID after completion
   };
-  
+
 
 
   // Function to delete the order
@@ -157,7 +157,7 @@ const OrdersPanel = () => {
     const matchesDate = filterDate
       ? moment(order.orderDate).isSame(moment(filterDate), "day")
       : true;
-    const matchesMaxAmount = (filterAmount === "" || parseFloat(filterAmount) === 0) || 
+    const matchesMaxAmount = (filterAmount === "" || parseFloat(filterAmount) === 0) ||
       (filterAmount && !isNaN(filterAmount) && order.totalAmount <= parseFloat(filterAmount));
     const matchesMinAmount = (minAmount === "" || parseFloat(minAmount) === 0) ||
       (minAmount && !isNaN(minAmount) && order.totalAmount >= parseFloat(minAmount));
@@ -190,11 +190,11 @@ const OrdersPanel = () => {
       Accepted: "bg-yellow-100",
       Cancelled: "bg-red-100",
     };
-  
+
     // Default to no background if the status is not recognized
     return statusClasses[status] || "";
   };
-  
+
 
   const handleCheckboxChange = (column) => {
     setVisibleColumns((prev) => ({
@@ -252,7 +252,7 @@ const OrdersPanel = () => {
   return (
     <div className="pt-4 h-full">
       <h2 className="text-xl font-bold mb-4">Orders Panel</h2>
-      
+
       {/* Filters Section */}
       <div className="flex items-center space-x-4 mb-4">
         {/* Search Input */}
@@ -299,41 +299,41 @@ const OrdersPanel = () => {
           value={filterAmount}
           onChange={(e) => setFilterAmount(e.target.value)}
         />
-  
-  <div
-  className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
-  title="Hide orders from store" // Tooltip text
->
-  <input
-    type="checkbox"
-    id="toggleAdminOrders"
-    checked={hideAdminOrders}
-    onChange={(e) => setHideAdminOrders(e.target.checked)}
-    className="h-4 w-4"
-  />
-  <label htmlFor="toggleAdminOrders" className="text-sm cursor-pointer">
-    <i className="fa-solid fa-store"></i>
-  </label>
-</div>
 
-{/* Toggle for Hide/Show Delete Column */}
-<div
-  className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
-  title="Show or hide delete column" // Tooltip text
->
-  <input
-    type="checkbox"
-    id="toggleDeleteColumn"
-    checked={visibleColumns.delete}
-    onChange={(e) =>
-      setVisibleColumns((prev) => ({ ...prev, delete: e.target.checked }))
-    }
-    className="h-4 w-4"
-  />
-  <label htmlFor="toggleDeleteColumn" className="text-sm cursor-pointer">
-    <i className="fa-solid fa-trash"></i> Delete Column
-  </label>
-</div>
+        <div
+          className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
+          title="Hide orders from store" // Tooltip text
+        >
+          <input
+            type="checkbox"
+            id="toggleAdminOrders"
+            checked={hideAdminOrders}
+            onChange={(e) => setHideAdminOrders(e.target.checked)}
+            className="h-4 w-4"
+          />
+          <label htmlFor="toggleAdminOrders" className="text-sm cursor-pointer">
+            <i className="fa-solid fa-store"></i>
+          </label>
+        </div>
+
+        {/* Toggle for Hide/Show Delete Column */}
+        <div
+          className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
+          title="Show or hide delete column" // Tooltip text
+        >
+          <input
+            type="checkbox"
+            id="toggleDeleteColumn"
+            checked={visibleColumns.delete}
+            onChange={(e) =>
+              setVisibleColumns((prev) => ({ ...prev, delete: e.target.checked }))
+            }
+            className="h-4 w-4"
+          />
+          <label htmlFor="toggleDeleteColumn" className="text-sm cursor-pointer">
+            <i className="fa-solid fa-trash"></i> Delete Column
+          </label>
+        </div>
 
 
 
@@ -365,28 +365,28 @@ const OrdersPanel = () => {
         </div>
         {/* Export Button */}
         <button
-  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 h-10 flex items-center space-x-2"
-  onClick={downloadCSV}
->
-  <i className="fa-solid fa-download"></i>
-  <span>.CSV</span>
-</button>
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 h-10 flex items-center space-x-2"
+          onClick={downloadCSV}
+        >
+          <i className="fa-solid fa-download"></i>
+          <span>.CSV</span>
+        </button>
 
       </div>
-      
-<button
-      className="bg-blue-500 text-white px-4 py-1 my-4 rounded hover:bg-red-600"
-      onClick={() => {
-        setSearchQuery("");
-        setFilterStatus("");
-        setFilterDate("");
-        setMinAmount("");
-        setFilterAmount("");
-        setHideAdminOrders("true");
-      }}
-    >
-      Clear All Filters
-    </button>
+
+      <button
+        className="bg-blue-500 text-white px-4 py-1 my-4 rounded hover:bg-red-600"
+        onClick={() => {
+          setSearchQuery("");
+          setFilterStatus("");
+          setFilterDate("");
+          setMinAmount("");
+          setFilterAmount("");
+          setHideAdminOrders("true");
+        }}
+      >
+        Clear All Filters
+      </button>
 
       {/* Orders Table */}
       {sortedOrders.length === 0 ? (
@@ -411,104 +411,104 @@ const OrdersPanel = () => {
             </tr>
           </thead>
           <tbody>
-          {sortedOrders.map((order, orderIndex) =>
-  order.orderItems.map((item, itemIndex) => (
-    <tr
-      key={`${order._id}-${itemIndex}`}
-      className={getStatusClass(order.status)}
-    >
-      {/* Merge Order ID */}
-      {itemIndex === 0 && visibleColumns.orderId && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {order._id}
-        </td>
-      )}
-      {/* Merge Customer Email */}
-      {itemIndex === 0 && visibleColumns.email && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {order.userEmail}
-        </td>
-      )}
-      {/* Individual Items */}
-      {visibleColumns.itemName && (
-        <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-      )}
-      {visibleColumns.shape && (
-        <td className="border border-gray-300 px-4 py-2">{item.shape}</td>
-      )}
-      {visibleColumns.quantity && (
-        <td className="border border-gray-300 px-4 py-2">{item.quantity}</td>
-      )}
-      {visibleColumns.price && (
-        <td className="border border-gray-300 px-4 py-2">₹{item.price}</td>
-      )}
-      {visibleColumns.weight && (
-        <td className="border border-gray-300 px-4 py-2">{item.weight}</td>
-      )}
-      {/* Merge Order Message */}
-      {itemIndex === 0 && visibleColumns.message && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {order.cakeMessage}
-        </td>
-      )}
-      {/* Merge Order Date */}
-      {itemIndex === 0 && visibleColumns.orderDate && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {new Date(order.orderDate).toLocaleDateString()}
-        </td>
-      )}
-      {/* Merge Order Time */}
-      {itemIndex === 0 && visibleColumns.orderTime && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {order.orderTime}
-        </td>
-      )}
-      {/* Merge Total Amount */}
-      {itemIndex === 0 && visibleColumns.totalAmount && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          ₹{order.totalAmount}
-        </td>
-      )}
-      {/* Merge Order Status */}
-      {itemIndex === 0 && visibleColumns.status && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          {order.status}
-        </td>
-      )}
-      {/* Merge Actions */}
-      {itemIndex === 0 && visibleColumns.actions && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          <select
-            className="border border-gray-400 rounded px-2 py-1"
-            value={order.status}
-            onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
-            disabled={updatingOrderId === order._id}
-          >
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Accepted">Accepted</option>
-          </select>
-          {updatingOrderId === order._id && (
-            <span className="text-blue-500 ml-2">Updating...</span>
-          )}
-        </td>
-      )}
-      {/* Merge Delete Order */}
-      {itemIndex === 0 && visibleColumns.delete && (
-        <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
-          <button
-            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-            onClick={() => deleteOrder(order._id)}
-            disabled={loading}
-          >
-            Delete
-          </button>
-        </td>
-      )}
-    </tr>
-  ))
-)}
+            {sortedOrders.map((order, orderIndex) =>
+              order.orderItems.map((item, itemIndex) => (
+                <tr
+                  key={`${order._id}-${itemIndex}`}
+                  className={getStatusClass(order.status)}
+                >
+                  {/* Merge Order ID */}
+                  {itemIndex === 0 && visibleColumns.orderId && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {order._id}
+                    </td>
+                  )}
+                  {/* Merge Customer Email */}
+                  {itemIndex === 0 && visibleColumns.email && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {order.userEmail}
+                    </td>
+                  )}
+                  {/* Individual Items */}
+                  {visibleColumns.itemName && (
+                    <td className="border border-gray-300 px-4 py-2">{item.name}</td>
+                  )}
+                  {visibleColumns.shape && (
+                    <td className="border border-gray-300 px-4 py-2">{item.shape}</td>
+                  )}
+                  {visibleColumns.quantity && (
+                    <td className="border border-gray-300 px-4 py-2">{item.quantity}</td>
+                  )}
+                  {visibleColumns.price && (
+                    <td className="border border-gray-300 px-4 py-2">₹{item.price}</td>
+                  )}
+                  {visibleColumns.weight && (
+                    <td className="border border-gray-300 px-4 py-2">{item.weight}</td>
+                  )}
+                  {/* Merge Order Message */}
+                  {itemIndex === 0 && visibleColumns.message && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {order.cakeMessage}
+                    </td>
+                  )}
+                  {/* Merge Order Date */}
+                  {itemIndex === 0 && visibleColumns.orderDate && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {new Date(order.orderDate).toLocaleDateString()}
+                    </td>
+                  )}
+                  {/* Merge Order Time */}
+                  {itemIndex === 0 && visibleColumns.orderTime && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {order.orderTime}
+                    </td>
+                  )}
+                  {/* Merge Total Amount */}
+                  {itemIndex === 0 && visibleColumns.totalAmount && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      ₹{order.totalAmount}
+                    </td>
+                  )}
+                  {/* Merge Order Status */}
+                  {itemIndex === 0 && visibleColumns.status && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      {order.status}
+                    </td>
+                  )}
+                  {/* Merge Actions */}
+                  {itemIndex === 0 && visibleColumns.actions && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      <select
+                        className="border border-gray-400 rounded px-2 py-1"
+                        value={order.status}
+                        onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
+                        disabled={updatingOrderId === order._id}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Accepted">Accepted</option>
+                      </select>
+                      {updatingOrderId === order._id && (
+                        <span className="text-blue-500 ml-2">Updating...</span>
+                      )}
+                    </td>
+                  )}
+                  {/* Merge Delete Order */}
+                  {itemIndex === 0 && visibleColumns.delete && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      <button
+                        className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                        onClick={() => deleteOrder(order._id)}
+                        disabled={loading}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
 
 
           </tbody>
