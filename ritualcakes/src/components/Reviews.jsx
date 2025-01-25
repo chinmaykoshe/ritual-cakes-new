@@ -79,7 +79,6 @@ const Reviews = ({ orderID }) => {
   return (
     <div className="reviews mt-4">
       <h4 className="text-sm font-semibold text-gray-800">Customer Reviews:</h4>
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {/* Existing reviews */}
       {reviews.length > 0 ? (
@@ -152,7 +151,7 @@ const Reviews = ({ orderID }) => {
           <p className="mt-4 text-gray-600">Please log in to post a review.</p>
           <button
             onClick={() => navigate("/login")} // Navigate to login page
-            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
           >
             Login to Post Review
           </button>

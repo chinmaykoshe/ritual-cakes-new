@@ -130,7 +130,7 @@ const ProductPage = () => {
             <p className="text-base lg:text-lg text-darkcustomGray mb-2">Rating: {product.rating} ⭐</p>
           )}
           <p className="text-xl lg:text-3xl md:mt-8 mt-2 font-semibold text-gray-600 mb-4 md:mb-6">
-            Price: Rs. {price}
+            Price: Rs. {price*quantity}
           </p>
           <p className="text-sm md:text-md text-darkcustomGray mb-4 md:mb-6">{product.description}</p>
 
