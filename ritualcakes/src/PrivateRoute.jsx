@@ -14,7 +14,7 @@ function PrivateRoute({ element }) {
   }
 
   // Redirect to '/signup' if not authorized
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/" replace />;
 }
 
 PrivateRoute.propTypes = {
