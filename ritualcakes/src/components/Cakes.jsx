@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { elements } from "../assets/assets"; // Import elements
 import Card from "./Card"; // Import the Card component
 
@@ -31,7 +31,6 @@ const CakesPage = () => {
   const sortedCakes = [...filteredCakes]
     .filter((cake) => {
       if (activeCategory === "Extra Products") {
-        // Check if there is any valid price in extraProducts (e.g., "6 pieces", "1 jar")
         return cake.prices && Object.values(cake.prices).some((price) => price > 0);
       }
       // For other products, check if they have a valid "500g" price
@@ -42,11 +41,9 @@ const CakesPage = () => {
       let priceB = 0;
 
       if (activeCategory === "Extra Products") {
-        // For extra products, we use the first price (e.g., "6 pieces", "1 jar")
         priceA = Object.values(a.prices)[0] || 0;
         priceB = Object.values(b.prices)[0] || 0;
       } else {
-        // For other categories, use the "500g" price
         priceA = a.prices["500g"] || 0;
         priceB = b.prices["500g"] || 0;
       }
@@ -77,7 +74,7 @@ const CakesPage = () => {
 
               {/* Dropdown for smaller screens */}
               <select
-                className="block md:hidden w-full p-2 border border-customGray rounded-lg bg-white text-customGray focus:outline-none focus:ring-2 focus:ring-darkcustombg"
+                className="block md:hidden w-full p-3 border border-customGray rounded-lg bg-darkcustombg text-customGray focus:outline-none focus:ring-2 focus:ring-darkcustombg focus:ring-offset-2 hover:border-darkcustombg transition-all ease-in-out"
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value)}
               >
@@ -85,12 +82,13 @@ const CakesPage = () => {
                   <option
                     key={index}
                     value={category}
-                    className="text-lg text-black hover:bg-darkcustombg hover:text-white"
+                    className="text-lg text-black bg-white hover:bg-darkcustombg hover:text-white transition-all ease-in-out"
                   >
                     {category}
                   </option>
                 ))}
               </select>
+
 
               {/* Category list for larger screens */}
               <ul className="space-y-4 mb-8 md:block hidden">
