@@ -193,23 +193,29 @@ const DesignCustomizationPage = () => {
             </div>
             {/* Delivery Date */}
             <div>
-              <label className="block font-bold text-sm mb-2"><p>Order Date</p><p className="text-xs text-gray-300">Order Date must be after 2 days</p></label>
+              <label className="block font-bold text-sm mb-2">
+                <p>Order Date and Time</p>
+                <p className="text-xs text-gray-300">Order Date and Time must be after 2 days</p>
+              </label>
               <input
-                type="date"
+                type="datetime-local"
                 name="deliveryDate"
                 value={formData.deliveryDate}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
                 disabled={!isLoggedIn}
+                min={`${formData.deliveryDate}T10:00`}
+                max={`${formData.deliveryDate}T23:00`}
                 required
               />
             </div>
+
             {/* Message on Cake */}
             <div>
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
               <input
                 type="text"
-                placeholder="please mention time between 10 AM TO 11 PM"
+                placeholder="HAPPY BIRTHDAY / ANNIVERSARY"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
@@ -225,7 +231,7 @@ const DesignCustomizationPage = () => {
             >
               {loading ? 'Submitting...' : 'Submit Customization'}
             </button>
-            
+
             {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
             {success && <div className="text-green-500 mt-4 text-center">Customization submitted successfully!</div>}
           </form>

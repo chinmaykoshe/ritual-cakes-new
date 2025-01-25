@@ -9,16 +9,24 @@ function Orders() {
   const { customizations, setCustomizations, error: customizationError } = useCustomization();
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("user");
-  
-const [loading, setLoading] = useState(true);
-const [hasLoaded, setHasLoaded] = useState(false);
-const [loadError, setLoadError] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   const handleImageLoad = () => {
-    setLoading(false);
-    setHasLoaded(true);
+    setLoadedCount((prevCount) => {
+      const newCount = prevCount + 1;
+
+      if (newCount === 4) {
+        setLoading(false);
+        setHasLoaded(true); // All 4 images have loaded
+      }
+
+      return newCount;
+    });
   };
-  
+
   const handleImageError = (e) => {
     e.target.src = "/fallback-image.jpg";
     setLoading(false);
@@ -168,6 +176,7 @@ const [loadError, setLoadError] = useState(false);
                     <p><strong>Message:</strong> {customization.message}</p>
                     <p><strong>Special Instructions:</strong> {customization.specialInstructions || "N/A"}</p>
                     <p><strong>Delivery Date:</strong> {new Date(customization.deliveryDate).toLocaleDateString()}</p>
+                    <p><strong>Delivery Time:</strong> {new Date(customization.deliveryDate).toLocaleTimeString()}</p>
                     <p>
                       <span
                         className={`px-2 py-1 rounded ${customization.approvalStatus === "approved"
