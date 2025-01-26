@@ -103,7 +103,7 @@ router.post('/customizations', async (req, res) => {
         <p><strong>Cake Type:</strong> ${customization.cakeType}</p>
         <p><strong>Flavor:</strong> ${customization.flavor}</p>
         <p><strong>Special Instructions:</strong> ${customization.specialInstructions || 'None'}</p>
-        <p><strong>Delivery Date:</strong> ${customization.deliveryDate}</p>
+        <p><strong>Delivery Date:</strong>${new Date(customization.deliveryDate).toDateString()}</p>
         <h3>Shipping Address:</h3>
         <p>${customization.address}</p>
         <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
@@ -256,7 +256,7 @@ router.put('/customizations/:id', async (req, res) => {
         <p><strong>Cake Type:</strong> ${customization.cakeType}</p>
         <p><strong>Flavor:</strong> ${customization.flavor}</p>
         <p><strong>Special Instructions:</strong> ${customization.specialInstructions || 'None'}</p>
-        <p><strong>Delivery Date:</strong> ${customization.deliveryDate}</p>
+        <p><strong>Delivery Date:</strong>${new Date(customization.deliveryDate).toDateString()}</p>
         <h3>Shipping Address:</h3>
         <p>${customization.address}</p>
         <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
@@ -271,9 +271,15 @@ router.put('/customizations/:id', async (req, res) => {
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
       to: customization.email,
-      subject: `Order Status Update: ${customization._id}`,
+      subject: `Order Status Updated as ${approvalStatus} for : ${customization._id}`,
       html: orderDetailsHtml,
     };
+
+
+    console.log('Sending email...');
+    console.log('Recipient:', mailOptionsUser.to);
+    console.log('Subject:', mailOptionsUser.subject);
+    console.log('HTML Content:', mailOptionsUser.html);
 
     // Send email to the user
     try {

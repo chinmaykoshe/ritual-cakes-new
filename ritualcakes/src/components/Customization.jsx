@@ -89,7 +89,7 @@ function CustomizationForm() {
             value={formData.email}
             onChange={handleChange} // Use handleChange from context
             required
-            disabled={!isLoggedIn} // Disable if user is not logged in
+            disabled
           />
         </div>
 
