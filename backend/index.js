@@ -43,10 +43,11 @@ app.use('/api', CartRouter);     // Cart routes
 app.use('/api', orderRoutes);  // Order routes
 app.use('/api', customizeRoutes);     // Customization routes
 app.use("/api", reviewRouter);// Review routes
+app.use('/api', resetpassroute);
+
 
 // Handle favicon requests to prevent unnecessary errors
 app.get('/favicon.ico', (req, res) => res.status(204).end());
-app.use('/api', resetpassroute);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
