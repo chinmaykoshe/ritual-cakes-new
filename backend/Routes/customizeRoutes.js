@@ -269,7 +269,7 @@ router.put('/customizations/:id', async (req, res) => {
     // Email options to send to the user
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
-      to: email, // Use the email passed from the frontend
+      to: updatedCustomization.email, // Use the email passed from the frontend
       subject: `Customization Status Updated as ${approvalStatus} for ${updatedCustomization._id}`,
       html: orderDetailsHtml,
     };
