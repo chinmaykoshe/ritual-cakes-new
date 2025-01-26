@@ -42,7 +42,7 @@ import StoreOrders from './components/ADMIN/StoreOrders.jsx';
 import ReviewSection from './components/ADMIN/ReviewSection.jsx';
 import useAxiosInterceptor from './axios.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
-import ResetPassword from './components/Resetpassword.jsx';
+import ResetPassword from './components/Reset-Password.jsx';
 
 
 // Redirect to homepage for invalid routes
