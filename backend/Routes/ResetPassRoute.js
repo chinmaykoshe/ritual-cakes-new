@@ -7,7 +7,7 @@ const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET; // Use environment variable
 const RESET_TOKEN_EXPIRATION = "1h"; // Token valid for 1 hour
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5174" || 'https://ritual-cakes--alpha.vercel.app/'; // Dynamic frontend URL
+const FRONTEND_URL = 'https://ritual-cakes--alpha.vercel.app/'; // Dynamic frontend URL
 
 router.post("/forgot-password", async (req, res) => {
     const { email } = req.body;
