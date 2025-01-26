@@ -170,7 +170,7 @@ router.get('/customizations/:email', async (req, res) => {
 });
 
 router.put('/customizations/:id', async (req, res) => {
-  const { approvalStatus, price } = req.body;
+  const { approvalStatus, price, email } = req.body;
 
   // Validate that price and approvalStatus are provided for update
   if (approvalStatus && !['pending', 'approved', 'rejected'].includes(approvalStatus)) {
@@ -256,6 +256,7 @@ router.put('/customizations/:id', async (req, res) => {
         <p><strong>Cake Type:</strong> ${customization.cakeType}</p>
         <p><strong>Flavor:</strong> ${customization.flavor}</p>
         <p><strong>Special Instructions:</strong> ${customization.specialInstructions || 'None'}</p>
+        <p><strong>Special Instructions:</strong> ${customization.price}</p>
         <p><strong>Delivery Date:</strong>${new Date(customization.deliveryDate).toDateString()}</p>
         <h3>Shipping Address:</h3>
         <p>${customization.address}</p>
