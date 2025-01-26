@@ -69,9 +69,9 @@ const ResetPassword = () => {
               aria-label="Toggle password visibility"
             >
               {newPasswordVisible ? (
-                <i className="fa fa-eye-slash text-gray-700"></i> // Icon for password visible
+                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
               ) : (
-                <i className="fa fa-eye text-gray-700"></i> // Icon for password hidden
+                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid(password visible)
               )}
             </button>
           </div>
@@ -93,9 +93,9 @@ const ResetPassword = () => {
               aria-label="Toggle password visibility"
             >
               {confirmPasswordVisible ? (
-                <i className="fa fa-eye-slash text-gray-700"></i> // Icon for password visible
+                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
               ) : (
-                <i className="fa fa-eye text-gray-700"></i> // Icon for password hidden
+                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid(password visible)
               )}
             </button>
           </div>
