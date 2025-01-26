@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 
+const mailKey = process.env.EMAIL_KEY;
+
 
 // Replace these with your actual email service credentials
 const transporter = nodemailer.createTransport({
@@ -7,7 +9,7 @@ const transporter = nodemailer.createTransport({
     port: 587,
     auth: {
       user: "ritualcakes2019@gmail.com",
-      pass: "spobqwcjjghrlqkq",
+      pass: mailKey,
     },
     tls: {
       rejectUnauthorized: false,
