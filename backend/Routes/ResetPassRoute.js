@@ -61,7 +61,7 @@ router.post("/forgot-password", async (req, res) => {
       .btn {
         display: inline-block;
         padding: 10px 20px;
-        background-color: rgb(72, 37, 11);
+        background-color: rgb(255, 190, 141);
         color: white;
         text-decoration: none;
         border-radius: 5px;
