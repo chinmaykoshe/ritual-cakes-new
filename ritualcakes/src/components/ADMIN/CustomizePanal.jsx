@@ -239,7 +239,7 @@ const CustomizationPanel = () => {
                       alt={`Design: ${customization.imageOrDesign}`}
                       className="w-32 h-32 object-cover rounded-lg"
                       onError={(e) => {
-                        e.target.src = "/fallback-image.jpg";
+                        e.target.src = "/fallback-image.png";
                       }}
                     />
                   ) : customization.imageOrDesign.startsWith("http") && /\.(jpg|jpeg|png|gif|webp)$/i.test(customization.imageOrDesign) ? (
@@ -248,7 +248,7 @@ const CustomizationPanel = () => {
                       alt={`Design: ${customization.imageOrDesign}`}
                       className="w-32 h-32 object-cover rounded-lg"
                       onError={(e) => {
-                        e.target.src = "/fallback-image.jpg";
+                        e.target.src = "/fallback-image.png";
                       }}
                     />
                   ) : (

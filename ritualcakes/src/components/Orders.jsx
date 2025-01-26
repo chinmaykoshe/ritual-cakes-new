@@ -10,7 +10,7 @@ function Orders() {
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("user");
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
@@ -19,7 +19,7 @@ function Orders() {
   };
 
   const handleImageError = (e) => {
-    e.target.src = "/fallback-image.jpg";
+    e.target.src = "/fallback-image.png";
     setLoading(false);
     setHasLoaded(true);
     setLoadError(true); // Track that error has occurred
@@ -102,7 +102,7 @@ function Orders() {
                   >
                     <div className="flex items-center space-x-4">
                       <img
-                        src={item.image || "/path/to/fallback-image.jpg"}
+                        src={item.image || "/fallback-image.png"}
                         alt={item.name}
                         className="md:h-52 object-cover rounded-lg mb-4 md:mb-0"
                       />
@@ -202,7 +202,7 @@ function Orders() {
                         />
                       ) : (
                         <img
-                          src={designnames[customization.imageOrDesign] || "/fallback-image.jpg"}
+                          src={designnames[customization.imageOrDesign] || "/fallback-image.png"}
                           alt={`Design: ${customization.imageOrDesign}`}
                           className="w-full h-full object-cover rounded-lg"
                           onLoad={handleImageLoad}
