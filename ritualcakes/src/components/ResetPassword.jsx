@@ -19,14 +19,12 @@ const ResetPassword = () => {
     setNewPasswordVisible((prev) => !prev);
   };
 
-
   // Toggle password visibility for the confirm password field
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible((prev) => !prev);
   };
 
   const apiUrl = "https://ritual-cakes-new-ogk5.vercel.app/api";
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +48,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-screen">
       <div className="p-6 bg-white shadow rounded-lg w-96">
         <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
         <form onSubmit={handleSubmit}>
@@ -71,9 +69,9 @@ const ResetPassword = () => {
               aria-label="Toggle password visibility"
             >
               {newPasswordVisible ? (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
+                <i className="fa fa-eye-slash text-gray-700"></i> // Icon for password visible
               ) : (
-                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid (password visible)
+                <i className="fa fa-eye text-gray-700"></i> // Icon for password hidden
               )}
             </button>
           </div>
@@ -95,9 +93,9 @@ const ResetPassword = () => {
               aria-label="Toggle password visibility"
             >
               {confirmPasswordVisible ? (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
+                <i className="fa fa-eye-slash text-gray-700"></i> // Icon for password visible
               ) : (
-                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid (password visible)
+                <i className="fa fa-eye text-gray-700"></i> // Icon for password hidden
               )}
             </button>
           </div>
