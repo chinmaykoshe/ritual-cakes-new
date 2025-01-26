@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useCustomization } from "../context/customizeContext";
 import { designnames } from "../designs/designassets";
 
@@ -38,6 +38,7 @@ const DesignCustomizationPage = () => {
   const [availableTypes, setAvailableTypes] = useState([]);
   const [selectedSize, setSelectedSize] = useState(formData.size || "");  // Initialize with formData if available
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -233,7 +234,17 @@ const DesignCustomizationPage = () => {
             </button>
 
             {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
-            {success && <div className="text-green-500 mt-4 text-center">Customization submitted successfully!</div>}
+            {success &&
+              <div className="text-green-500 mt-4 text-center">
+                Customization submitted successfully!
+                <button
+                  onClick={() => navigate("/orders")} // Redirect to orders page
+                  className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+                >
+                  Check Your Orders Here
+                </button>
+              </div>
+            }
           </form>
         </div>
       </div>

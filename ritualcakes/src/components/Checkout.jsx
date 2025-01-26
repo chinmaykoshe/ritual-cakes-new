@@ -230,8 +230,6 @@ function Checkout() {
                 </div>
               </div>
 
-              {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
-              {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
 
               <div className="flex justify-center mt-6">
                 <button
@@ -242,6 +240,18 @@ function Checkout() {
                   {loading ? 'Placing Order...' : 'Place Order'}
                 </button>
               </div>
+              {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
+              {successMessage &&
+                <p className="text-green-500 text-center">
+                  Order Placed Sucessfully
+                  <button
+                    onClick={() => navigate("/orders")} // Redirect to orders page
+                    className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+                  >
+                    Check Your Orders Here
+                  </button>
+                </p>}
+
             </div>
           </div>
         ) : (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCustomization } from '../context/customizeContext';  // Import the context
+import { useNavigate } from 'react-router-dom';
 
 function CustomizationForm() {
   const {
@@ -10,6 +11,7 @@ function CustomizationForm() {
     error,
     success,
   } = useCustomization(); // Destructure context values and functions
+  const navigate = useNavigate();
 
   const availableCakeTypes = {
     "0.5 kg": ["Round", "Heart", "Square"],
@@ -258,7 +260,15 @@ function CustomizationForm() {
       )}
 
       {success && (
-        <div className="text-green-500 mt-4 text-center">{success}</div>
+        <div className="text-green-500 mt-4 text-center">
+          Customization submitted successfully!
+          <button
+            onClick={() => navigate("/orders")} // Redirect to orders page
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+          >
+            Check Your Orders Here
+          </button>
+        </div>
       )}
     </div>
   );

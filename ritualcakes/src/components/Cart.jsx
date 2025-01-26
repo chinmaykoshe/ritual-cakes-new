@@ -87,9 +87,9 @@ function Cart() {
             {cart.map((item) => (
               <div
                 key={item.orderID}
-                className="bg-white p-6 rounded-lg shadow-lg flex flex-col sm:flex-row justify-between items-center sm:items-start"
+                className="bg-white p-6 rounded-lg shadow-lg flex flex-col sm:flex-row justify-between items-left sm:items-start"
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-left space-x-4">
                   <img
                     src={item.img}
                     alt={item.name}

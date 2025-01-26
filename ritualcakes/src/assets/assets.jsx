@@ -169,18 +169,8 @@ export const elements = {
         "chocolatecake3", // A different related product, e.g., chocolate cupcakes
         "fusionchocolatecake1",
       ],
-      reviews: [
-        {
-          author: "John Doe",
-          rating: 5,
-          comment: "Amazing cake! The blend of vanilla and chocolate is perfect."
-        },
-        {
-          author: "Jane Smith",
-          rating: 4,
-          comment: "Good cake, but I would have preferred more chocolate chips."
-        }
-      ]
+      reviews: [],
+      rating: 4.5
     },
     {
       orderID: "chocolatecake2",
@@ -198,7 +188,8 @@ export const elements = {
       },
       sizes: ["Round", "Heart", "Square"],
       img: assets.zebraChocostem,
-      related: [],rating: 4.5
+      related: [],
+      rating: 4.5
     },
     {
       orderID: "chocolatecake3",
