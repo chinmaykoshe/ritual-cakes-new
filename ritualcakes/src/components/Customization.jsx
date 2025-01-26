@@ -264,7 +264,7 @@ function CustomizationForm() {
           Customization submitted successfully!
           <button
             onClick={() => navigate("/orders")} // Redirect to orders page
-            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+            className="m-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
           >
             Check Your Orders Here
           </button>

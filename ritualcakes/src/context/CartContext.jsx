@@ -1,8 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
-// Create context for Cart
-const CartContext = createContext();    
+const CartContext = createContext();
 
 // Provider component
 export const CartProvider = ({ children }) => {
@@ -12,8 +10,6 @@ export const CartProvider = ({ children }) => {
 
 
   const token = localStorage.getItem('token');
-
-  
   // Load cart on mount
   useEffect(() => {
     const fetchCart = async () => {
@@ -34,8 +30,8 @@ export const CartProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${apiUrl}/add`, 
-        { products: [product] }, 
+        `${apiUrl}/add`,
+        { products: [product] },
         { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
       return response.data; // Return added product details
@@ -74,8 +70,36 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      // Iterate over the cart items and delete each order by its orderID
+      for (const item of cart) {
+        const orderID = item.orderID;
+  
+        const response = await axios.delete(`${apiUrl}/remove/${orderID}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+  
+        if (response.status !== 200) {
+          console.error(`Failed to remove item with orderID: ${orderID}`);
+          return; // Exit the loop if any item removal fails
+        }
+      }
+  
+      // If all deletions were successful, clear the cart in the client state
+      setCart([]); 
+      console.log("All cart items have been removed.");
+  
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
+  };
+  
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart , clearCart }}>
       {children}
     </CartContext.Provider>
   );

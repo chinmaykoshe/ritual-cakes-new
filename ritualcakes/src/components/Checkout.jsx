@@ -4,7 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useOrder } from "../context/OrderContext";
 
 function Checkout() {
-  const { cart } = useCart();
+  const { cart , clearCart } = useCart();
   const navigate = useNavigate();
   const [customerName, setCustomerName] = useState("");
   const [address, setAddress] = useState("");
@@ -95,11 +95,11 @@ function Checkout() {
       await createOrder(orderData);
       setSuccessMessage("Order placed successfully!");
 
-      // Redirect to home page after successful order placement
-      setTimeout(() => {
-        navigate("/"); // Navigate to the home page
-      }, 2000); // Wait for 2 seconds before navigating to allow the success message to be visible
 
+      setTimeout(async () => {
+        await clearCart(); // Wait for clearCart to complete
+        navigate("/orders"); // Navigate to the orders page after clearing the cart
+      }, 2000); // Wait for 2 seconds before clearing the cart and navigating
     } catch (error) {
       setErrorMessages(error.response?.data?.message || "Error placing order, please try again.");
     }
@@ -246,7 +246,7 @@ function Checkout() {
                   Order Placed Sucessfully
                   <button
                     onClick={() => navigate("/orders")} // Redirect to orders page
-                    className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+                    className="m-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
                   >
                     Check Your Orders Here
                   </button>
