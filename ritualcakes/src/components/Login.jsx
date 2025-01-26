@@ -100,7 +100,12 @@ function Login() {
             />
           </div>
           <div className="mb-6 relative">
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Password</label>
+          <span className="flex justify-between items-center">
+  <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Password</label> 
+  <a href="/forgot-password" className="text-blue-600 hover:underline text-sm">Forgot password?</a>
+</span>
+
+
             <input
               type={passwordVisible ? 'text' : 'password'} // Toggle between text and password
               id="password"

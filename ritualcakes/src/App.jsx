@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import React from 'react';
 import { BrowserRouter, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
@@ -14,14 +14,14 @@ import PageDesigns from './components/PageDesigns.jsx';
 import Catalogue from './components/Catalogue';
 import ProductPage from './components/ProductPage';
 import Footer from './components/Footer';
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import 'react-toastify/ReactToastify.css';
 import './index.css';
 import { CartProvider } from './context/CartContext.jsx';
 import axios from 'axios';
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`; // Set Authorization token
-import UserDetails from './components/UserButton.jsx'; 
+import UserDetails from './components/UserButton.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import Customers from './components/ADMIN/Customers.jsx';
 import Store from './components/ADMIN/Store.jsx';
@@ -31,7 +31,7 @@ import Signup from './components/Signup.jsx';
 import Dashboard from './components/ADMIN/Dashboard.jsx';
 import AdminProducts from './components/ADMIN/Products.jsx';
 import DesignCustomizationPage from './components/DesignCustomizationPage';
-import AdminLayout from './components/ADMIN/AdminLayout'; 
+import AdminLayout from './components/ADMIN/AdminLayout';
 import Checkout from './components/Checkout.jsx';
 import { CustomizationProvider } from './context/customizeContext';
 import { OrderProvider } from './context/OrderContext';
@@ -41,11 +41,13 @@ import CakesAvailable from './components/ADMIN/CakesAvailable.jsx';
 import StoreOrders from './components/ADMIN/StoreOrders.jsx';
 import ReviewSection from './components/ADMIN/ReviewSection.jsx';
 import useAxiosInterceptor from './axios.jsx';
+import ForgotPassword from './components/ForgotPassword.jsx';
+import ResetPassword from './components/Resetpassword.jsx';
 
 // Redirect to homepage for invalid routes
 function InvalidRouteRedirect() {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     navigate('/', { replace: true }); // Navigate to homepage
   }, [navigate]);
@@ -62,7 +64,7 @@ function App() {
   return (
     <div className='container mx-auto max-w-none relative'>
       <React.StrictMode>
-        <CustomizationProvider> 
+        <CustomizationProvider>
           <OrderProvider>
             <CartProvider>
               <UserProvider>
@@ -105,6 +107,8 @@ function App() {
                     <Route path="/pagedesigns" element={<PageDesigns />} />
                     <Route path="*" element={<InvalidRouteRedirect />} />
                     <Route path="/UserDetails" element={<UserDetails />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
                   </Routes>
                 </div>
 
@@ -117,7 +121,7 @@ function App() {
               </UserProvider>
             </CartProvider>
           </OrderProvider>
-        </CustomizationProvider>  
+        </CustomizationProvider>
       </React.StrictMode>
     </div>
   );

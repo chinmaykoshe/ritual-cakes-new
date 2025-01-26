@@ -1,0 +1,161 @@
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const transporter = require("../Controllers/mailer");
+const User = require("../Models/User");
+const router = express.Router();
+
+const JWT_SECRET = process.env.JWT_SECRET; // Use environment variable
+const RESET_TOKEN_EXPIRATION = "1h"; // Token valid for 1 hour
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5174" || 'https://ritual-cakes--alpha.vercel.app/'; // Dynamic frontend URL
+
+router.post("/forgot-password", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if reset email has already been sent
+        if (user.passwordResetSent) {
+            return res.status(400).json({ message: "Password reset email already sent" });
+        }
+
+        // Generate a reset token
+        const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
+            expiresIn: RESET_TOKEN_EXPIRATION,
+        });
+
+        // Send reset link via email
+        const resetLink = `${FRONTEND_URL}/reset-password/${resetToken}`;
+        await transporter.sendMail({
+            from: "no-reply@ritualcakes.com",
+            to: email,
+            subject: "Password Reset Request at Ritual Cakes",
+            html: `
+        
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Password Reset</title>
+    <style>
+      body {
+        padding: 25px;
+        font-family: Arial, sans-serif;
+        background-color: rgb(255, 228, 208);
+        color: rgb(44, 44, 44);
+        line-height: 1.6;
+      }
+
+      h2 {
+        color: rgb(72, 37, 11);
+      }
+
+      p {
+        margin: 10px 0;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: rgb(72, 37, 11);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      .btn:hover {
+        background-color: rgb(44, 44, 44);
+      }
+
+      footer {
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: rgb(77, 77, 77);
+        text-align: center;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h2>Password Reset</h2>
+    <p>Dear ${user.name},</p>
+    <p>You have requested to reset your password at Ritual Cakes. Click the button below to reset your password:</p>
+    <a href="${resetLink}" class="btn">Reset Password</a>
+    <p>If you did not request this, please ignore this email.</p>
+    <p>Thank you,</p>
+    <p>The Ritual Cakes Team</p>
+    <footer>
+      <p>Sincerely,<br> Ritual Cakes </p>
+      <p>&copy; ${new Date().getFullYear()} Ritual Cakes. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
+
+        
+        `,
+        });
+
+        // Mark that the reset email has been sent
+        user.passwordResetSent = true;
+        await user.save();
+
+        res.status(200).json({ message: "Reset password link sent to your email" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error sending reset link", error });
+    }
+});
+
+
+// Reset Password Route
+router.post("/reset-password/:token", async (req, res) => {
+    const { newPassword } = req.body;
+    const { token } = req.params; // Get token from URL params
+
+    if (!token || !newPassword) {
+        return res.status(400).json({ message: "Token and new password are required" });
+    }
+
+    try {
+        // Verify the token
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const userId = decoded.userId;
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Validate the new password
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        if (!passwordRegex.test(newPassword)) {
+            return res.status(400).json({ message: "Password must be at least 8 characters long and contain at least one letter and one number" });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successful" });
+    } catch (error) {
+        console.error(error);
+
+        if (error.name === "JsonWebTokenError") {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        res.status(500).json({ message: "Error resetting password", error });
+    }
+});
+
+module.exports = router;

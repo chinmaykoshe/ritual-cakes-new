@@ -1,15 +1,13 @@
 const express = require('express');
 require('dotenv').config();
-require('./Models/db'); // Assuming this connects to your database
-
-// Import routers
+require('./Models/db'); 
 const AuthRouter = require('./Routes/AuthRouter');
 const CartRouter = require('./Routes/CartRouter');
 const orderRoutes = require('./Routes/orderRoutes');
 const customizeRoutes = require('./Routes/customizeRoutes');
 const userRoutes = require('./Routes/userRoutes');
 const reviewRouter = require('./Routes/reviewRouter');
-
+const resetpassroute = require('./Routes/ResetPassRoute');
 const app = express();
 
 // CORS configuration
@@ -48,6 +46,7 @@ app.use("/api", reviewRouter);// Review routes
 
 // Handle favicon requests to prevent unnecessary errors
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.use('/api', resetpassroute);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
