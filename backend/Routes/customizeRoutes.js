@@ -168,21 +168,18 @@ router.get('/customizations/:email', async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 router.put('/customizations/:id', async (req, res) => {
   try {
     const { id } = req.params; // Extract the customization ID from the route parameter
-    const { approvalStatus, price, email } = req.body; // Extract approvalStatus, price, and email from the request body
-
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" }); // Ensure email is provided
-    }
+    const { approvalStatus, price } = req.body; // Extract only approvalStatus and price from the request body
 
     const validStatuses = ['pending', 'approved', 'rejected']; // Define valid approval statuses
     if (!validStatuses.includes(approvalStatus)) {
       return res.status(400).json({ message: "Invalid approval status value" });
     }
 
-    // Find and update the customization
+    // Find the customization and update it
     const updatedCustomization = await Customization.findByIdAndUpdate(
       id,
       { approvalStatus, price },
@@ -193,7 +190,14 @@ router.put('/customizations/:id', async (req, res) => {
       return res.status(404).json({ message: "Customization not found" });
     }
 
-    console.log("User email received:", email);
+    // Get the email from the database record
+    const email = updatedCustomization.email;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email not found for this customization" });
+    }
+
+    console.log("Email fetched from database:", email);
 
     // Construct HTML for the email
     const orderDetailsHtml = `
@@ -269,7 +273,7 @@ router.put('/customizations/:id', async (req, res) => {
     // Email options to send to the user
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
-      to: updatedCustomization.email, // Use the email passed from the frontend
+      to: email, 
       subject: `Customization Status Updated as ${approvalStatus} for ${updatedCustomization._id}`,
       html: orderDetailsHtml,
     };
