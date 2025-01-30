@@ -4,14 +4,9 @@ import 'font-awesome/css/font-awesome.min.css';
 function Footer() {
   return (
     <div className="mt-28 flex flex-col min-h">
-      {/* Main Content */}
-
-      {/* Footer */}
       <footer className="bg-orange-50 bg-opacity-85 text-darkcustombg1 pt-4 pb-8">
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap md:flex-nowrap justify-between">
-
-            {/* About the Company */}
             <div className="w-full md:w-1/3 mb-6 md:mb-0 pl-4 pr-20 ">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>
               <p className="text-gray-700">
@@ -19,8 +14,6 @@ function Footer() {
               </p>
               <p className="mt-4 font-italic text-gray-500">- Jyoti Joshi COO</p>
             </div>
-
-            {/* Keep Connected */}
             <div className="w-full md:w-1/3 mb-6 md:mb-0 px-4">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">Keep Connected</h2>
               <ul className="list-none">
@@ -34,25 +27,8 @@ function Footer() {
                     <i className="fa fa-instagram mr-2"></i> Follow us on Instagram
                   </a>
                 </li>
-                <li className="mb-2">
-                  <a href="https://plus.google.com" className="text-gray-700 hover:text-darkcustombg1 flex items-center">
-                    <i className="fa fa-google-plus mr-2"></i> Add us on Google Plus
-                  </a>
-                </li>
-                <li className="mb-2">
-                  <a href="https://dribbble.com" className="text-gray-700 hover:text-darkcustombg1 flex items-center">
-                    <i className="fa fa-dribbble mr-2"></i> Follow us on Dribbble
-                  </a>
-                </li>
-                <li className="mb-2">
-                  <a href="https://pinterest.com" className="text-gray-700 hover:text-darkcustombg1 flex items-center">
-                    <i className="fa fa-pinterest mr-2"></i> Follow us on Pinterest
-                  </a>
-                </li>
               </ul>
             </div>
-
-            {/* Contact Information */}
             <div className="w-full md:w-1/3 px-4">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">Contact Information</h2>
               <address className="text-gray-700">
@@ -70,8 +46,6 @@ function Footer() {
               </p>
             </div>
           </div>
-
-          {/* Footer Bottom */}
           <div className="mt-8 border-t border-gray-700 pt-4 text-center">
             <p className="text-gray-700 text-sm">
               © 2024 Ritual Cakes. All Rights Reserved. Designed and developed by Chinmay Koshe.

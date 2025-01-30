@@ -10,8 +10,7 @@ function Login() {
   const [errorMessages, setErrorMessages] = useState(null);
   const [sucessMessages, setSucessMessages] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false); // state to toggle password visibility
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -27,8 +26,6 @@ function Login() {
     } else {
       navigate('/home');
     }
-
-    // Force a page reload after navigation
     window.location.reload();
   };
   const handleSignInSubmit = async (e) => {
@@ -37,13 +34,10 @@ function Login() {
 
     try {
       const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/login";
-
-      // Convert email to lowercase before sending
       const lowercasedSignInData = {
         ...signInData,
-        email: signInData.email.toLowerCase(), // Ensure email is lowercase
+        email: signInData.email.toLowerCase(),
       };
-
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -51,21 +45,15 @@ function Login() {
         },
         body: JSON.stringify(lowercasedSignInData),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error('Incorrect credentials!');
       }
-
       const { token, email, role } = await response.json();
-
-      // Save email and role in lowercase to localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('user', email.toLowerCase()); // Save email as lowercase
+      localStorage.setItem('user', email.toLowerCase());
       localStorage.setItem('role', role);
-
       navigateToDashboard(role);
-
       setTimeout(() => {
         setSucessMessages('Sign in sucess ! Redirecting...');
       }, 3000);
@@ -76,8 +64,6 @@ function Login() {
       setLoading(false);
     }
   };
-
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
   };
@@ -104,10 +90,8 @@ function Login() {
               <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Password</label>
               <a href="/forgot-password" className="text-blue-600 hover:underline text-sm">Forgot password?</a>
             </span>
-
-
             <input
-              type={passwordVisible ? 'text' : 'password'} // Toggle between text and password
+              type={passwordVisible ? 'text' : 'password'}
               id="password"
               name="password"
               value={signInData.password}
@@ -122,22 +106,19 @@ function Login() {
               aria-label="Toggle password visibility"
             >
               {passwordVisible ? (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye normal (password hidden)
+                <i className="fa-regular fa-eye text-gray-700"></i>
               ) : (
-                <i className="fa-solid fa-eye text-gray-700"></i> // Eye solid(password visible)
+                <i className="fa-solid fa-eye text-gray-700"></i>
               )}
             </button>
           </div>
-
           {errorMessages && <p className="text-red-500 text-center mb-4">{errorMessages}</p>}
           {sucessMessages && <p className="text-green-500 text-center mb-4">{sucessMessages}</p>}
-
           <hr className="my-6" />
           <p className="text-m font-bold text-center">
             New Customer?{' '}
             <a href="/signup" className="text-blue-500 hover:text-blue-700">Sign Up</a>
           </p>
-
           <button
             type="submit"
             className="w-full bg-orange-300 text-white text-xl font-bold py-3 rounded-lg hover:bg-green-300 mt-6"

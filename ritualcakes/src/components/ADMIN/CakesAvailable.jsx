@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import { elements } from '../../assets/assets';
 
 function CakesAvailable() {
-  // Flattening the elements to access all cakes
-  const allCakes = Object.values(elements).flat(); // Flattens the elements to get all cakes
-
-  const [searchQuery, setSearchQuery] = useState(""); // To manage search input
-
-  // Filter cakes based on search query for both name and orderID
+  const allCakes = Object.values(elements).flat();
+  const [searchQuery, setSearchQuery] = useState(""); 
   const filteredCakes = allCakes.filter((cake) =>
-    cake.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Match query case-insensitively for name
-    cake.orderID.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively for orderID
+    cake.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    cake.orderID.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-
-  // Split cakes into two halves
   const half = Math.ceil(filteredCakes.length / 2);
   const firstHalf = filteredCakes.slice(0, half);
   const secondHalf = filteredCakes.slice(half);
@@ -22,19 +15,14 @@ function CakesAvailable() {
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Available Cakes</h2>
-
-      {/* Search Bar */}
       <input
         type="text"
         placeholder="Search cakes..."
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery state
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded"
       />
-
-      {/* Container for two columns */}
       <div className="flex">
-        {/* Left Column */}
         <div className="w-1/2 pr-4">
           <table className="border-collapse w-full">
             <thead className='bg-neutral-100'>
@@ -63,8 +51,6 @@ function CakesAvailable() {
             </tbody>
           </table>
         </div>
-
-        {/* Right Column */}
         <div className="w-1/2 pl-4">
           <table className="border-collapse w-full">
             <thead className='bg-neutral-100'>

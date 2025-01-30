@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { elements } from "../assets/assets";
-import Card from "./Card"; // Import the Card component
-import Reviews from "./Reviews.jsx"; // Import Reviews component
-import { useCart } from "../context/CartContext"; // Import useCart hook to manage cart state
+import Card from "./Card";
+import Reviews from "./Reviews.jsx";
+import { useCart } from "../context/CartContext"; 
 
 const ProductPage = () => {
   const { orderId } = useParams();
@@ -14,10 +14,10 @@ const ProductPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("description");
   const [price, setPrice] = useState(0);
-  const { addToCart } = useCart(); // Use addToCart function from context
-  const [errorMessage, setErrorMessage] = useState(""); // State for success message
+  const { addToCart } = useCart();
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     for (const category of Object.values(elements)) {
@@ -68,23 +68,17 @@ const ProductPage = () => {
     if (weightKg <= 1.5) return ["Round", "Square"];
     return ["Square"];
   };
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   const handleAddToCart = async () => {
-    const token = localStorage.getItem('token'); // Check for token
-  
+    const token = localStorage.getItem('token');
     if (!token) {
-      // If no token, inform the user to sign in
       setErrorMessage("Please sign in to add items to your cart");
-      setTimeout(() => setErrorMessage(""), 3000); // Clear the message after 3 seconds
+      setTimeout(() => setErrorMessage(""), 3000);
       return;
     }
-  
-    setLoading(true); // Start loading when the function is triggered
-  
+    setLoading(true);
     try { 
       const productToAdd = {
         orderID: product.orderID,
@@ -95,22 +89,19 @@ const ProductPage = () => {
         price,
         img: product.img,
       };
-  
-      const response = await addToCart(productToAdd); // Call the async function
+      const response = await addToCart(productToAdd);
       if (response) {
         setSuccessMessage("Product added successfully");
-        setTimeout(() => setSuccessMessage(""), 3000); // Clear the message after 3 seconds
+        setTimeout(() => setSuccessMessage(""), 3000);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
       setErrorMessage("Failed to add product. Please try again.");
-      setTimeout(() => setErrorMessage(""), 3000); // Clear the message after 3 seconds
+      setTimeout(() => setErrorMessage(""), 3000); 
     } finally {
-      setLoading(false); // Stop loading once the process is complete
+      setLoading(false);
     }
   };
-  
-
   if (!product) {
     return (
       <div className="text-center mt-16">
@@ -122,7 +113,6 @@ const ProductPage = () => {
 
   return (
     <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg px-4 lg:p-8 lg:m-top-16 shadow-lg relative">
-
       <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8">
         <div className="flex-1">
           <img
@@ -132,7 +122,6 @@ const ProductPage = () => {
             onError={(e) => (e.target.src = "./assets/fallbackImage.png")}
           />
         </div>
-
         <div className="flex-1 lg:pr-24">
           <h1 className="text-3xl lg:text-6xl font-bold mt-2 mb-2 md:mb-4 text-darkcustomGray">{product.name}</h1>
           {product.rating && (
@@ -141,8 +130,6 @@ const ProductPage = () => {
           <p className="text-xl lg:text-3xl md:mt-8 mt-2 font-semibold text-gray-600 mb-4 md:mb-6">
             Price: Rs. {price * quantity}
           </p>
-
-
           <p className="font-bold text-sm lg:text-lg text-darkcustomGray mb-2">Select Weight:</p>
           <div className="flex flex-wrap gap-4 lg:gap-6 mb-4 lg:mb-6">
             {Object.keys(product.prices).map((weightOption) => (
@@ -156,7 +143,6 @@ const ProductPage = () => {
               </div>
             ))}
           </div>
-
           <p className="font-bold text-sm md:text-lg text-darkcustomGray mb-2">Select Shape:</p>
           <div className="flex flex-wrap gap-4 md:gap-6 mb-4 md:mb-6">
             {getAvailableShapes(weight).map((shapeOption) => (
@@ -170,7 +156,6 @@ const ProductPage = () => {
               </div>
             ))}
           </div>
-
           <p className="font-bold text-sm md:text-lg text-darkcustomGray mb-2">Select Quantity:</p>
           <div className="flex items-center mb-2 md:mb-4">
             <button
@@ -187,14 +172,8 @@ const ProductPage = () => {
               +
             </button>
           </div>
-
-
-
           {errorMessage && <p className="text-red-500 text-center p-2">{errorMessage}</p>}
           {successMessage && <p className="text-darkcustombg2 text-center p-2">{successMessage}</p>}
-
-
-          {/* Updated Add to Cart button */}
           <button
             type="submit"
             className={`w-full font-bold mt-4 py-2 px-6 rounded-lg ${loading
@@ -202,14 +181,13 @@ const ProductPage = () => {
                 : "bg-darkcustombg2 text-white hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
               }`}
             onClick={handleAddToCart}
-            disabled={loading} // Disable the button only when loading
+            disabled={loading} 
           >
             {loading ? "Adding to Cart..." : "Add to Cart"}
           </button>
 
         </div>
       </div>
-
       <div className="mt-8 md:mt-12">
         <div className="tabs flex flex-wrap border-b mb-4 md:mb-6">
           <button
@@ -221,7 +199,6 @@ const ProductPage = () => {
           >
             Description
           </button>
-
           <button
             onClick={() => setActiveTab("reviews")}
             className={`px-2 md:px-4 py-1 md:py-2 font-semibold text-sm md:text-base ${activeTab === "reviews"
@@ -232,7 +209,6 @@ const ProductPage = () => {
             Reviews
           </button>
         </div>
-
         {activeTab === "description" ? (
           <p className="mt-4 text-gray-500">{product.description}</p>
 
@@ -240,7 +216,6 @@ const ProductPage = () => {
           <Reviews orderID={product.orderID} />
         )}
       </div>
-
       <div className="mt-12">
         <h2 className="text-xl font-semibold text-darkcustomGray">Related Products</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
@@ -253,8 +228,6 @@ const ProductPage = () => {
           )}
         </div>
       </div>
-
-
     </div>
   );
 };

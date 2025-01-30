@@ -10,10 +10,8 @@ const CustomizationPanel = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCakeType, setSelectedCakeType] = useState("");
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
-  const [selectedDate, setSelectedDate] = useState(""); // New state for date filter
+  const [selectedDate, setSelectedDate] = useState("");
   const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
-
-  // Fetch customizations from API
   const fetchCustomizations = async () => {
     setLoading(true);
     try {
@@ -21,12 +19,9 @@ const CustomizationPanel = () => {
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
-
       const response = await axios.get(`${apiUrl}/customizations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Check if the response data is an array
       if (Array.isArray(response.data)) {
         setCustomizations(response.data);
       } else {
@@ -38,8 +33,6 @@ const CustomizationPanel = () => {
       setLoading(false);
     }
   };
-
-  // Filter customizations based on the search query, cake type, and approval status
   const filteredCustomizations = customizations
     .filter((customization) => {
       const searchLower = searchQuery.toLowerCase();
@@ -48,7 +41,6 @@ const CustomizationPanel = () => {
       const dateFilter = selectedDate
         ? moment(customization.deliveryDate).format("YYYY-MM-DD") === selectedDate
         : true;
-
       return (
         (customization.name.toLowerCase().includes(searchLower) ||
           customization.email.toLowerCase().includes(searchLower) ||
@@ -58,9 +50,7 @@ const CustomizationPanel = () => {
         dateFilter
       );
     })
-    .sort((a, b) => moment(b.deliveryDate).isBefore(moment(a.deliveryDate)) ? 1 : -1); // Sort by latest first
-
-  // Update customization approval status
+    .sort((a, b) => moment(b.deliveryDate).isBefore(moment(a.deliveryDate)) ? 1 : -1); 
   const updateCustomizationStatus = async (customizationId, newStatus) => {
     setLoading(true);
     try {
@@ -68,13 +58,11 @@ const CustomizationPanel = () => {
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
-
       const response = await axios.put(
         `${apiUrl}/customizations/${customizationId}`,
         { approvalStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setCustomizations((prevCustomizations) =>
         prevCustomizations.map((customization) =>
           customization._id === customizationId ? { ...customization, approvalStatus: newStatus } : customization
@@ -86,8 +74,6 @@ const CustomizationPanel = () => {
       setLoading(false);
     }
   };
-
-  // Update price for customization
   const updateCustomizationPrice = async (customizationId, newPrice) => {
     setLoading(true);
     try {
@@ -95,13 +81,11 @@ const CustomizationPanel = () => {
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
-
       const response = await axios.put(
         `${apiUrl}/customizations/${customizationId}`,
         { price: newPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setCustomizations((prevCustomizations) =>
         prevCustomizations.map((customization) =>
           customization._id === customizationId ? { ...customization, price: newPrice } : customization
@@ -113,8 +97,6 @@ const CustomizationPanel = () => {
       setLoading(false);
     }
   };
-
-  // Export customizations to CSV
   const exportToCSV = () => {
     const headers = [
       "Customization ID",
@@ -132,7 +114,6 @@ const CustomizationPanel = () => {
       "Price",
       "imageOrDesign"
     ];
-
     const rows = customizations.map((customization) => [
       customization._id,
       customization.name,
@@ -149,22 +130,18 @@ const CustomizationPanel = () => {
       customization.approvalStatus,
       `₹${customization.price}`,
     ]);
-
     const csvContent = [headers, ...rows]
       .map((row) => row.map((item) => `"${item}"`).join(","))
       .join("\n");
-
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-
     link.setAttribute("href", url);
     link.setAttribute("download", `customizations_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-
   useEffect(() => {
     fetchCustomizations();
   }, []);
@@ -193,7 +170,6 @@ const CustomizationPanel = () => {
           <option value="approved">Approved</option>
           <option value="rejected">Rejected</option>
         </select>
-
         <input
           type="date"
           className="border border-gray-400 rounded px-4 py-2 w-64 mr-4"

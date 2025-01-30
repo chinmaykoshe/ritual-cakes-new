@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCustomization } from "../context/customizeContext";
 import { designnames } from "../designs/designassets";
 
-// Define available cake types based on size
 const availableCakeTypes = {
   "0.5 kg": ["Round", "Heart", "Square"],
   "1 kg": ["Round", "Heart", "Square"],
@@ -15,7 +14,6 @@ const availableCakeTypes = {
   "4 kg": ["Square"],
 };
 
-// Define available flavors
 const flavors = [
   "Plain Chocolate", "Chocochips Zebra", "Vanilla Chocochips", "Hazelnut Mousse Cream Cake",
   "White Forest", "Black Forest", "Chocolate Forest", "Belgium Chocolate", "Coffee", "Roasted Almond",
@@ -32,23 +30,20 @@ const flavors = [
 ];
 
 const DesignCustomizationPage = () => {
-  const { designName } = useParams();  // Get design name from URL
+  const { designName } = useParams(); 
   const { formData, handleChange, submitCustomization, loading, error, success } = useCustomization();
   const [design, setDesign] = useState(null);
   const [availableTypes, setAvailableTypes] = useState([]);
-  const [selectedSize, setSelectedSize] = useState(formData.size || "");  // Initialize with formData if available
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  const [selectedSize, setSelectedSize] = useState(formData.size || "");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Check for token
-    setIsLoggedIn(!!token); // Update login status
+    const token = localStorage.getItem("token"); 
+    setIsLoggedIn(!!token); 
   }, []);
-
   useEffect(() => {
     if (designnames.hasOwnProperty(designName)) {
       const currentDesign = {
@@ -56,11 +51,10 @@ const DesignCustomizationPage = () => {
         imageUrl: designnames[designName],
       };
       setDesign(currentDesign);
-      formData.imageOrDesign = currentDesign.name; // Update value directly
+      formData.imageOrDesign = currentDesign.name; 
     } else {
     }
   }, [designName, formData]);
-
   useEffect(() => {
     if (selectedSize) {
       setAvailableTypes(availableCakeTypes[selectedSize] || []);
@@ -75,10 +69,9 @@ const DesignCustomizationPage = () => {
       </div>
     );
   }
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    submitCustomization(e); // Call submit function from context
+    submitCustomization(e); 
   };
 
   return (
@@ -97,7 +90,6 @@ const DesignCustomizationPage = () => {
             <p className="text-center text-red-500 text-sm mt-2">Please log in to customize a cake.</p>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
             <div>
               <label className="block font-bold text-sm mb-2">Name</label>
               <input
@@ -107,11 +99,10 @@ const DesignCustomizationPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
-                disabled={!isLoggedIn} // Disable if not logged in
+                disabled={!isLoggedIn}
                 required
               />
             </div>
-            {/* Phone */}
             <div>
               <label className="block font-bold text-sm mb-2">Phone Number</label>
               <input
@@ -125,7 +116,6 @@ const DesignCustomizationPage = () => {
                 required
               />
             </div>
-            {/* Address */}
             <div>
               <label className="block font-bold text-sm mb-2">Address</label>
               <textarea
@@ -138,7 +128,6 @@ const DesignCustomizationPage = () => {
                 required
               />
             </div>
-            {/* Cake Size */}
             <div>
               <label className="block font-bold text-sm mb-2">Size</label>
               <select
@@ -158,7 +147,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-            {/* Cake Type */}
             <div>
               <label className="block font-bold text-sm mb-2">Cake Type</label>
               <select
@@ -175,7 +163,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-            {/* Flavor */}
             <div>
               <label className="block font-bold text-sm mb-2">Flavor</label>
               <select
@@ -192,7 +179,6 @@ const DesignCustomizationPage = () => {
                 ))}
               </select>
             </div>
-            {/* Delivery Date */}
             <div>
               <label className="block font-bold text-sm mb-2">
                 <p>Order Date and Time</p>
@@ -210,8 +196,6 @@ const DesignCustomizationPage = () => {
                 required
               />
             </div>
-
-            {/* Message on Cake */}
             <div>
               <label className="block font-bold text-sm mb-2">Message on Cake</label>
               <input
@@ -224,7 +208,6 @@ const DesignCustomizationPage = () => {
                 disabled={!isLoggedIn}
               />
             </div>
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-darkcustombg2 text-white py-2 rounded-lg focus:outline-none hover:bg-darkcustombg-light"
@@ -232,13 +215,12 @@ const DesignCustomizationPage = () => {
             >
               {loading ? 'Submitting...' : 'Submit Customization'}
             </button>
-
             {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
             {success &&
               <div className="text-green-500 mt-4 text-center">
                 Customization submitted successfully!
                 <button
-                  onClick={() => navigate("/orders")} // Redirect to orders page
+                  onClick={() => navigate("/orders")}
                   className="m-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
                 >
                   Check Your Orders Here
@@ -248,7 +230,6 @@ const DesignCustomizationPage = () => {
           </form>
         </div>
       </div>
-
       <p className="text-center text-sm font-medium text-customGray mt-4 mb-8 bg-yellow-200 p-4 rounded-lg border border-yellow-400">
         <span className="font-bold text-red-600">Note:</span> If the design is multi-tiered/multi-layered, please choose a weight above 1.5kg for a 2-tier cake and 2.5kg for a 3-tier cake.
       </p>

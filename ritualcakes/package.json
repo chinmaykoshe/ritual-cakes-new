@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://project-new-code-ritual-cakes-gqwl7cuv8-chinmaykoshes-projects.vercel.app",
+  "proxy": "",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

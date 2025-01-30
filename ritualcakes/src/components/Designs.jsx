@@ -3,27 +3,22 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { designnames } from "../designs/designassets";
-import ThemeSection from "./ThemeSection";  // Import the updated ThemeSection component
+import ThemeSection from "./ThemeSection"; 
 
-// Main Designs Component
 const Designs = () => {
   const navigate = useNavigate();
-
-  // Handle carousel image click
   const handleClickDesign = (designImages) => {
     navigate("/pagedesigns", { state: { designImages } });
   };
 
-
   return (
     <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg lg:p-8 lg:m-top-16 shadow-lg">
-      {/* Carousel Section */}
       <section className="mb-12 flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="lg:w-1/2 flex items-center justify-center">
           <Carousel
             showThumbs={false}
             showStatus={false}
-            showIndicators={false} // Hiding dots at the bottom
+            showIndicators={false}
             infiniteLoop={true}
             useKeyboardArrows={true}
             autoPlay={true}
@@ -63,61 +58,50 @@ const Designs = () => {
           </NavLink>
         </div>
       </section>
-
-      {/* Theme Sections */}
       <ThemeSection
         title="Engagement Theme"
         categoryPrefix="theme_engagement_design_"
         designnames={designnames}
-      // Passing handleZoomIn
       />
       <ThemeSection
         title="Mom Theme"
         categoryPrefix="theme_mom_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Dad Theme"
         categoryPrefix="theme_dad_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Anniversary Theme"
         categoryPrefix="theme_anniversary_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Boy Theme"
         categoryPrefix="theme_boy_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Cute Cake Theme"
         categoryPrefix="theme_cute_cake_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Girl Theme"
         categoryPrefix="theme_girl_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Profession Theme"
         categoryPrefix="theme_profession_design_"
         designnames={designnames}
-
       />
       <ThemeSection
         title="Retirement Theme"
         categoryPrefix="theme_retirement_design_"
         designnames={designnames}
-
       />
     </div>
   );

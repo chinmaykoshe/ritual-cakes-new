@@ -10,61 +10,49 @@ function Checkout() {
   const [address, setAddress] = useState("");
   const [cakeMessage, setCakeMessage] = useState("Happy Birthday <Name>");
   const [orderDate, setOrderDate] = useState("");
-  const [orderTime, setOrderTime] = useState("17:00"); // Default to 5:00 PM
-  const [paymentMethod, setPaymentMethod] = useState("COD"); // New state for payment method
+  const [orderTime, setOrderTime] = useState("17:00"); 
+  const [paymentMethod, setPaymentMethod] = useState("COD"); 
   const [errorMessages, setErrorMessages] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { createOrder, error, loading } = useOrder();
-
   useEffect(() => {
-    // Calculate the date 2 days later and set it as the default order date
     const date = new Date();
-    date.setDate(date.getDate() + 2); // Set the date to 2 days later
+    date.setDate(date.getDate() + 2); 
     const formattedDate = date.toISOString().split("T")[0];
-    setOrderDate(formattedDate); // Set the default order date to 2 days later
-
-    // Update the min date for the date input (2 days later)
+    setOrderDate(formattedDate); 
     const minDate = formattedDate;
-
     const orderDateInput = document.getElementById("orderDateInput");
     if (orderDateInput) {
       orderDateInput.setAttribute("min", minDate);
     }
-  }, []); // Empty dependency array to run only on component mount
-
+  }, []);
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
-
   const getUserEmail = () => {
     return localStorage.getItem("user") || null;
   };
-
   const handleOrderTimeChange = (event) => {
     const selectedTime = event.target.value;
     const selectedDate = new Date(`1970-01-01T${selectedTime}:00`);
-    const startTime = new Date("1970-01-01T10:00:00"); // 10:00 AM
-    const endTime = new Date("1970-01-01T23:00:00"); // 11:00 PM
-
+    const startTime = new Date("1970-01-01T10:00:00");
+    const endTime = new Date("1970-01-01T23:00:00");
     if (selectedDate >= startTime && selectedDate <= endTime) {
       setOrderTime(selectedTime);
     } else {
       setErrorMessages("Please select a time between 10:00 AM and 11:00 PM.");
     }
   };
-
   const handlePlaceOrder = async () => {
     if (!customerName || !address || !cakeMessage || !orderTime) {
       setErrorMessages("Please fill in all fields.");
       return;
     }
-
     const userEmail = getUserEmail();
     if (!userEmail) {
       setErrorMessages("User not logged in.");
       return;
     }
-
     try {
       const orderItems = cart.map((item) => ({
         orderID: item.orderID,
@@ -75,9 +63,7 @@ function Checkout() {
         weight: parseFloat(item.weight),
         image: item.img,
       }));
-
       const totalAmount = parseFloat(calculateTotal());
-
       const orderData = {
         userEmail,
         customerName,
@@ -87,19 +73,15 @@ function Checkout() {
         paymentMethod,
         cakeMessage,
         orderDate: new Date(orderDate).toISOString(),
-        orderTime: orderTime, // Include the selected time
+        orderTime: orderTime,
         status: "Pending",
       };
-
-
       await createOrder(orderData);
       setSuccessMessage("Order placed successfully!");
-
-
       setTimeout(async () => {
-        await clearCart(); // Wait for clearCart to complete
-        navigate("/orders"); // Navigate to the orders page after clearing the cart
-      }, 2000); // Wait for 2 seconds before clearing the cart and navigating
+        await clearCart();
+        navigate("/orders"); 
+      }, 2000);
     } catch (error) {
       setErrorMessages(error.response?.data?.message || "Error placing order, please try again.");
     }
@@ -115,7 +97,6 @@ function Checkout() {
           &#8592; Back to Cart
         </button>
         <h1 className="text-3xl font-bold mb-6 text-center">Checkout</h1>
-
         {cart.length > 0 ? (
           <div>
             <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
@@ -135,7 +116,6 @@ function Checkout() {
                 </div>
               </div>
             ))}
-
             <div className="mt-6">
               <h3 className="text-2xl font-bold mb-4">Customer Information</h3>
               <div className="mb-4">
@@ -149,7 +129,6 @@ function Checkout() {
                   placeholder="Enter your name"
                 />
               </div>
-
               <div className="mb-4">
                 <label htmlFor="address" className="block text-sm font-semibold mb-2">Delivery Address</label>
                 <textarea
@@ -160,7 +139,6 @@ function Checkout() {
                   placeholder="Enter your delivery address"
                 />
               </div>
-
               <div className="mb-4">
                 <label htmlFor="message" className="block text-sm font-semibold mb-2">Message on Cake</label>
                 <input
@@ -172,7 +150,6 @@ function Checkout() {
                   placeholder="Enter a message for the cake"
                 />
               </div>
-
               <div className="mb-4">
                 <label htmlFor="orderDate" className="block text-sm font-semibold mb-2"><p>Order Date</p><p className="text-xs text-gray-300">Order Date must be after 2 days</p></label>
                 <input
@@ -183,8 +160,6 @@ function Checkout() {
                   className="w-full p-2 border border-gray-300 rounded-lg"
                 />
               </div>
-
-              {/* Time selection */}
               <div className="mb-4">
                 <label htmlFor="orderTime" className="block text-sm font-semibold mb-2">Select Delivery Time</label>
                 <input
@@ -198,8 +173,6 @@ function Checkout() {
                   required
                 />
               </div>
-
-              {/* Payment Method Selection */}
               <div className="mb-4">
                 <label className="block text-sm font-semibold mb-2">Payment Method</label>
                 <div className="flex space-x-4">
@@ -229,8 +202,6 @@ function Checkout() {
                   </div>
                 </div>
               </div>
-
-
               <div className="flex justify-center mt-6">
                 <button
                   onClick={handlePlaceOrder}
@@ -245,13 +216,12 @@ function Checkout() {
                 <p className="text-green-500 text-center">
                   Order Placed Sucessfully
                   <button
-                    onClick={() => navigate("/orders")} // Redirect to orders page
+                    onClick={() => navigate("/orders")}
                     className="m-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
                   >
                     Check Your Orders Here
                   </button>
                 </p>}
-
             </div>
           </div>
         ) : (

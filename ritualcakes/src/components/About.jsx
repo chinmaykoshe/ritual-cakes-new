@@ -11,11 +11,8 @@ function About() {
     <div className="mx-2 max-w-7xl md:mx-auto py-6 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-6 lg:px-8 mt-4 shadow-lg">
       <div className="container mx-auto px-4 md:px-6">
         <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">About Us</h1>
-
         <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
-          {/* Custom Bakes Section */}
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
-
             <div className="md:ml-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Custom Bakes</h2>
               <p className="text-lg text-gray-700 mb-4">
@@ -31,8 +28,6 @@ function About() {
               className="w-full md:w-1/2 rounded-lg mb-4 mx-2 md:mb-0 shadow-md object-cover h-[300px]"
             />
           </div>
-
-          {/* Chocolates Section */}
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
             <img
               src="/chocolates.jpg"
@@ -50,8 +45,6 @@ function About() {
             </div>
           </div>
         </div>
-
-        {/* Customer Reviews Section */}
         <div className="mt-16">
           <h2 className="text-3xl font-semibold mb-8 text-center text-gray-800">Customer Reviews</h2>
           <div className="flex flex-col md:flex-row justify-center gap-8">

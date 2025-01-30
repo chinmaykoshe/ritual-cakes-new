@@ -10,35 +10,29 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") ? true : false);
   const [isOpen, setIsOpen] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const { cart } = useCart(); // Accessing the cart from context
-
+  const { cart } = useCart();
   const toggleMenu = () => setIsOpen(!isOpen);
-
   const handleSignOut = () => {
     const isConfirmed = window.confirm("Are you sure you want to sign out?");
     if (isConfirmed) {
       localStorage.clear();
       setIsLoggedIn(false);
-      navigate("/"); // Navigate to home page after sign-out
+      navigate("/"); 
     }
   };
-
-  // Check if the token exists and sign out if missing
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       localStorage.clear();
     } else {
-      setIsLoggedIn(true); // Token exists, user is logged in
+      setIsLoggedIn(true);
     }
   }, []);
 
   return (
     <div className="mb-14">
-      {/* Top Navbar */}
       <nav className="fixed top-0 left-0 w-full border-grey-200 font-montserrat bg-orange-50 bg-opacity-80 backdrop-blur-md z-[9999]">
         <div className="w-full px-3 py-2 flex items-center justify-between mx-auto">
-          {/* Logo and Menu Toggle */}
           <div className="flex items-center rtl:space-x-reverse">
             <div className="lg:hidden flex items-center mr-2">
               <button onClick={toggleMenu} className="text-gray-900">
@@ -52,8 +46,6 @@ function Navbar() {
               </span>
             </NavLink>
           </div>
-
-          {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-4 justify-center flex-grow">
             {["Home", "Designs", "Cakes", "Catalogue", "Customization", "About", "Orders"].map(
               (item, index) => (
@@ -70,8 +62,6 @@ function Navbar() {
               )
             )}
           </div>
-
-          {/* Right Actions */}
           <div className="ml-auto flex items-center space-x-4">
             <button
               className="relative text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out"
@@ -79,7 +69,6 @@ function Navbar() {
             >
               <i className="fa-solid fa-magnifying-glass md:text-2xl text-lg"></i>
             </button>
-
             <button
               className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out"
               onClick={() => {
@@ -94,14 +83,12 @@ function Navbar() {
                 </span>
               )}
             </button>
-
             <button
               className="relative text-gray-600 hover:text-gray-800 mx-2 transition duration-300 ease-in-out"
               onClick={() => navigate("/UserDetails")}
             >
               <i className="fa-solid fa-user md:text-2xl text-xl"></i>
             </button>
-
             <button
               type="button"
               className="text-black bg-darkcustombg hover:bg-orange-300 hover:text-white font-bold rounded-lg text-xs md:text-sm px-2 py-2"
@@ -112,20 +99,13 @@ function Navbar() {
           </div>
         </div>
       </nav>
-
-      {/* Search Bar */}
       {showSearchBar && <SearchBar showSearchBar={showSearchBar} setShowSearchBar={setShowSearchBar} />}
-
-      {/* Mobile Menu */}
       <div className={`fixed inset-0 z-40 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
-        {/* Overlay */}
         <div
           className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-500 ${isOpen ? "opacity-100" : "opacity-0"
             }`}
           onClick={toggleMenu}
         ></div>
-
-
         {!isLoggedIn && (
           <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2">
             <p className="text-red-600 md:font-semibold">
@@ -133,8 +113,6 @@ function Navbar() {
             </p>
           </div>
         )}
-
-        {/* Sidebar */}
         <div
           className={`fixed top-0 left-0 w-64 bg-white h-full shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
@@ -166,12 +144,9 @@ function Navbar() {
           </div>
         </div>
       </div>
-
       {
         isLoggedIn ?? <div>please signin to place orders! </div>
-
       }
-
     </div>
   );
 }

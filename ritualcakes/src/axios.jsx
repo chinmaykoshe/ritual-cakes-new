@@ -1,31 +1,21 @@
-import axios from 'axios'; // Import Axios for HTTP requests
+import axios from 'axios';
+axios.defaults.baseURL = 'https://ritual-cakes-new-ogk5.vercel.app';
 
-// Set base URL for Axios
-axios.defaults.baseURL = 'https://ritual-cakes-new-ogk5.vercel.app'; // Global base URL for all requests
-
-// Axios response interceptor
 const useAxiosInterceptor = () => {
-
-  // Handle 401 Unauthorized errors
   axios.interceptors.response.use(
-    response => response, // Return successful response
+    response => response,
     error => {
       if (error.response && error.response.status === 401) {
-        localStorage.clear(); // Clear localStorage
-
-
-        // Prevent multiple reloads in the same session
+        localStorage.clear();
         if (!sessionStorage.getItem('hasReloaded')) {
-          sessionStorage.setItem('hasReloaded', 'true'); // Set reload flag
-          window.location.reload(); // Reload the page
+          sessionStorage.setItem('hasReloaded', 'true'); 
+          window.location.reload();
         }
-
-        return Promise.reject(error); // Reject the error
+        return Promise.reject(error); 
       }
-
-      return Promise.reject(error); // Reject other errors
+      return Promise.reject(error);
     }
   );
 };
 
-export default useAxiosInterceptor; // Export the hook
+export default useAxiosInterceptor;

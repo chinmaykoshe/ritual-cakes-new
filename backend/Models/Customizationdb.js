@@ -7,7 +7,7 @@ const customizationSchema = new mongoose.Schema({
     required: true,
     set: (email) => email.toLowerCase() // Automatically convert to lowercase
   },
-  phone: { type: String },
+  phone: { type: String, required: true },
   address: { type: String, required: true },
   size: { type: String, required: true },
   cakeType: { type: String, required: true },

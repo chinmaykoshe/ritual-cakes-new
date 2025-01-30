@@ -13,85 +13,77 @@ function Signup() {
     password: ''
   });
   const [errorMessages, setErrorMessages] = useState(null);
-  const [sucessMessages, setSucessMessages] = useState(null); // State for success messages
-  const [loading, setLoading] = useState(false); // Loading state
-  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility toggle
-
+  const [sucessMessages, setSucessMessages] = useState(null); 
+  const [loading, setLoading] = useState(false); 
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top on component mount
+    window.scrollTo(0, 0); 
   }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignUpData((prevData) => ({ ...prevData, [name]: value }));
-    setErrorMessages(null); // Clear error messages on input
+    setErrorMessages(null); 
   };
-
   const handleMobileChange = (e) => {
     const { value } = e.target;
-    // Allow only numbers and limit the input length to 10
     if (/^\d{0,10}$/.test(value)) {
       setSignUpData((prevData) => ({ ...prevData, mobile: value }));
-      setErrorMessages(null); // Clear error messages on input
+      setErrorMessages(null);
     }
   };
-
   const validatePassword = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{8,}$/;
-    return regex.test(password); // Validate password format
+    return regex.test(password);
   };
-
   const handlePasswordChange = (e) => {
     const { value } = e.target;
     setSignUpData((prevData) => ({ ...prevData, password: value }));
     if (!validatePassword(value)) {
-      // Add any specific password validation actions here
     }
-    setErrorMessages(null); // Clear error messages on input
+    setErrorMessages(null);
   };
 
   const togglePasswordVisibility = () => {
-    setPasswordVisible((prevState) => !prevState); // Toggle password visibility
+    setPasswordVisible((prevState) => !prevState); 
   };
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true on form submission
+    setLoading(true); 
 
-    // Validate password before submitting
     if (!validatePassword(signUpData.password)) {
       setErrorMessages("Password must contain at least one letter, one number, and be at least 8 characters long. Special characters are optional.");
-      setLoading(false); // Reset loading state
+      setLoading(false); 
       return;
     }
 
     try {
-      const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup"; // API URL for sign-up
+      const url = "https://ritual-cakes-new-ogk5.vercel.app/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(signUpData) // Send sign-up data
+        body: JSON.stringify(signUpData)
       });
       const result = await response.json();
 
       if (!response.ok) {
         const errorMessage = result.error || result.message || 'An error occurred during sign-up.';
-        setErrorMessages(errorMessage); // Display error if sign-up fails
+        setErrorMessages(errorMessage);
         return;
       }
 
       setTimeout(async () => {
-        setSucessMessages("Signup Sucess !!!"); // Show success message
-        await navigate('/login'); // Redirect to login page
+        setSucessMessages("Signup Sucess !!!");
+        await navigate('/login');
       }, 2000);
 
     } catch (error) {
       const errorMessage = error.message || 'An unexpected error occurred during sign-up.';
-      setErrorMessages(errorMessage); // Display error message on failure
+      setErrorMessages(errorMessage);
     } finally {
-      setLoading(false); // Reset loading state after operation
+      setLoading(false);
     }
   };
 
@@ -105,7 +97,7 @@ function Signup() {
       address: '',
       password: ''
     });
-    setErrorMessages(null); // Reset error messages on form reset
+    setErrorMessages(null);
   };
 
   return (
@@ -157,7 +149,7 @@ function Signup() {
               type="tel"
               id="mobile"
               name="mobile"
-              pattern="\d{10}" // Ensures exactly 10 numeric digits
+              pattern="\d{10}"
               title="Mobile number must be exactly 10 digits long"
               value={signUpData.mobile}
               onChange={handleMobileChange}
@@ -191,14 +183,14 @@ function Signup() {
           <div className="mb-6 relative">
             <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Create Password</label>
             <input
-              type={passwordVisible ? "text" : "password"} // Toggle between password and text
+              type={passwordVisible ? "text" : "password"}
               id="password"
               name="password"
               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{8,}$"
               title="Password must contain at least one letter, one number, and be at least 8 characters long. Special characters are optional."
               value={signUpData.password}
               onChange={handlePasswordChange}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none pr-10" // Added padding-right for button
+              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none pr-10"
               required
             />
             <button
@@ -208,9 +200,9 @@ function Signup() {
               aria-label="Toggle password visibility"
             >
               {passwordVisible ? (
-                <i className="fa-regular fa-eye text-gray-700"></i> // Eye Slash (password hidden)
+                <i className="fa-regular fa-eye text-gray-700"></i> 
               ) : (
-                <i className="fa-solid fa-eye text-gray-700"></i> // Eye (password visible)
+                <i className="fa-solid fa-eye text-gray-700"></i> 
               )}
             </button>
           </div>
@@ -218,18 +210,18 @@ function Signup() {
           <hr className="my-6" />
 
           {errorMessages && (
-            <p className="text-red-500 text-center mb-4">{errorMessages}</p> // Display error message
+            <p className="text-red-500 text-center mb-4">{errorMessages}</p> 
           )}
 
           {sucessMessages && (
-            <p className="text-green-500 text-center mb-4">{sucessMessages}</p> // Display success message
+            <p className="text-green-500 text-center mb-4">{sucessMessages}</p> 
           )}
 
           <div className="flex justify-between items-center mt-6 md:gap-6 gap-4">
             <button
               type="submit"
               className="w-full bg-orange-300 text-white text-xl font-bold py-3 rounded-lg hover:bg-green-300"
-              disabled={loading} // Disable button when loading
+              disabled={loading} 
             >
               Sign Up
             </button>
@@ -237,7 +229,7 @@ function Signup() {
               type="reset"
               onClick={handleReset}
               className="w-full border border-orange-300 text-orange-300 text-xl font-bold py-3 rounded-lg hover:bg-orange-100"
-              disabled={loading} // Disable button when loading
+              disabled={loading}
             >
               Reset
             </button>

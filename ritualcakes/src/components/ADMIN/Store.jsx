@@ -3,14 +3,12 @@ import { elements } from '../../assets/assets';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 const cakes = Object.values(elements).flat();
 
 function Store() {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [customMessages, setCustomMessages] = useState({}); // For storing custom messages for each cake
-
+  const [customMessages, setCustomMessages] = useState({}); 
   useEffect(() => {
     const defaultOptions = cakes.reduce((acc, cake) => {
       const defaultWeight = cake.prices['500g'] ? '500g' : Object.keys(cake.prices)[0];
@@ -19,7 +17,6 @@ function Store() {
     }, {});
     setSelectedOptions(defaultOptions);
   }, []);
-
   const handleSelectionChange = (orderID, type, value) => {
     setSelectedOptions((prevState) => ({
       ...prevState,
@@ -29,34 +26,26 @@ function Store() {
       },
     }));
   };
-
   const handleCustomMessageChange = (orderID, message) => {
     setCustomMessages((prevState) => ({
       ...prevState,
       [orderID]: message,
     }));
   };
-
-
   const token = localStorage.getItem('token');
 
   const placeOrder = async (selectedCake) => {
     try {
-      // Fetch user details and token from local storage
-      const userEmail = localStorage.getItem('user') || 'ritualcake.admin@gmail.com'; // Replace with dynamic user retrieval
+      const userEmail = localStorage.getItem('user') || 'ritualcake.admin@gmail.com'; 
       if (!token) {
         toast.error('Token is missing. Please log in.');
         throw new Error('Authentication token is missing.');
       }
-
-      // Validate the selected options (weight and shape)
       const selectedOption = selectedOptions[selectedCake.orderID];
       if (!selectedOption?.weight || !selectedOption?.shape) {
         toast.error('Please select a valid weight and shape.');
         return;
       }
-
-      // Prepare the order item data
       const orderItem = {
         name: selectedCake.name,
         weight: selectedOption.weight,
@@ -65,27 +54,19 @@ function Store() {
         orderID: selectedCake.orderID,
         image: selectedCake.image || 'default_image_url',
       };
-
-      // Calculate total amount from price
       const totalAmount = parseFloat(orderItem.price || 0);
       if (isNaN(totalAmount) || totalAmount <= 0) {
         toast.error('Invalid total amount. Please check the price and try again.');
         return;
       }
-
-      // Static or dynamic values
-      const deliveryAddress = '123 Main St'; // Replace with the user's actual address if available
-      const paymentMethod = 'COD'; // Replace with dynamic value if needed
+      const deliveryAddress = '123 Main St';
+      const paymentMethod = 'COD'; 
       const cakeMessage = customMessages[selectedCake.orderID]?.trim() || 'Ordered from store';
       const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
-
-      // Validate custom message length
       if (cakeMessage.length > 100) {
         toast.error('Custom message must be 100 characters or less.');
         return;
       }
-
-      // Prepare the order data payload
       const orderData = {
         userEmail,
         orderItems: [orderItem],
@@ -96,8 +77,6 @@ function Store() {
         orderDate: new Date().toISOString(),
         orderTime: new Date().toLocaleTimeString(),
       };
-
-      // Send the order data to the backend API
       const response = await axios.post(
         `${apiUrl}/orders`,
         orderData,
@@ -108,7 +87,6 @@ function Store() {
           },
         }
       );
-
       if (response.status === 201) {
         toast.success(`Order for "${selectedCake.name}" placed successfully!`);
       } else {
@@ -119,8 +97,6 @@ function Store() {
       toast.error('Error placing order: ' + (error.response?.data?.message || error.message));
     }
   };
-
-  // Confirmation before placing the order
   const handlePlaceOrder = (cake) => {
     const confirmation = window.confirm(
       `Are you sure you want to place an order for "${cake.name}" (${selectedOptions[cake.orderID]?.weight}, ${selectedOptions[cake.orderID]?.shape})?`
@@ -129,9 +105,6 @@ function Store() {
       placeOrder(cake);
     }
   };
-
-
-
   const filteredCakes = cakes.filter((cake) =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase())
   );

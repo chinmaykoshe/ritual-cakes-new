@@ -1,25 +1,22 @@
 body{
   background-color: #FDFFF5;
-    background-size: cover; /* Ensures the image covers the whole screen */
+    background-size: cover; 
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Keeps it fixed during scrolling */
+    background-attachment: fixed;
     background-position: center;
     backdrop-filter: blur(8px);
 }
 
-
 .navlink-active {
-  background-color: rgb(255, 192, 143); /* darkcustombg color */
-  color: #ffffff; /* text color */
+  background-color: rgb(255, 192, 143); 
+  color: #ffffff;
 }
 
 .navlink-inactive {
   background-color: transparent;
-  color: #000000; /* text color */
+  color: #000000;
 }
 
-
-/* Custom button styles */
 .custom-btn {
   position: relative;
   display: inline-block;
@@ -27,15 +24,11 @@ body{
   border: none;
 }
 
-
-/* 11 */
 .btn-11 {
   position: relative;
   border: none;
-  
-  background: rgb(255, 228, 208); /* darkcustombg */
-  background: linear-gradient(0deg, rgb(255, 146, 62) 0%, rgba(255, 192, 143, 1) 100%); /* Gradient from darkcustombg to darkcustombg2 */
-  
+  background: rgb(255, 228, 208); 
+  background: linear-gradient(0deg, rgb(255, 146, 62) 0%, rgba(255, 192, 143, 1) 100%); 
   color: #fff;
   overflow: hidden;
   padding: 10px 20px;
@@ -45,14 +38,12 @@ body{
   outline: none;
 }
 
-/* Hover effect */
 .btn-11:hover {
   text-decoration: none;
   color: #fff;
   opacity: 0.7;
 }
 
-/* Before pseudo-element for the glowing animation */
 .btn-11:before {
   position: absolute;
   content: '';
@@ -62,10 +53,9 @@ body{
   width: 30px;
   height: 100%;
   background-color: #fff;
-  animation: shiny-btn1 3s ease-in-out infinite; /* Adjusted animation to glow effect */
+  animation: shiny-btn1 3s ease-in-out infinite; 
 }
 
-/* Active state with box-shadow */
 .btn-11:active {
   box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .3),
               -4px -4px 6px 0 rgba(116, 125, 136, .2), 
@@ -73,7 +63,6 @@ body{
               inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
 
-/* Animation for glowing effect */
 @keyframes shiny-btn1 {
   0% {
     transform: scale(0) rotate(45deg);
@@ -92,8 +81,6 @@ body{
     opacity: 0;
   }
 }
-
-
 
 @keyframes fade-in {
   0% {
@@ -129,42 +116,7 @@ body{
 .card-container.visible {
   opacity: 1;
 }
-/* Initial styling for the icons */
 .theme-toggle i {
   cursor: pointer;
-  transition: transform 0.5s ease, opacity 0.5s ease;  /* Smooth transition for rotation and opacity */
-}
-
-/* Hide the moon icon initially */
-#moon {
-  display: none;
-}
-
-/* Dark mode styles */
-body.dark-mode {
-  background-color: #030303;
-  color: rgb(169, 169, 169);
-}
-
-body.dark-mode #sun {
-  display: none;
-}
-
-body.dark-mode #moon {
-  display: block;
-}
-
-/* Rotation effect */
-body.dark-mode .theme-toggle i {
-  transform: rotate(360deg);  /* Apply rotation when dark mode is enabled */
-}
-
-/* When switching from light to dark or vice versa, rotate the icon */
-.theme-toggle i {
-  transition: transform 01.5s ease-in-out, opacity 01.5s ease-in-out;  /* Transition for both rotation and opacity */
-}
-
-/* Rotation reset on the sun icon */
-#sun {
-  transform: rotate(0deg);  /* Reset rotation to 0 for sun icon */
+  transition: transform 0.5s ease, opacity 0.5s ease;  
 }

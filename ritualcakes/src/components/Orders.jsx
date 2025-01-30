@@ -9,20 +9,17 @@ function Orders() {
   const { customizations, setCustomizations, error: customizationError } = useCustomization();
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("user");
-
   const [loading, setLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
-
   const handleImageLoad = () => {
     setLoading(false);
   };
-
   const handleImageError = (e) => {
     e.target.src = "/fallback-image.png";
     setLoading(false);
     setHasLoaded(true);
-    setLoadError(true); // Track that error has occurred
+    setLoadError(true); 
   };
   useEffect(() => {
     const fetchCustomizations = async () => {
@@ -44,11 +41,9 @@ function Orders() {
       fetchCustomizations();
     }
   }, [userEmail, setCustomizations]);
-
   if (!userEmail) {
     return (
       <div className="mx-2 max-w-7xl md:mx-auto py-4 py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
-        {/* Back Button */}
         <div className="mb-6">
           <Link
             to="/"
@@ -74,7 +69,6 @@ function Orders() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-        {/* Back Button */}
         <div className="mb-6">
           <Link
             to="/"
@@ -83,8 +77,6 @@ function Orders() {
             &larr; Back to Home
           </Link>
         </div>
-
-        {/* Orders Section */}
         <h1 className="text-3xl font-bold mb-6 text-center">Your Orders</h1>
         {loading ? (
           <p className="text-center">Loading orders...</p>
@@ -144,8 +136,6 @@ function Orders() {
         ) : (
           <p className="text-center text-gray-600">You have no orders yet.</p>
         )}
-
-        {/* Customizations Section */}
         <div className="mt-12 space-y-8">
           <h1 className="text-3xl font-bold mb-6 text-center">All Customizations</h1>
           {customizations && customizations.length > 0 ? (
@@ -182,13 +172,10 @@ function Orders() {
                         {customization.approvalStatus}
                       </span>
                     </p>
-
                     <p className="text-lg"><strong>Price:</strong> Rs. {customization.price}</p>
                     <p><strong>Image or Design:</strong></p>
                     <p className="break-all overflow-hidden text-ellipsis line-clamp-3">{customization.imageOrDesign || "No image/design provided"}</p>
                   </div>
-
-                  {/* Image Section */}
                   <div className="m-4 md:mt-0 md:ml-8 md:w-1/3 lg:w-1/3 w-full">
                     {loading && !hasLoaded && !loadError && <div className="spinner">Loading...</div>}
                     {customization.imageOrDesign && !hasLoaded ? (

@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import { designnames } from '../../designs/designassets';
 
 function Products() {
-  // Create an array of design names and images to display
-  const designs = Object.entries(designnames); // This will convert the object into an array of [name, image] pairs
-
-  const [searchQuery, setSearchQuery] = useState(""); // To manage search input
-
-  // Filter designs based on search query
+  const designs = Object.entries(designnames); 
+  const [searchQuery, setSearchQuery] = useState("");
   const filteredDesigns = designs.filter(([name]) =>
-    name.toLowerCase().includes(searchQuery.toLowerCase()) // Match query case-insensitively
+    name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  // Split designs into two halves
   const half = Math.ceil(filteredDesigns.length / 2);
   const firstHalf = filteredDesigns.slice(0, half);
   const secondHalf = filteredDesigns.slice(half);
@@ -20,19 +14,14 @@ function Products() {
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Product Designs</h2>
-
-      {/* Search Bar */}
       <input
         type="text"
         placeholder="Search designs..."
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery state
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded"
       />
-
-      {/* Container for two columns */}
       <div className="flex">
-        {/* Left Column */}
         <div className="w-1/2 pr-4">
           <table className="border-collapse w-full">
             <thead>
@@ -59,8 +48,6 @@ function Products() {
             </tbody>
           </table>
         </div>
-
-        {/* Right Column */}
         <div className="w-1/2 pl-4">
           <table className="border-collapse w-full">
             <thead>

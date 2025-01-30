@@ -10,63 +10,46 @@ const StoreOrders = () => {
   const [dateFilter, setDateFilter] = useState("");
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
-  const isFetching = useRef(false); // Prevent redundant API calls
-  
-  // Function to fetch orders
+  const isFetching = useRef(false);
   const fetchAdminOrders = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const userEmail = localStorage.getItem("user");
       const role = localStorage.getItem("role");
-
       if (!token) throw new Error("Token not found. Please log in again.");
       if (!userEmail) throw new Error("User email not found.");
-
       const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`;
-
       const response = await axios.get(apiUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-
       const orders = Array.isArray(response.data) ? response.data : response.data.orders || [];
-
       const filteredOrders = orders.filter(
         (order) => order.userEmail === userEmail
       );
-
       const sortedOrders = filteredOrders.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-
       setAdminOrders(sortedOrders);
     } catch (err) {
     } finally {
       setLoading(false);
     }
   };
-
-  // Fetch orders on component mount
   useEffect(() => {
     if (!isFetching.current) {
       isFetching.current = true;
       fetchAdminOrders().then(() => (isFetching.current = false));
     }
   }, []);
-
-  // Helper functions for date formatting
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");
   };
-
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString("en-US", { hour12: true });
   };
-
-  // Filter orders dynamically
   const filteredOrders = useMemo(() => {
     return adminOrders.filter((order) =>
       order.orderItems.some((item) => {
@@ -93,21 +76,17 @@ const StoreOrders = () => {
   }, [adminOrders, searchQuery, shapeFilter, dateFilter, minAmount, maxAmount]);
 
   const today = new Date().toLocaleDateString("en-US");
-  // Inside your component function
   const todayTotal = useMemo(() => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time to midnight for today's date comparison
-
+    today.setHours(0, 0, 0, 0); 
     return adminOrders
       .filter((order) => {
         const orderDate = new Date(order.createdAt);
-        orderDate.setHours(0, 0, 0, 0); // Reset time to midnight for each order
-        return orderDate.getTime() === today.getTime(); // Compare date parts only
+        orderDate.setHours(0, 0, 0, 0); 
+        return orderDate.getTime() === today.getTime(); 
       })
-      .reduce((total, order) => total + order.totalAmount, 0); // Sum totalAmount for today's orders
-  }, [adminOrders]); // Recalculate when adminOrders changes
-
-  // Export orders to CSV
+      .reduce((total, order) => total + order.totalAmount, 0);
+  }, [adminOrders]); 
   const exportToCSV = () => {
     const headers = [
       "Cake Name",
@@ -167,7 +146,6 @@ const StoreOrders = () => {
           </button>
         </div>
       </div>
-
       <div className="mb-4 grid grid-cols-6 gap-4">
         <input
           type="text"
@@ -207,7 +185,6 @@ const StoreOrders = () => {
           className="border p-2 rounded"
         />
       </div>
-
       {filteredOrders.length > 0 ? (
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>

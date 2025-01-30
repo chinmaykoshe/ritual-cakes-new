@@ -5,32 +5,24 @@ function Customers() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
-
+  const [searchQuery, setSearchQuery] = useState('');
   const token = localStorage.getItem('token');
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users`;
-
   useEffect(() => {
     const fetchCustomers = async () => {
       if (token) {
         try {
-
-
           const response = await axios.get(apiUrl, {
             headers: { Authorization: `Bearer ${token}` },
           });
-
-
-          // Check the structure of the response
           if (Array.isArray(response.data)) {
             setCustomers(response.data);
           } else if (Array.isArray(response.data.users)) {
-            setCustomers(response.data.users); // If users are nested inside `data.users`
+            setCustomers(response.data.users);
           } else {
             setError('Unexpected data format');
           }
         } catch (err) {
-          // Log and set error message in case of failure
           console.error('Error fetching customers:', err);
           setError(err.response?.data?.message || err.message || 'Error fetching customers');
         } finally {
@@ -61,8 +53,6 @@ function Customers() {
       }
     }
   };
-
-  // Filter customers based on the search query
   const filteredCustomers = customers.filter((customer) => {
     const search = searchQuery.toLowerCase();
     return (
@@ -78,8 +68,6 @@ function Customers() {
     <div className="p-8">
       <h2 className="text-2xl font-bold mb-4">Customers List</h2>
       <p className="text-neutral-500 text-sm mb-8">Dashboard / Customers</p>
-
-      {/* Search Input */}
       <input
         type="text"
         placeholder="Search by name, email, address, etc..."
@@ -87,7 +75,6 @@ function Customers() {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded"
       />
-
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -113,7 +100,7 @@ function Customers() {
                 </tr>
               ) : (
                 filteredCustomers
-                  .filter((customer) => customer.role !== 'admin') // Hide admin users
+                  .filter((customer) => customer.role !== 'admin') 
                   .map((customer) => (
                     <tr key={customer._id}>
                       <td className="px-4 py-2 border border-solid">{customer.name}</td>

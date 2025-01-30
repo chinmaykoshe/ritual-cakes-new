@@ -1,48 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Import the CartContext
+import { useCart } from "../context/CartContext";
 function Cart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [errorMessages, setErrorMessages] = useState("");
-  const [loading, setLoading] = useState(false); // State for loading
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const isLoggedIn = !!localStorage.getItem("user"); // Check if user is logged in
-
+  const isLoggedIn = !!localStorage.getItem("user");
   useEffect(() => {
-    setLoading(true); // Set loading to true when component mounts
-    // Simulate data loading (e.g., fetching cart data if needed)
+    setLoading(true); 
     setTimeout(() => {
-      setLoading(false); // Set loading to false after data is "loaded"
-    }, 1000); // You can replace this with actual async data fetching if needed
+      setLoading(false); 
+    }, 1000);
   }, [cart]);
-
-  // Calculate total price
   const calculateTotal = () => {
     return cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
   };
-
-  // Calculate total number of items
   const calculateTotalItems = () => {
     return cart?.reduce((total, item) => total + item.quantity, 0) || 0;
   };
-
   const handleRemoveFromCart = (orderId) => {
     try {
-      removeFromCart(orderId); // Remove item from the cart
+      removeFromCart(orderId);
       setErrorMessages("Item removed successfully.");
-      setTimeout(() => setErrorMessages(""), 3000); // Clear message after 3 seconds
+      setTimeout(() => setErrorMessages(""), 3000);
     } catch (error) {
       setErrorMessages("Error removing item from cart.");
       setTimeout(() => setErrorMessages(""), 3000);
     }
   };
-
   const handleQuantityChange = (orderId, action) => {
     try {
       const item = cart.find((item) => item.orderID === orderId);
       const newQuantity = action === "increment" ? item.quantity + 1 : Math.max(1, item.quantity - 1);
-      updateQuantity(orderId, newQuantity); // Update quantity in the context
+      updateQuantity(orderId, newQuantity);
     } catch (error) {
       setErrorMessages("Error updating quantity.");
       setTimeout(() => setErrorMessages(""), 3000);
@@ -52,7 +43,6 @@ function Cart() {
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
-        {/* Back Button */}
         <div className="mb-6">
           <Link
             to="/"
@@ -62,14 +52,12 @@ function Cart() {
           </Link>
         </div>
         <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
-
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
-
         {!isLoggedIn ? (
           <div className="text-center">
             <p className="text-black font-semibold">Please log in to add items to the cart.</p>
             <button
-              onClick={() => navigate("/login")} // Redirect to login page
+              onClick={() => navigate("/login")}
               className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
             >
               Go to Login
@@ -135,7 +123,7 @@ function Cart() {
             </div>
             <div className="flex justify-center mt-6">
               <button
-                onClick={() => navigate("/checkout")} // Redirect to /checkout
+                onClick={() => navigate("/checkout")}
                 className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
               >
                 Proceed to Checkout

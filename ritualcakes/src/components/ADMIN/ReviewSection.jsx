@@ -2,18 +2,14 @@ import React, { useState, useEffect } from "react";
 
 const ReviewSection = () => {
   const [reviews, setReviews] = useState([]);
-  const [editingReview, setEditingReview] = useState(null); // Tracks the review being edited
+  const [editingReview, setEditingReview] = useState(null);
   const [editedContent, setEditedContent] = useState("");
-  const [error, setError] = useState(""); // To store error messages
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const [error, setError] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
   const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api'
-
-
   useEffect(() => {
     fetchReviews();
   }, []);
-
-  // Fetch reviews from the API
   const fetchReviews = async () => {
     try {
       const response = await fetch(`${apiUrl}/reviews`);
@@ -24,8 +20,6 @@ const ReviewSection = () => {
       console.error("Error fetching reviews:", error);
     }
   };
-
-  // Group reviews by product name
   const groupReviewsByProduct = (reviews) => {
     const grouped = reviews.reduce((acc, review) => {
       const { orderID } = review;
@@ -38,13 +32,9 @@ const ReviewSection = () => {
       reviews,
     }));
   };
-
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-
-  // Filter reviews based on search term
   const filteredReviews = reviews.filter(({ productName, reviews }) => {
     const productMatches = productName.toLowerCase().includes(searchTerm.toLowerCase());
     const reviewsMatch = reviews.some((review) =>
@@ -79,11 +69,9 @@ const ReviewSection = () => {
       setError("Error deleting review");
     }
   };
-
-  // Handle edit review
   const handleEditReview = (review) => {
-    setEditingReview(review._id); // Set the ID of the review being edited
-    setEditedContent(review.content); // Initialize with current content
+    setEditingReview(review._id);
+    setEditedContent(review.content);
   };
 
   const handleSaveEdit = async (reviewID) => {

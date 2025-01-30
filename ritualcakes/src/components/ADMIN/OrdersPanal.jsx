@@ -11,9 +11,7 @@ const OrdersPanel = () => {
   const [filterDate, setFilterDate] = useState("");
   const [filterAmount, setFilterAmount] = useState("");
   const [minAmount, setMinAmount] = useState("");
-
-  const [updatingOrderId, setUpdatingOrderId] = useState(null); // For updating status
-
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const [hideAdminOrders, setHideAdminOrders] = useState(true);
   const [visibleColumns, setVisibleColumns] = useState({
     orderId: true,
@@ -33,40 +31,31 @@ const OrdersPanel = () => {
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const token = localStorage.getItem("token");
-
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/orders`;
-
-
-
   const updateOrderStatus = async (orderId, status) => {
     if (!token) {
       console.error("Token not found");
       return;
     }
-
-    const order = orders.find((order) => order._id === orderId); // Fetch the specific order by ID
-    const userEmail = order ? order.userEmail : null;  // Get the userEmail from the order
-    const itemName = order ? order.orderItems[0].name : "Unknown Item"; // Fetch item name 
-    const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight"; // Fetch item weight 
-
+    const order = orders.find((order) => order._id === orderId);
+    const userEmail = order ? order.userEmail : null;  
+    const itemName = order ? order.orderItems[0].name : "Unknown Item"; 
+    const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight";
     if (!userEmail) {
       console.error("User email not found");
       return;
     }
-
-    // Confirmation dialog before proceeding with the status update
     const confirmationMessage = `Are you sure you want to set ${userEmail}'s order of ${itemName} (Weight: ${itemWeight}) status to ${status}?`;
     const isConfirmed = window.confirm(confirmationMessage);
     if (!isConfirmed) {
-      return;  // User canceled the operation
+      return; 
     }
-
     try {
       const response = await axios.put(
         `${apiUrl}/${orderId}/status`,
         {
-          status: status,  // Order status
-          userEmail: userEmail,  // Include the user email here
+          status: status, 
+          userEmail: userEmail, 
         },
         {
           headers: {
@@ -74,50 +63,35 @@ const OrdersPanel = () => {
           },
         }
       );
-
-      return response.data; // Return response data if update is successful
+      return response.data;
     } catch (error) {
       console.error("Error updating order status:", error.response ? error.response.data : error.message);
       setError("Failed to update order status.");
     }
   };
-
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
-    setUpdatingOrderId(orderId); // Set the updating order ID
-
-    // Update the order status via API
+    setUpdatingOrderId(orderId); 
     const updatedOrder = await updateOrderStatus(orderId, newStatus);
-
     if (updatedOrder) {
-      // Update the state with the updated status
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId
-            ? { ...order, status: newStatus }  // Update the status of the order
+            ? { ...order, status: newStatus } 
             : order
         )
       );
     }
-
-    setUpdatingOrderId(null); // Clear the updating order ID after completion
+    setUpdatingOrderId(null);
   };
-
-
-
-  // Function to delete the order
   const deleteOrder = async (orderId) => {
     const confirmed = window.confirm("Are you sure you want to delete this order?");
     if (!confirmed) return;
-
     setLoading(true);
-
     try {
       if (!token) throw new Error("Token not found. Please log in again.");
       await axios.delete(`${apiUrl}/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Update the orders list
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
     } catch (err) {
       alert(err.response?.data?.message || err.message || "Failed to delete order");
@@ -126,8 +100,6 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
-
-  // Fetch the orders
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -142,12 +114,9 @@ const OrdersPanel = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchOrders();
   }, []);
-
-  // Apply filters to orders
   const filteredOrders = orders.filter((order) => {
     const matchesSearchQuery =
       !searchQuery ||
@@ -161,9 +130,7 @@ const OrdersPanel = () => {
       (filterAmount && !isNaN(filterAmount) && order.totalAmount <= parseFloat(filterAmount));
     const matchesMinAmount = (minAmount === "" || parseFloat(minAmount) === 0) ||
       (minAmount && !isNaN(minAmount) && order.totalAmount >= parseFloat(minAmount));
-
     const notFromAdmin = hideAdminOrders ? order.userEmail !== "ritualcake.admin@gmail.com" : true;
-
     return matchesSearchQuery && matchesStatus && matchesDate && matchesMaxAmount && matchesMinAmount && notFromAdmin;
   });
 
@@ -185,32 +152,24 @@ const OrdersPanel = () => {
 
   const getStatusClass = (status) => {
     const statusClasses = {
-      Pending: "bg-gray-100", // Explicit background for Pending
+      Pending: "bg-gray-100", 
       Completed: "bg-green-100",
       Accepted: "bg-yellow-100",
       Cancelled: "bg-red-100",
     };
-
-    // Default to no background if the status is not recognized
     return statusClasses[status] || "";
   };
-
-
   const handleCheckboxChange = (column) => {
     setVisibleColumns((prev) => ({
       ...prev,
       [column]: !prev[column],
     }));
   };
-
-  // Function to generate CSV data
   const generateCSV = () => {
     const headers = Object.keys(visibleColumns).filter(
       (column) => visibleColumns[column]
     );
-
     const csvData = [
-      // Adding header row
       headers.join(","),
       ...sortedOrders.map((order) =>
         headers
@@ -235,8 +194,6 @@ const OrdersPanel = () => {
 
     return csvData.join("\n");
   };
-
-  // Function to download the CSV file
   const downloadCSV = () => {
     const csvContent = generateCSV();
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -252,10 +209,7 @@ const OrdersPanel = () => {
   return (
     <div className="pt-4 h-full">
       <h2 className="text-xl font-bold mb-4">Orders Panel</h2>
-
-      {/* Filters Section */}
       <div className="flex items-center space-x-4 mb-4">
-        {/* Search Input */}
         <input
           type="text"
           className="border border-gray-400 rounded px-2 py-1 h-10 border-2 border-gray-400"
@@ -263,7 +217,6 @@ const OrdersPanel = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        {/* Filter by Status */}
         <select
           className="border border-gray-400 rounded px-2 border-2 border-gray-400 py-1 h-10"
           value={filterStatus}
@@ -275,14 +228,12 @@ const OrdersPanel = () => {
           <option value="Cancelled">Cancelled</option>
           <option value="Cancelled">Accepted</option>
         </select>
-        {/* Filter by Date */}
         <input
           type="date"
           className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
           value={filterDate}
           onChange={(e) => setFilterDate(e.target.value)}
         />
-        {/* Filter by Minimum Amount */}
         <input
           type="number"
           className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
@@ -291,7 +242,6 @@ const OrdersPanel = () => {
           onChange={(e) => setMinAmount(e.target.value)}
           min="0"
         />
-        {/* Filter by Max Amount */}
         <input
           type="number"
           className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
@@ -299,10 +249,9 @@ const OrdersPanel = () => {
           value={filterAmount}
           onChange={(e) => setFilterAmount(e.target.value)}
         />
-
         <div
           className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
-          title="Hide orders from store" // Tooltip text
+          title="Hide orders from store"
         >
           <input
             type="checkbox"
@@ -315,11 +264,9 @@ const OrdersPanel = () => {
             <i className="fa-solid fa-store"></i>
           </label>
         </div>
-
-        {/* Toggle for Hide/Show Delete Column */}
         <div
           className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
-          title="Show or hide delete column" // Tooltip text
+          title="Show or hide delete column" 
         >
           <input
             type="checkbox"
@@ -334,10 +281,6 @@ const OrdersPanel = () => {
             <i className="fa-solid fa-trash"></i> Delete Column
           </label>
         </div>
-
-
-
-        {/* Dropdown for Show/Hide Columns */}
         <div className="relative">
           <button
             onClick={handleDropdownToggle}
@@ -363,7 +306,6 @@ const OrdersPanel = () => {
             </div>
           )}
         </div>
-        {/* Export Button */}
         <button
           className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 h-10 flex items-center space-x-2"
           onClick={downloadCSV}
@@ -371,9 +313,7 @@ const OrdersPanel = () => {
           <i className="fa-solid fa-download"></i>
           <span>.CSV</span>
         </button>
-
       </div>
-
       <button
         className="bg-blue-500 text-white px-4 py-1 my-4 rounded hover:bg-red-600"
         onClick={() => {
@@ -387,8 +327,6 @@ const OrdersPanel = () => {
       >
         Clear All Filters
       </button>
-
-      {/* Orders Table */}
       {sortedOrders.length === 0 ? (
         <div className="text-center text-lg font-semibold mb-4">No orders yet</div>
       ) : (
@@ -417,19 +355,16 @@ const OrdersPanel = () => {
                   key={`${order._id}-${itemIndex}`}
                   className={getStatusClass(order.status)}
                 >
-                  {/* Merge Order ID */}
                   {itemIndex === 0 && visibleColumns.orderId && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order._id}
                     </td>
                   )}
-                  {/* Merge Customer Email */}
                   {itemIndex === 0 && visibleColumns.email && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order.userEmail}
                     </td>
                   )}
-                  {/* Individual Items */}
                   {visibleColumns.itemName && (
                     <td className="border border-gray-300 px-4 py-2">{item.name}</td>
                   )}
@@ -445,37 +380,31 @@ const OrdersPanel = () => {
                   {visibleColumns.weight && (
                     <td className="border border-gray-300 px-4 py-2">{item.weight}</td>
                   )}
-                  {/* Merge Order Message */}
                   {itemIndex === 0 && visibleColumns.message && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order.cakeMessage}
                     </td>
                   )}
-                  {/* Merge Order Date */}
                   {itemIndex === 0 && visibleColumns.orderDate && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {new Date(order.orderDate).toLocaleDateString()}
                     </td>
                   )}
-                  {/* Merge Order Time */}
                   {itemIndex === 0 && visibleColumns.orderTime && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order.orderTime}
                     </td>
                   )}
-                  {/* Merge Total Amount */}
                   {itemIndex === 0 && visibleColumns.totalAmount && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       ₹{order.totalAmount}
                     </td>
                   )}
-                  {/* Merge Order Status */}
                   {itemIndex === 0 && visibleColumns.status && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order.status}
                     </td>
                   )}
-                  {/* Merge Actions */}
                   {itemIndex === 0 && visibleColumns.actions && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       <select
@@ -494,7 +423,6 @@ const OrdersPanel = () => {
                       )}
                     </td>
                   )}
-                  {/* Merge Delete Order */}
                   {itemIndex === 0 && visibleColumns.delete && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       <button
@@ -509,8 +437,6 @@ const OrdersPanel = () => {
                 </tr>
               ))
             )}
-
-
           </tbody>
         </table>
       )}

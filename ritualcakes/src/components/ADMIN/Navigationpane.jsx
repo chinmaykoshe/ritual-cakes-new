@@ -13,7 +13,6 @@ function NavigationPane() {
         </span>
       </div>
       <hr className='mb-4' />
-
       <nav className="flex flex-col gap-4">
         <NavLink
           to="/admin/dashboards"
@@ -55,9 +54,7 @@ function NavigationPane() {
         >
           IN STORE COLLECTION
         </NavLink>
-
         <hr />
-
         <NavLink
           to="/admin/CakesAvailable"
           className={({ isActive }) =>
@@ -74,9 +71,7 @@ function NavigationPane() {
         >
           AVAILABLE CUSTOMIZATIONS
         </NavLink>
-
         <hr />
-
         <NavLink
           to="/admin/store"
           className={({ isActive }) =>
@@ -85,9 +80,7 @@ function NavigationPane() {
         >
           STORE
         </NavLink>
-
         <hr />
-
         <NavLink
           to="/admin/reviewsection"
           className={({ isActive }) =>
@@ -97,7 +90,6 @@ function NavigationPane() {
           REVIEW SECTION
         </NavLink>
       </nav>
-
       <div className="mt-auto">
         <p
           className="text-neutral-400 mt-8 cursor-pointer"
@@ -105,7 +97,6 @@ function NavigationPane() {
         >
           VIEW STORE
         </p>
-
         <p
           className="text-neutral-400 my-4 cursor-pointer"
           onClick={() => alert('Call Chinmay to get help related to development')}

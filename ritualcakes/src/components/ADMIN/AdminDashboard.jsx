@@ -13,13 +13,8 @@ import StoreOrders from './StoreOrders';
 function AdminDashboard() {
   return (
     <div className="w-full h-full bg-neutral-50 flex bg-white">
-      {/* Fixed Navigation Pane */}
       <NavigationPane />
-
       <main className="flex-1 p-6">
-        {/* Navigation links for routing */}
-
-        {/* Routing the selected component */}
         <Routes>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/customers" element={<Customers />} />

@@ -4,51 +4,36 @@ import { NavLink } from 'react-router-dom';
 import Card from './Card';
 import DesignCard from './DesignCard';
 import { designnames } from '../designs/designassets';
-import { motion } from 'framer-motion'; // Import framer-motion
-import { useInView } from 'react-intersection-observer'; // Import react-intersection-observer
-import '../App.css'; // Import the custom CSS file
-
-// Get the design keys (in this case design1, design2, etc.)
-const designKeys = Object.keys(designnames);
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import '../App.css';
 
 function Home() {
   const [randomDesigns, setRandomDesigns] = useState([]);
-
-  // Hero Section visibility trigger
   const { ref: heroRef, inView: heroInView } = useInView({
-    threshold: 0.5, // When 50% of the Hero section is visible
+    threshold: 0.5,
   });
-
   useEffect(() => {
-    // Function to get random designs
     const getRandomDesigns = () => {
       if (!designnames || typeof designnames !== 'object') return [];
-
-      // Get all design keys
       const designKeys = Object.keys(designnames);
-
-      // Shuffle the array and select the first 4 designs
       const shuffledKeys = designKeys.sort(() => Math.random() - 0.5).slice(0, 4);
       setRandomDesigns(shuffledKeys);
     };
-
     getRandomDesigns();
   }, [designnames]);
-
   const reviews = [
     { id: 1, name: 'Alice', text: 'Amazing cakes! Highly recommend.' },
     { id: 2, name: 'Bob', text: 'Fresh and delicious, every single time.' },
     { id: 3, name: 'Charlie', text: 'Great service and even better cakes.' },
   ];
-
   return (
     <>
-      {/* Hero Section */}
       <motion.div
         className="py-8 px-4 overflow-hidden"
-        ref={heroRef} // Reference for the inView hook
-        initial={{ opacity: 0 }} // Starting opacity
-        animate={{ opacity: heroInView ? 1 : 0 }} // Fade in when it comes into view
+        ref={heroRef} 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: heroInView ? 1 : 0 }} 
         transition={{ duration: 0.4 }}
       >
         <div className="flex flex-col lg:flex-row items-center justify-between">
@@ -98,16 +83,12 @@ function Home() {
           </NavLink>
         </div>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Specials Section */}
       <motion.div
         className="signature-section py-8 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Our Specials</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -115,7 +96,6 @@ function Home() {
             whileInView={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-
           >
             <Card orderID="rituals5" />
           </motion.div>
@@ -123,7 +103,6 @@ function Home() {
             whileInView={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-
           >
             <Card orderID="rituals6" />
           </motion.div>
@@ -131,7 +110,6 @@ function Home() {
             whileInView={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-
           >
             <Card orderID="rituals1" />
           </motion.div>
@@ -139,7 +117,6 @@ function Home() {
             whileInView={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-
           >
             <Card orderID="rituals10" />
           </motion.div>
@@ -147,14 +124,11 @@ function Home() {
       </motion.div>
 
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Categories Section */}
       <motion.div
         className="signature-section py-8 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Explore Our Categories</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -165,11 +139,10 @@ function Home() {
                 whileInView={{ opacity: 1 }}
                 initial={{ opacity: 0 }}
                 transition={{ duration: 0.6 }}
-
               >
                 <DesignCard
-                  designnames={designnames}  // Pass the design data
-                  designKey={designKey}      // Pass the individual design key
+                  designnames={designnames}  
+                  designKey={designKey}      
                 />
               </motion.div>
             ))
@@ -178,16 +151,12 @@ function Home() {
           )}
         </div>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Customer Reviews Section */}
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-2xl font-bold mb-6 text-center text-darkcustombg1">What Our Customers Say</h2>
         <div className="flex flex-col md:flex-row justify-center gap-6">
@@ -198,7 +167,6 @@ function Home() {
               whileInView={{ opacity: 1 }}
               initial={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-
             >
               <h1 className='text-8xl my-[-48px]'>&ldquo;</h1>
               <div className="flex items-center my-4">
@@ -212,16 +180,12 @@ function Home() {
           ))}
         </div>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Baking Process Section */}
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-4xl font-bold text-center text-darkcustombg1">How We Bake</h2>
         <div className="flex flex-col md:flex-row justify-between items-center mt-8">
@@ -235,16 +199,12 @@ function Home() {
           </p>
         </div>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Subscription Section */}
       <motion.div
         className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-3xl font-bold mb-6">Ready to Order Your Favorite Cake?</h2>
         <p className="text-lg">
@@ -261,16 +221,12 @@ function Home() {
           <span className="text-xl">→</span>
         </motion.button>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-
-      {/* Google Maps Section */}
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
-
       >
         <h2 className="text-4xl font-bold text-center text-darkcustombg1">Find Us Here</h2>
         <p className="text-lg text-center mt-4 text-gray-600">

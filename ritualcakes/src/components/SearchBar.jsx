@@ -1,43 +1,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
-import { elements } from "../assets/assets"; // Assuming elements are statically imported
+import { elements } from "../assets/assets"; 
 
 const SearchBar = ({ showSearchBar, setShowSearchBar }) => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(""); // Managing searchQuery internally
-  const [filteredNames, setFilteredNames] = useState([]); // Store filtered name results
-  const [filteredDescriptions, setFilteredDescriptions] = useState([]); // Store filtered description results
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [filteredNames, setFilteredNames] = useState([]);
+  const [filteredDescriptions, setFilteredDescriptions] = useState([]); 
 
-  // Handle search query change and filter items dynamically
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    // Only proceed if the query has some value
     if (query.length > 0) {
       const filteredNamesResults = getFilteredNames(query);
       const filteredDescriptionsResults = getFilteredDescriptions(query);
       setFilteredNames(filteredNamesResults);
       setFilteredDescriptions(filteredDescriptionsResults);
     } else {
-      setFilteredNames([]); // Clear name results when query is empty
-      setFilteredDescriptions([]); // Clear description results when query is empty
+      setFilteredNames([]);
+      setFilteredDescriptions([]); 
     }
   };
-
-  // Handle item click to navigate to product page
   const handleItemClick = (orderID) => {
     navigate(`/product/${orderID}`);
-    setShowSearchBar(false); // Close search bar when item is clicked
+    setShowSearchBar(false); 
   };
-
-  // Close search bar when 'X' is clicked
   const handleCloseSearchBar = () => {
     setShowSearchBar(false);
   };
-
-  // Extract and filter names based on search query
   const getFilteredNames = (query) => {
     const items = Object.values(elements).flatMap((category) =>
       category.map((product) => ({
@@ -50,8 +42,6 @@ const SearchBar = ({ showSearchBar, setShowSearchBar }) => {
       product.searchableName.includes(query.toLowerCase())
     );
   };
-
-  // Extract and filter descriptions based on search query
   const getFilteredDescriptions = (query) => {
     const items = Object.values(elements).flatMap((category) =>
       category.map((product) => ({
@@ -87,14 +77,13 @@ const SearchBar = ({ showSearchBar, setShowSearchBar }) => {
 
           {searchQuery && (
             <ul className="mt-2 mx-4">
-              {/* Product Names Results */}
               {filteredNames.length > 0 && (
                 <div>
                   <h3 className="text-gray-600 font-bold mt-4">Product Names:</h3>
                   {filteredNames.map((product, index) => (
                     <li key={index} className="p-2 hover:bg-gray-100">
                       <span
-                        onClick={() => handleItemClick(product.orderID)} // Navigate to product page
+                        onClick={() => handleItemClick(product.orderID)} 
                         className="text-gray-900 hover:text-black cursor-pointer"
                       >
                         {product.name}
@@ -103,15 +92,13 @@ const SearchBar = ({ showSearchBar, setShowSearchBar }) => {
                   ))}
                 </div>
               )}
-
-              {/* Product Descriptions Results */}
               {filteredDescriptions.length > 0 && (
                 <div>
                   <h3 className="text-gray-600 font-bold mt-4">Product Descriptions:</h3>
                   {filteredDescriptions.map((product, index) => (
                     <li key={index} className="p-2 hover:bg-gray-100">
                       <span
-                        onClick={() => handleItemClick(product.orderID)} // Navigate to product page
+                        onClick={() => handleItemClick(product.orderID)}
                         className="text-gray-900 hover:text-black cursor-pointer"
                       >
                         {product.description}
@@ -120,8 +107,6 @@ const SearchBar = ({ showSearchBar, setShowSearchBar }) => {
                   ))}
                 </div>
               )}
-
-              {/* If no results found */}
               {filteredNames.length === 0 && filteredDescriptions.length === 0 && (
                 <li className="p-2 text-gray-500">No results found</li>
               )}

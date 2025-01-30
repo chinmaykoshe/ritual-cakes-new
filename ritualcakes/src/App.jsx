@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import React from 'react';
-import { BrowserRouter, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
 import About from './components/About';
@@ -20,7 +20,7 @@ import 'react-toastify/ReactToastify.css';
 import './index.css';
 import { CartProvider } from './context/CartContext.jsx';
 import axios from 'axios';
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`; // Set Authorization token
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 import UserDetails from './components/UserButton.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import Customers from './components/ADMIN/Customers.jsx';
@@ -44,12 +44,11 @@ import useAxiosInterceptor from './axios.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/Resetpassword.jsx';
 
-// Redirect to homepage for invalid routes
 function InvalidRouteRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/', { replace: true }); // Navigate to homepage
+    navigate('/', { replace: true });
   }, [navigate]);
 
   return null;
@@ -57,9 +56,9 @@ function InvalidRouteRedirect() {
 
 function App() {
   const location = useLocation();
-  useAxiosInterceptor(); // Initialize Axios interceptor for handling authentication
+  useAxiosInterceptor(); 
 
-  const isAdminPath = location.pathname.startsWith('/admin'); // Check if the route is for the admin panel
+  const isAdminPath = location.pathname.startsWith('/admin'); 
 
   return (
     <div className='container mx-auto max-w-none relative'>
@@ -68,7 +67,6 @@ function App() {
           <OrderProvider>
             <CartProvider>
               <UserProvider>
-                {/* Show Navbar for non-admin routes */}
                 {!isAdminPath && (
                   <div className='z-[1] relative'>
                     <Navbar />
@@ -77,7 +75,6 @@ function App() {
 
                 <div className='z-[0] relative'>
                   <Routes>
-                    {/* Admin routes, all protected by PrivateRoute */}
                     <Route path="/admin" element={<PrivateRoute element={<AdminLayout />} />} >
                       <Route path="/admin/dashboards" element={<PrivateRoute element={<Dashboard />} />} />
                       <Route path="/admin/customers" element={<PrivateRoute element={<Customers />} />} />
@@ -90,7 +87,6 @@ function App() {
                       <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
                     </Route>
 
-                    {/* Public routes */}
                     <Route path='/' element={<Home />} />
                     <Route path='/about' element={<About />} />
                     <Route path='/designs' element={<Designs />} />
@@ -112,7 +108,6 @@ function App() {
                   </Routes>
                 </div>
 
-                {/* Show Footer for non-admin routes */}
                 {!isAdminPath && (
                   <div className='z-[-1] relative'>
                     <Footer />

@@ -2,30 +2,27 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 const CartContext = createContext();
 
-// Provider component
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
-  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/cart`; // Base URL
+  const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/cart`;
 
 
   const token = localStorage.getItem('token');
-  // Load cart on mount
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get(`${apiUrl}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-        setCart(response.data.cartItems); // Set cart items
+        setCart(response.data.cartItems);
       } catch (error) {
         console.error('Error fetching cart items:', error.response?.data || error.message);
       }
     };
     fetchCart();
-  }, []); // Runs only once
+  }, []);
 
-  // Add product to cart
   const addToCart = async (product) => {
     try {
       const token = localStorage.getItem('token');
@@ -34,15 +31,14 @@ export const CartProvider = ({ children }) => {
         { products: [product] },
         { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
-      return response.data; // Return added product details
+      return response.data;
     } catch (error) {
       setSuccessMessage("Failed to add product to cart");
-      setTimeout(() => setSuccessMessage(""), 3000); // Reset message after 3s
+      setTimeout(() => setSuccessMessage(""), 3000);
       return null;
     }
   };
 
-  // Update product quantity
   const updateQuantity = async (orderID, quantity) => {
     try {
       const token = localStorage.getItem('token');
@@ -57,7 +53,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Remove product from cart
   const removeFromCart = async (orderID) => {
     try {
       const token = localStorage.getItem('token');
@@ -73,8 +68,6 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     try {
       const token = localStorage.getItem('token');
-      
-      // Iterate over the cart items and delete each order by its orderID
       for (const item of cart) {
         const orderID = item.orderID;
   
@@ -84,11 +77,10 @@ export const CartProvider = ({ children }) => {
   
         if (response.status !== 200) {
           console.error(`Failed to remove item with orderID: ${orderID}`);
-          return; // Exit the loop if any item removal fails
+          return;
         }
       }
-  
-      // If all deletions were successful, clear the cart in the client state
+
       setCart([]); 
       console.log("All cart items have been removed.");
   
@@ -105,5 +97,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use cart context
 export const useCart = () => useContext(CartContext);

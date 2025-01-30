@@ -1,103 +1,85 @@
 import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-// Create a context for Orders
 const OrderContext = createContext();
-
-// Create a provider component for Orders
 export const OrderProvider = ({ children }) => {
-  const [orders, setOrders] = useState([]); // State to store orders
-  const [error, setError] = useState(null); // State to store errors
-  const [loading, setLoading] = useState(false); // State to manage loading status
-  const isFetching = useRef(false); // Ref to prevent multiple fetch requests simultaneously
-
-  const token = localStorage.getItem('token'); // Get token from localStorage
-
-  // Fetch orders for the user when the component mounts
+  const [orders, setOrders] = useState([]); 
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(false); 
+  const isFetching = useRef(false); 
+  const token = localStorage.getItem('token'); 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (isFetching.current) return; // Avoid redundant API calls
-      isFetching.current = true; // Mark as fetching
+      if (isFetching.current) return;
+      isFetching.current = true;
 
-      setLoading(true); // Set loading to true during data fetch
+      setLoading(true);
       try {
-        const userEmail = localStorage.getItem('user'); // Get user email from localStorage
-
+        const userEmail = localStorage.getItem('user'); 
         if (!token || !userEmail) {
-          throw new Error('Missing authentication details'); // Throw error if missing token or user email
+          throw new Error('Missing authentication details'); 
         }
-
-        // Fetch orders from API with user email and token
         const response = await axios.get(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${userEmail}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setOrders(response.data); // Update orders state with fetched data
+        setOrders(response.data); 
       } catch (error) {
-        setError(error.response?.data?.message || 'Failed to fetch orders'); // Handle fetch errors
+        setError(error.response?.data?.message || 'Failed to fetch orders'); 
       } finally {
-        setLoading(false); // Set loading to false after the request
-        isFetching.current = false; // Reset fetching flag
+        setLoading(false);
+        isFetching.current = false;
       }
     };
-
-    fetchOrders(); // Call the function to fetch orders on mount
-  }, []); // Empty dependency array means this runs only once on component mount
-
-  // Function to create a new order
+    fetchOrders(); 
+  }, []); 
   const createOrder = async (orderData) => {
-    setLoading(true); // Set loading state to true during order creation
+    setLoading(true); 
     try {
       if (!token) {
-        setError('Token not found.'); // Error if token is missing
+        setError('Token not found.'); 
         setLoading(false);
         return;
       }
-      // Send POST request to create a new order
       const response = await axios.post(`https://ritual-cakes-new-ogk5.vercel.app/api/orders`, orderData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
 
-      setOrders((prevOrders) => [...prevOrders, response.data.order]); // Add the new order to the orders list
+      setOrders((prevOrders) => [...prevOrders, response.data.order]); 
     } catch (error) {
-      setError(error.message || 'Failed to create order'); // Handle errors during order creation
+      setError(error.message || 'Failed to create order'); 
     } finally {
-      setLoading(false); // Set loading to false after order creation
+      setLoading(false); 
     }
   };
-
-  // Function to delete an order
   const deleteOrder = async (orderID) => {
-    setLoading(true); // Set loading state to true during order deletion
+    setLoading(true); 
     try {
-      // Send DELETE request to remove an order
       await axios.delete(`https://ritual-cakes-new-ogk5.vercel.app/api/orders/${orderID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Remove deleted order from the state
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderID));
     } catch (error) {
-      setError(error.message || 'Failed to delete order'); // Handle errors during order deletion
+      setError(error.message || 'Failed to delete order');
     } finally {
-      setLoading(false); // Set loading to false after deletion
+      setLoading(false);
     }
   };
 
   return (
     <OrderContext.Provider
       value={{
-        orders, // Provide orders state
-        createOrder, // Provide function to create orders
-        deleteOrder, // Provide function to delete orders
-        error, // Provide error state
-        loading, // Provide loading state
+        orders,
+        createOrder,
+        deleteOrder,
+        error, 
+        loading, 
       }}
     >
-      {children} {/* Render the child components */}
+      {children}
     </OrderContext.Provider>
   );
 };
 
-// Hook to access the Order context
-export const useOrder = () => useContext(OrderContext); // Use the Order context for accessing state and functions
+export const useOrder = () => useContext(OrderContext);
