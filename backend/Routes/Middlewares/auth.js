@@ -5,16 +5,14 @@ const ensureAuthenticated = (req, res, next) => {
     if (!auth || !auth.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Unauthorized. JWT Token required' });
     }
-
-    const token = auth.split(' ')[1]; // Extract the token
+    const token = auth.split(' ')[1]; 
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized. Invalid token format' });
     }
-
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Attach decoded token to request
-        next(); // Proceed to the next middleware/route
+        req.user = decoded;
+        next();
     } catch (err) {
         return res.status(401).json({ message: 'Unauthorized. JWT Token invalid or expired' });
     }

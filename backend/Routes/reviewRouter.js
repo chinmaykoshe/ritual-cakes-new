@@ -2,19 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Review = require("../Models/Review");
 const router = express.Router();
-const ensureAuthenticated = require("./Middlewares/auth"); // Import the authentication middleware
-
-// -------------------------- Helper Functions --------------------------
-
-// Validate that orderID is a valid string
+const ensureAuthenticated = require("./Middlewares/auth"); 
 const validateOrderID = (orderID) => typeof orderID === "string" && orderID.trim().length > 0;
-
-// Validate that reviewID is a valid MongoDB ObjectId
 const validateReviewID = (reviewID) => mongoose.Types.ObjectId.isValid(reviewID);
 
-// -------------------------- USER ROUTES --------------------------
-
-// Backend route for fetching all reviews (public access)
 router.get("/reviews", async (req, res) => {
   try {
     const reviews = await Review.find().sort({ createdAt: -1 });
@@ -24,8 +15,6 @@ router.get("/reviews", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch reviews" });
   }
 });
-
-// GET reviews for a specific order (public access)
 router.get("/reviews/:orderID", async (req, res) => {
   const { orderID } = req.params;
 
@@ -46,8 +35,6 @@ router.get("/reviews/:orderID", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch reviews" });
   }
 });
-
-// POST a new review (requires authentication)
 router.post("/reviews/:orderID", ensureAuthenticated, async (req, res) => {
   const { orderID } = req.params;
   const { content, authorName } = req.body;
@@ -77,8 +64,6 @@ router.post("/reviews/:orderID", ensureAuthenticated, async (req, res) => {
     res.status(500).json({ error: "Failed to post review" });
   }
 });
-
-// PUT a review (for editing, requires authentication)
 router.put("/reviews/:reviewID", ensureAuthenticated, async (req, res) => {
   const { reviewID } = req.params;
   const { content } = req.body;
@@ -108,10 +93,6 @@ router.put("/reviews/:reviewID", ensureAuthenticated, async (req, res) => {
     res.status(500).json({ error: "Failed to update review" });
   }
 });
-
-// -------------------------- ADMIN ROUTES --------------------------
-
-// DELETE a review (by reviewID, requires authentication)
 router.delete("/reviews/:orderID/:reviewID", ensureAuthenticated, async (req, res) => {
   const { orderID, reviewID } = req.params;
 

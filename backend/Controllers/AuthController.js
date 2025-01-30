@@ -1,29 +1,19 @@
 const UserModel = require("../Models/User");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const transporter = require('../Controllers/mailer'); // Import mailer configuration
+const transporter = require('../Controllers/mailer'); 
 
-
-// Signup function
 const signup = async (req, res) => {
     try {
         let { name, surname, email, password, address, mobile, dob, role } = req.body;
-
-        // Default role as "user" if not provided
         role = role || "user";
-
-        // Check if the user already exists
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(409).json({ message: "User already exists...", success: false });
         }
-
-        // Create and save the new user
         const userModel = new UserModel({ name, surname, email, password, address, mobile, dob, role });
         userModel.password = await bcrypt.hash(password, 10);
         await userModel.save();
-
-        // Prepare the email content
         const signupEmailHtml = `
         <!DOCTYPE html>
         <html>
@@ -110,24 +100,18 @@ const signup = async (req, res) => {
         </body>
         </html>
         `;
-
-        // Email options for the user
         const mailOptionsUser = {
             from: 'ritualcakes2019@gmail.com',
             to: userModel.email,
             subject: `Welcome to RITUAL CAKES`,
             html: signupEmailHtml,
         };
-
-        // Email options for the admin
         const mailOptionsAdmin = {
             from: 'ritualcakes2019@gmail.com',
             to: 'ritualcakes2019@gmail.com',
             subject: `New SIGN UP FROM ${userModel.email}`,
             html: signupEmailHtml,
         };
-
-        // Send emails
         try {
             await transporter.sendMail(mailOptionsUser);
             console.log('Email sent to user successfully');
@@ -141,41 +125,31 @@ const signup = async (req, res) => {
         } catch (error) {
             console.error('Error sending email to admin:', error.message);
         }
-
-        // Send success response
         res.status(201).json({ message: "Signup successfully", success: true });
     } catch (err) {
         res.status(500).json({ message: "Internal server error", success: false });
         console.error('Signup error:', err.message);
     }
 };
-
-// Login function with enhancements
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Validate input
         if (!email || !password) {
             return res.status(400).json({ message: "Email and password are required.", success: false });
         }
-
         const user = await UserModel.findOne({ email });
         if (!user) {
             return res.status(403).json({ message: "Invalid credentials.", success: false });
         }
-
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
             return res.status(403).json({ message: "Invalid credentials.", success: false });
         }
-
         const jwtToken = jwt.sign(
             { email: user.email, _id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "1w" }
         );
-
         res.status(200).json({
             message: "Login successfully",
             success: true,
@@ -188,24 +162,17 @@ const login = async (req, res) => {
         res.status(500).json({ message: "Internal server error", success: false });
     }
 };
-
-// Get user by email (from token)
 const getUserByEmail = async (req, res) => {
-    const token = req.headers.authorization; // Correctly extract token
-
+    const token = req.headers.authorization;
     if (!token) {
         return res.status(403).json({ message: "No token provided", success: false });
     }
-
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
         const user = await UserModel.findOne({ email: req.params.email });
-
         if (!user) {
             return res.status(404).json({ message: "User not found", success: false });
         }
-
         res.status(200).json({
             success: true,
             name: user.name,
@@ -216,12 +183,10 @@ const getUserByEmail = async (req, res) => {
             address: user.address,
         });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         res.status(500).json({ message: "Internal server error", success: false });
     }
 };
-
-
 module.exports = {
     signup,
     login,

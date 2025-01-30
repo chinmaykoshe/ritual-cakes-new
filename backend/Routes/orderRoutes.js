@@ -2,11 +2,8 @@ const express = require('express');
 const router = express.Router();
 const OrderModel = require('../Models/Order');
 const UserModel = require('../Models/User');
-const ensureAuthenticated = require('./Middlewares/auth'); // Import the middleware
-const transporter = require('../Controllers/mailer'); // Import mailer configuration
-
-
-// Middleware to fetch orders based on userEmail
+const ensureAuthenticated = require('./Middlewares/auth'); 
+const transporter = require('../Controllers/mailer'); 
 const getUserOrders = async (req, res, next) => {
   try {
     const { userEmail } = req.params;
@@ -22,8 +19,6 @@ const getUserOrders = async (req, res, next) => {
     res.status(500).json({ message: 'Error fetching orders', error: error.message });
   }
 };
-
-// Get all orders (Admin only)
 router.get('/orders', ensureAuthenticated, async (req, res) => {
   try {
     const orders = await OrderModel.find().sort({ createdAt: -1 });
@@ -33,7 +28,6 @@ router.get('/orders', ensureAuthenticated, async (req, res) => {
   }
 });
 
-// Create a new order (Authenticated users)
 router.post('/orders', ensureAuthenticated, async (req, res) => {
   try {
     const {
@@ -46,35 +40,22 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       orderDate,
       orderTime,
     } = req.body;
-
-    // Validation for required fields
     if (!userEmail || !orderItems || !totalAmount || !deliveryAddress || !paymentMethod || !orderDate) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
-
-    // Validate payment method
     const validPaymentMethods = ['COD', 'Online'];
     if (!validPaymentMethods.includes(paymentMethod)) {
       return res.status(400).json({ message: 'Invalid payment method' });
     }
-
-    // Validate cake message length
     if (cakeMessage && cakeMessage.length > 100) {
       return res.status(400).json({ message: 'Cake message must be 100 characters or less' });
     }
-
-    // Normalize email
     const userEmailNormalized = userEmail.toLowerCase();
-
-    // Fetch user details
     const user = await UserModel.findOne({ email: userEmailNormalized });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
     const userName = `${user.name} ${user.surname}`;
-
-    // Create new order
     const newOrder = new OrderModel({
       userEmail: userEmailNormalized,
       orderItems,
@@ -87,9 +68,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       status: 'Pending',
       createdAt: new Date(),
     });
-
     await newOrder.save();
-
     const orderDetailsHtml = `
     <!DOCTYPE html>
     <html>
@@ -183,94 +162,66 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
         </footer>
       </body>
     </html>`;
-
-    // Email options
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
       to: userEmail,
       subject: `Order Confirmation: ${newOrder._id}`,
       html: orderDetailsHtml,
     };
-
     const mailOptionsAdmin = {
       from: 'ritualcakes2019@gmail.com',
       to: 'ritualcakes2019@gmail.com',
       subject: `New Order: ${newOrder._id}`,
       html: orderDetailsHtml,
     };
-
-    // Send emails
     await transporter.sendMail(mailOptionsUser);
     await transporter.sendMail(mailOptionsAdmin);
-
     res.status(201).json({ message: 'Order placed successfully!', order: newOrder });
   } catch (error) {
     console.error('Error:', error.message);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
-
-
-
-// Get all orders for a specific user (Authenticated users only)
 router.get('/orders/:userEmail', ensureAuthenticated, getUserOrders, (req, res) => {
-  // Ensure the user can only see their own orders (case insensitive)
   if (req.user.email.toLowerCase() !== req.params.userEmail.toLowerCase()) {
     return res.status(403).json({ message: 'Access forbidden: You can only view your own orders' });
   }
   res.status(200).json(req.userOrders);
 });
-
-
-// Delete an order by ID (Admin only)
 router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
   try {
     const { orderID } = req.params;
-
     const deletedOrder = await OrderModel.findByIdAndDelete(orderID);
-
     if (!deletedOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
     res.status(200).json({ message: 'Order deleted successfully', orderID });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
 
-
-
-
 router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { status, userEmail } = req.body;  // Extract userEmail and status from the request body
-
+    const { status, userEmail } = req.body;
     if (!userEmail) {
-      return res.status(400).json({ message: 'userEmail is required' });  // Ensure email is provided
+      return res.status(400).json({ message: 'userEmail is required' }); 
     }
-
     const validStatuses = ['Pending', 'Completed', 'Cancelled', 'Accepted'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
-
-    // Find and update the order
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       orderId,
       { status },
-      { new: true }  // This ensures the updated document is returned
+      { new: true } 
     );
 
     if (!updatedOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
-    // No need to fetch userEmail from updatedOrder since it's passed from the frontend
     console.log("User email received:", userEmail);
-
-    // Construct HTML for the email
     const orderDetailsHtml = `
     <!DOCTYPE html>
     <html>
@@ -365,32 +316,22 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
         </footer>
       </body>
     </html>`;
-            
-            
-    // Email options to send to the user
     const mailOptionsUser = {
-      from: 'ritualcakes2019@gmail.com', // Sender email
-      to: userEmail,  // Use the userEmail passed from the frontend
-      subject: `ORDER WAS ${status} FOR ${updatedOrder._id}`,  // Subject line
-      html: orderDetailsHtml,  // The HTML content of the email
+      from: 'ritualcakes2019@gmail.com', 
+      to: userEmail, 
+      subject: `ORDER WAS ${status} FOR ${updatedOrder._id}`, 
+      html: orderDetailsHtml, 
     };
-
-    // Send email to the user
     try {
       await transporter.sendMail(mailOptionsUser);
       console.log('Email sent to user successfully');
     } catch (error) {
       console.error('Error sending email to user:', error.message);
     }
-
-    // Respond back with success message and updated order
     res.status(200).json({ message: 'Order status updated successfully', order: updatedOrder });
   } catch (error) {
-    // In case of any errors, send a 500 status with error message
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
-
-
 
 module.exports = router;

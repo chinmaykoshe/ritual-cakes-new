@@ -4,39 +4,30 @@ const jwt = require("jsonwebtoken");
 const transporter = require("../Controllers/mailer");
 const User = require("../Models/User");
 const router = express.Router();
-
-const JWT_SECRET = process.env.JWT_SECRET; // Use environment variable
-const RESET_TOKEN_EXPIRATION = "1h"; // Token valid for 1 hour
-const FRONTEND_URL = 'https://ritual-cakes--alpha.vercel.app/'; // Dynamic frontend URL
+const JWT_SECRET = process.env.JWT_SECRET;
+const RESET_TOKEN_EXPIRATION = "1h";
+const FRONTEND_URL = 'https://ritual-cakes--alpha.vercel.app/';
 
 router.post("/forgot-password", async (req, res) => {
-    const { email } = req.body;
+  const { email } = req.body;
 
-    try {
-        // Check if user exists
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        // Check if reset email has already been sent
-        if (user.passwordResetSent) {
-            return res.status(400).json({ message: "Password reset email already sent" });
-        }
-
-        // Generate a reset token
-        const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
-            expiresIn: RESET_TOKEN_EXPIRATION,
-        });
-
-        // Send reset link via email
-        const resetLink = `${FRONTEND_URL}/reset-password/${resetToken}`;
-        await transporter.sendMail({
-            from: "no-reply@ritualcakes.com",
-            to: email,
-            subject: "Password Reset Request at Ritual Cakes",
-            html: `
-        
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.passwordResetSent) {
+      return res.status(400).json({ message: "Password reset email already sent" });
+    }
+    const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: RESET_TOKEN_EXPIRATION,
+    });
+    const resetLink = `${FRONTEND_URL}/reset-password/${resetToken}`;
+    await transporter.sendMail({
+      from: "no-reply@ritualcakes.com",
+      to: email,
+      subject: "Password Reset Request at Ritual Cakes",
+      html: `
 <!DOCTYPE html>
 <html>
   <head>
@@ -96,66 +87,46 @@ router.post("/forgot-password", async (req, res) => {
     </footer>
   </body>
 </html>
-
-        
         `,
-        });
+    });
 
-        // Mark that the reset email has been sent
-        user.passwordResetSent = true;
-        await user.save();
+    user.passwordResetSent = true;
+    await user.save();
 
-        res.status(200).json({ message: "Reset password link sent to your email" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error sending reset link", error });
-    }
+    res.status(200).json({ message: "Reset password link sent to your email" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error sending reset link", error });
+  }
 });
-
-
-// Reset Password Route
 router.post("/reset-password/:token", async (req, res) => {
-    const { newPassword } = req.body;
-    const { token } = req.params; // Get token from URL params
-
-    if (!token || !newPassword) {
-        return res.status(400).json({ message: "Token and new password are required" });
+  const { newPassword } = req.body;
+  const { token } = req.params; 
+  if (!token || !newPassword) {
+    return res.status(400).json({ message: "Token and new password are required" });
+  }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = decoded.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-
-    try {
-        // Verify the token
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const userId = decoded.userId;
-
-        // Find the user by ID
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        // Validate the new password
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-        if (!passwordRegex.test(newPassword)) {
-            return res.status(400).json({ message: "Password must be at least 8 characters long and contain at least one letter and one number" });
-        }
-
-        // Hash the new password
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        // Update the user's password
-        user.password = hashedPassword;
-        await user.save();
-
-        res.status(200).json({ message: "Password reset successful" });
-    } catch (error) {
-        console.error(error);
-
-        if (error.name === "JsonWebTokenError") {
-            return res.status(400).json({ message: "Invalid or expired token" });
-        }
-
-        res.status(500).json({ message: "Error resetting password", error });
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long and contain at least one letter and one number" });
     }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error(error);
+    if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+    res.status(500).json({ message: "Error resetting password", error });
+  }
 });
 
 module.exports = router;

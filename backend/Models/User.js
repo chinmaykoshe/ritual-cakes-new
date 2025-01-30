@@ -9,7 +9,7 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
         match: [/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please provide a valid email address'],
-        set: (email) => email.toLowerCase() // Automatically convert email to lowercase
+        set: (email) => email.toLowerCase() 
     },
     mobile: {
         type: String,
@@ -19,20 +19,17 @@ const UserSchema = new Schema({
     dob: { type: Date },
     address: { type: String, required: true },
     password: { type: String, required: true },
-
     cartProducts: [{
-        orderID: { type: String, required: true }, // Use orderID here
+        orderID: { type: String, required: true }, 
         name: { type: String },
         quantity: { type: Number, default: 1 },
         weight: { type: String },
         shape: { type: String },
         img: { type: String },
-        price: { type: Number }, // Store price
+        price: { type: Number }, 
     }],
-
-    role: { type: String, enum: ['user', 'admin'], default: 'user' }, // Add role
-
-}, { timestamps: true }); // Automatically add createdAt and updatedAt timestamps
+    role: { type: String, enum: ['user', 'admin'], default: 'user' }, 
+}, { timestamps: true });
 
 const UserModel = mongoose.model('users', UserSchema);
 module.exports = UserModel;

@@ -5,16 +5,11 @@ const transporter = require('../Controllers/mailer');
 
 router.post('/customizations', async (req, res) => {
   try {
-    // Destructure form data from request body
     const { name, email, phone, address, size, cakeType, flavor, message, specialInstructions, deliveryDate, imageOrDesign } = req.body;
-
-    // Ensure deliveryDate is at least 2 days ahead
     const twoDaysLater = moment().add(2, 'days').startOf('day').toDate();
     if (new Date(deliveryDate) < twoDaysLater) {
       return res.status(400).json({ message: "Delivery date must be at least two days from now." });
     }
-
-    // Create the customization
     const customization = new Customization({
       name,
       email,
@@ -27,13 +22,10 @@ router.post('/customizations', async (req, res) => {
       specialInstructions,
       deliveryDate,
       imageOrDesign,
-      approvalStatus: 'pending', // Default approval status
-      price: 0 // Default price
+      approvalStatus: 'pending',
+      price: 0 
     });
-
-    // Save the customization to the database
     await customization.save();
-
     const customizationDetailsHtml = `
     <!DOCTYPE html>
     <html>
@@ -113,26 +105,20 @@ router.post('/customizations', async (req, res) => {
         </footer>
       </body>
     </html>`;
-
-    // Email options
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
       to: customization.email,
       subject: `Order Confirmation: ${customization._id}`,
       html: customizationDetailsHtml,
     };
-
     const mailOptionsAdmin = {
       from: 'ritualcakes2019@gmail.com',
       to: 'ritualcakes2019@gmail.com',
       subject: `New Order: ${customization._id}`,
       html: customizationDetailsHtml,
     };
-
-    // Send emails
     await transporter.sendMail(mailOptionsUser);
     await transporter.sendMail(mailOptionsAdmin);
-
     res.status(201).json({ message: "Customization created successfully", customization });
   } catch (error) {
     console.error(error);
@@ -140,10 +126,6 @@ router.post('/customizations', async (req, res) => {
   }
 });
 
-/**
- * GET route to fetch all customizations
- * This route allows users to view all their customization requests.
- */
 router.get('/customizations', async (req, res) => {
   try {
     const customizations = await Customization.find();
@@ -156,7 +138,6 @@ router.get('/customizations', async (req, res) => {
 
 router.get('/customizations/:email', async (req, res) => {
   try {
-    // Find customization by email instead of id
     const customizations = await Customization.find({ email: req.params.email });
 
     if (customizations.length === 0) {
@@ -171,35 +152,25 @@ router.get('/customizations/:email', async (req, res) => {
 
 router.put('/customizations/:id', async (req, res) => {
   try {
-    const { id } = req.params; // Extract the customization ID from the route parameter
-    const { approvalStatus, price } = req.body; // Extract only approvalStatus and price from the request body
-
-    const validStatuses = ['pending', 'approved', 'rejected']; // Define valid approval statuses
+    const { id } = req.params;
+    const { approvalStatus, price } = req.body; 
+    const validStatuses = ['pending', 'approved', 'rejected'];
     if (!validStatuses.includes(approvalStatus)) {
       return res.status(400).json({ message: "Invalid approval status value" });
     }
-
-    // Find the customization and update it
     const updatedCustomization = await Customization.findByIdAndUpdate(
       id,
       { approvalStatus, price },
-      { new: true } // Ensure the updated document is returned
+      { new: true } 
     );
-
     if (!updatedCustomization) {
       return res.status(404).json({ message: "Customization not found" });
     }
-
-    // Get the email from the database record
     const email = updatedCustomization.email;
-
     if (!email) {
       return res.status(400).json({ message: "Email not found for this customization" });
     }
-
     console.log("Email fetched from database:", email);
-
-    // Construct HTML for the email
     const orderDetailsHtml = `
     <!DOCTYPE html>
     <html>
@@ -269,27 +240,20 @@ router.put('/customizations/:id', async (req, res) => {
         </footer>
       </body>
     </html>`;
-
-    // Email options to send to the user
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
       to: email, 
       subject: `Customization Status Updated as ${approvalStatus} for ${updatedCustomization._id}`,
       html: orderDetailsHtml,
     };
-
-    // Send email to the user
     try {
       await transporter.sendMail(mailOptionsUser);
       console.log('Email sent to user successfully');
     } catch (error) {
       console.error('Error sending email to user:', error.message);
     }
-
-    // Respond back with success message and updated customization
     res.status(200).json({ message: "Customization status updated successfully", customization: updatedCustomization });
   } catch (error) {
-    // In case of any errors, send a 500 status with error message
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
