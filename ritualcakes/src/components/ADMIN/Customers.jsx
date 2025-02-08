@@ -41,8 +41,7 @@ function Customers() {
     const confirmDelete = window.confirm('Are you sure you want to delete this customer?');
     if (confirmDelete) {
       try {
-
-        await axios.delete(apiUrl, {
+        await axios.delete(`${apiUrl}/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCustomers((prev) => prev.filter((customer) => customer._id !== id));
@@ -53,6 +52,7 @@ function Customers() {
       }
     }
   };
+
   const filteredCustomers = customers.filter((customer) => {
     const search = searchQuery.toLowerCase();
     return (
