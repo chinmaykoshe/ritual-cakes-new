@@ -132,8 +132,6 @@ function Orders() {
 >
   Cancel Order
 </button>
-                        Cancel Order
-                      </button>
                     </div>
                   </div>
                 ))}
