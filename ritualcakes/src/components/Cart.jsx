@@ -11,7 +11,7 @@ function Cart() {
     setLoading(true); 
     setTimeout(() => {
       setLoading(false); 
-    }, 2000);
+    }, 1000);
   }, [cart]);
   const calculateTotal = () => {
     return cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
