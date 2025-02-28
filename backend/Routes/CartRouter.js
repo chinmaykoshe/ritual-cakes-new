@@ -4,20 +4,16 @@ const ensureAuthenticated = require('./Middlewares/auth');
 const UserModel = require('../Models/User'); 
 
 router.get('/cart', ensureAuthenticated, async (req, res) => {
-    console.log("GET /cart - Fetching cart items");
     try {
         const user = await UserModel.findById(req.user._id); 
-        console.log("User fetched:", user);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
         const cartItems = user.cartProducts; 
-        console.log("Cart items retrieved:", cartItems);
-        return res.status(200).json({ cartItems, exampleProduct }); 
+        return res.status(200).json({ cartItems }); 
     } catch (error) {
         console.error("Error fetching cart items:", error);
-        return res.status(500).json({ message: 'Error fetching cart items' });
+        return res.status(500).json({ message: 'Error fetching cart items', error });
     }
 });
 

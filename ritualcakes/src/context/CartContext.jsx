@@ -6,18 +6,19 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/cart`;
-
-
   const token = localStorage.getItem('token');
+
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get(apiUrl, {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setCart(response.data.cartItems);
+        console.log("Cart API Response:", response.data);
+        setCart(response.data.cartItems || []);
       } catch (error) {
-        console.error('Error fetching cart items:', error.response?.data || error.message);
+        console.error("Error fetching cart items:", error);
+        console.log("Full Error Response:", error.response?.data || error.message);
       }
     };
     fetchCart();
@@ -91,7 +92,7 @@ export const CartProvider = ({ children }) => {
   
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart , clearCart }}>
+    <CartContext.Provider value={{ cart , addToCart, updateQuantity, removeFromCart , clearCart }}>
       {children}
     </CartContext.Provider>
   );
