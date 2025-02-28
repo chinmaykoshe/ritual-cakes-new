@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`${apiUrl}`, {
+        const response = await axios.get(apiUrl, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         setCart(response.data.cartItems);
