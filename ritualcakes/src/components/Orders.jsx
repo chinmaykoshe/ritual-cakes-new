@@ -122,11 +122,16 @@ function Orders() {
                     </div>
                     <div className="mt-4 flex justify-center">
                       <button
-                        onClick={() => alert("Call +91 --------- to cancel the order")}
-                        className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
-                      >
-                        Cancel Order
-                      </button>
+  onClick={() => {
+    const confirmCall = window.confirm("Call +91 --------- to cancel the order?");
+    if (confirmCall) {
+      window.location.href = "tel:+91---------";
+    }
+  }}
+  className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+>
+  Cancel Order
+</button>
                     </div>
                   </div>
                 ))}
@@ -201,11 +206,16 @@ function Orders() {
 
                   <div className="mt-4 flex justify-center">
                     <button
-                      onClick={() => alert("Call +91 --------- to cancel the order")}
-                      className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
-                    >
-                      Cancel Customization
-                    </button>
+  onClick={() => {
+    const confirmCall = window.confirm("Call +91 --------- to cancel the order?");
+    if (confirmCall) {
+      window.location.href = "tel:+91---------";
+    }
+  }}
+  className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+>
+  Cancel Order
+</button>
                   </div>
                 </div>
               ))}
