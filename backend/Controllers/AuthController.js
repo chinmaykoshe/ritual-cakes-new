@@ -139,7 +139,7 @@ const login = async (req, res) => {
         }
         const user = await UserModel.findOne({ email });
         if (!user) {
-            return res.status(403).json({ message: "Invalid credentials.", success: false });
+            return res.status(403).json({ message: "New Email detected", success: false });
         }
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
