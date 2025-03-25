@@ -47,12 +47,10 @@ function Login() {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        if (response.status === 404) {
-            throw new Error('User not found!');
-        } else if (response.status === 401) {
+        if (response.status === 401) {
             throw new Error('Incorrect credentials!');
         } else {
-            throw new Error('An unexpected error occurred!');
+            throw new Error('User not found!');
         }
     }    
       const { token, email, role } = await response.json();
