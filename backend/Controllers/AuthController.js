@@ -139,11 +139,11 @@ const login = async (req, res) => {
         }
         const user = await UserModel.findOne({ email });
         if (!user) {
-            return res.status(403).json({ message: "New Email detected", success: false });
+            return res.status(404).json({ message: "New Email detected", success: false });
         }
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
-            return res.status(404).json({ message: "Invalid credentials.", success: false });
+            return res.status(401).json({ message: "Invalid credentials.", success: false });
         }
         const jwtToken = jwt.sign(
             { email: user.email, _id: user._id, role: user.role },

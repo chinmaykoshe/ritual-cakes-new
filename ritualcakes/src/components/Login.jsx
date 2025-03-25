@@ -47,8 +47,14 @@ function Login() {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error('Incorrect credentials!');
-      }
+        if (response.status === 404) {
+            throw new Error('User not found!');
+        } else if (response.status === 401) {
+            throw new Error('Incorrect credentials!');
+        } else {
+            throw new Error('An unexpected error occurred!');
+        }
+    }    
       const { token, email, role } = await response.json();
       localStorage.setItem('token', token);
       localStorage.setItem('user', email.toLowerCase());
