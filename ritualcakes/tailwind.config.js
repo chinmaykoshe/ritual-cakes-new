@@ -20,6 +20,7 @@ export default {
         darkcustombg:'rgb(255, 228, 208)',
         darkcustombg1:'rgb(72, 37, 11)',
         darkcustombg2:'rgb(255, 192, 143)',
+        darkcustombg3:'rgb(255, 170, 105)',
        },
 
     },
