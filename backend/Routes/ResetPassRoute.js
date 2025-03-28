@@ -61,7 +61,7 @@ router.post("/forgot-password", async (req, res) => {
       }
 
       .btn:hover {
-        background-color: rgb(44, 44, 44);
+        background-color: rgb(255, 170, 105);
       }
 
       footer {
