@@ -61,7 +61,6 @@ function Login() {
       setTimeout(() => {
         setSucessMessages('Sign in sucess ! Redirecting...');
       }, 3000);
-
     } catch (error) {
       setErrorMessages(error.message || 'An error occurred during sign-in. Please try again later.');
     } finally {
@@ -71,7 +70,10 @@ function Login() {
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
   };
-
+  const handleFocus = () => {
+    setErrorMessages('');
+  };
+  
   return (
     <div className="flex justify-center items-center min-h-screen ">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg mt-2 lg:mt-16">
@@ -100,6 +102,7 @@ function Login() {
               name="password"
               value={signInData.password}
               onChange={handleChange}
+              onFocus={handleFocus}
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none pr-10"
               required
             />
