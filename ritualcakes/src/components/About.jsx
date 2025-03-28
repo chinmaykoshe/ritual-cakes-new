@@ -2,9 +2,9 @@ import React from 'react';
 
 function About() {
   const reviews = [
-    { id: 1, name: "John Doe", text: "Amazing cakes! Highly recommend!" },
-    { id: 2, name: "Jane Smith", text: "The chocolates were incredible!" },
-    { id: 3, name: "Emily darkcustombg1", text: "Delicious cupcakes, will order again!" }
+    { id: 1, name: "John Thakur", text: "Amazing cakes! Highly recommend!" },
+    { id: 2, name: "Jane Mhate", text: "The chocolates were incredible!" },
+    { id: 3, name: "Emily Patil", text: "Delicious cupcakes, will order again!" }
   ];
 
   return (
@@ -16,7 +16,7 @@ function About() {
             <div className="md:ml-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Custom Bakes</h2>
               <p className="text-lg text-gray-700 mb-4">
-                At Ritual Cakes in Navi Mumbai, we offer a variety of freshly baked treats for all your special occasions. From sponge to chocolate cakes, we customize each cake to your preference...
+                At Ritual Cakes in Uran, we offer a variety of freshly baked treats for all your special occasions. From sponge to chocolate cakes, we customize each cake to your preference...
               </p>
               <p className="text-lg text-gray-700 mb-4">
                 For inquiries or to place an order, call us at <a href="tel:+917021482775" className="text-blue-600 hover:text-blue-800">+91 7021482775</a> or DM us on Instagram or Facebook.

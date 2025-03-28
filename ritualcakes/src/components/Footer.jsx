@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 
 function Footer() {
@@ -8,7 +9,9 @@ function Footer() {
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap md:flex-nowrap justify-between">
             <div className="w-full md:w-1/3 mb-6 md:mb-0 pl-4 pr-20 ">
-              <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>
+              <Link to="/about">
+                <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>
+              </Link>
               <p className="text-gray-700">
                 At Ritual Cakes, we are passionate about baking the finest cakes and goodies, always fresh from the oven.
               </p>
@@ -37,12 +40,21 @@ function Footer() {
                 Dronagiri, Uran-400702, Raigad, Maharashtra, India
               </address>
               <p className="mt-4">
-                <i className="fa fa-phone mr-2"></i>+91 8169296802
+                <i className="fa fa-phone mr-2"></i>
+                <a href="tel:+918169296802" className="text-gray-700 hover:text-darkcustombg1">
+                  +91 8169296802
+                </a>
                 <br />
-                <i className="fa fa-phone mr-2"></i>+91 7021482775
+                <i className="fa fa-phone mr-2"></i>
+                <a href="tel:+917021482775" className="text-gray-700 hover:text-darkcustombg1">
+                  +91 7021482775
+                </a>
               </p>
               <p className="mt-2">
-                <i className="fa fa-envelope mr-2"></i> ritualcakes2019@gmail.com
+                <i className="fa fa-envelope mr-2"></i>
+                <a href="mailto:ritualcakes2019@gmail.com" className="text-gray-700 hover:text-darkcustombg1">
+                  ritualcakes2019@gmail.com
+                </a>
               </p>
             </div>
           </div>

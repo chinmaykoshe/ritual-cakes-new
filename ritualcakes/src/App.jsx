@@ -109,7 +109,7 @@ function App() {
                 </div>
 
                 {!isAdminPath && (
-                  <div className='z-[-1] relative'>
+                  <div className='z-[0] relative'>
                     <Footer />
                   </div>
                 )}

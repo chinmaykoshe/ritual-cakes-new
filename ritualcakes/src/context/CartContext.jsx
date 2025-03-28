@@ -27,6 +27,19 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product) => {
     try {
       const token = localStorage.getItem('token');
+      const existingItem = cart.find((item) => item.orderID === product.orderID);
+      let updatedCart;
+      if (existingItem) {
+        updatedCart = cart.map((item) =>
+          item.orderID === product.orderID
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        updatedCart = [...cart, { ...product, quantity: 1 }];
+      }
+      setCart(updatedCart);
+
       const response = await axios.post(
         `${apiUrl}/add`,
         { products: [product] },
@@ -39,7 +52,6 @@ export const CartProvider = ({ children }) => {
       return null;
     }
   };
-
   const updateQuantity = async (orderID, quantity) => {
     try {
       const token = localStorage.getItem('token');
@@ -71,28 +83,27 @@ export const CartProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       for (const item of cart) {
         const orderID = item.orderID;
-  
+
         const response = await axios.delete(`${apiUrl}/remove/${orderID}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-  
+
         if (response.status !== 200) {
           console.error(`Failed to remove item with orderID: ${orderID}`);
           return;
         }
       }
 
-      setCart([]); 
+      setCart([]);
       console.log("All cart items have been removed.");
-  
+
     } catch (error) {
       console.error("Error clearing cart:", error);
     }
   };
-  
 
   return (
-    <CartContext.Provider value={{ cart , addToCart, updateQuantity, removeFromCart , clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
