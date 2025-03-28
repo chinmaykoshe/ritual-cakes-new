@@ -171,7 +171,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
     const mailOptionsAdmin = {
       from: 'ritualcakes2019@gmail.com',
       to: 'ritualcakes2019@gmail.com',
-      subject: `OrderPlaced by ${username} with order id ${newOrder._id}`,
+      subject: `New Order Placed by ${user.name} ${user.surname} with order id ${newOrder._id}`,
       html: orderDetailsHtml,
     };
     await transporter.sendMail(mailOptionsUser);
