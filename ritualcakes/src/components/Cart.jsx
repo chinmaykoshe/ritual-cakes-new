@@ -1,42 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+
 function Cart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [errorMessages, setErrorMessages] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingItem, setLoadingItem] = useState(null); // Track loading for specific items
+  const [operationType, setOperationType] = useState(""); // Track operation (adding/removing)
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("user");
-  useEffect(() => {
-    setLoading(true); 
-    setTimeout(() => {
-      setLoading(false); 
-    }, 1000);
-  }, [cart]);
+
   const calculateTotal = () => {
     return cart?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
   };
+
   const calculateTotalItems = () => {
     return cart?.reduce((total, item) => total + item.quantity, 0) || 0;
   };
-  const handleRemoveFromCart = (orderId) => {
+
+  const handleRemoveFromCart = async (orderId) => {
+    setLoadingItem(orderId);
+    setOperationType("removing"); // Specify the operation
     try {
-      removeFromCart(orderId);
+      await removeFromCart(orderId);
       setErrorMessages("Item removed successfully.");
       setTimeout(() => setErrorMessages(""), 3000);
     } catch (error) {
       setErrorMessages("Error removing item from cart.");
       setTimeout(() => setErrorMessages(""), 3000);
+    } finally {
+      setLoadingItem(null);
+      setOperationType(""); // Clear operation type
     }
   };
-  const handleQuantityChange = (orderId, action) => {
+
+  const handleQuantityChange = async (orderId, action) => {
+    setLoadingItem(orderId);
+    setOperationType("updating quantity"); // Specify the operation
     try {
       const item = cart.find((item) => item.orderID === orderId);
       const newQuantity = action === "increment" ? item.quantity + 1 : Math.max(1, item.quantity - 1);
-      updateQuantity(orderId, newQuantity);
+      await updateQuantity(orderId, newQuantity);
     } catch (error) {
       setErrorMessages("Error updating quantity.");
       setTimeout(() => setErrorMessages(""), 3000);
+    } finally {
+      setLoadingItem(null);
+      setOperationType(""); // Clear operation type
     }
   };
 
@@ -63,8 +73,6 @@ function Cart() {
               Go to Login
             </button>
           </div>
-        ) : loading ? (
-          <p className="text-center p-4">Loading your cart... </p>
         ) : cart?.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             <div className="text-right">
@@ -91,6 +99,7 @@ function Cart() {
                       <button
                         onClick={() => handleQuantityChange(item.orderID, "decrement")}
                         className="px-2 md:px-4 py-1 border rounded hover:bg-gray-200"
+                        disabled={loadingItem === item.orderID}
                       >
                         -
                       </button>
@@ -98,6 +107,7 @@ function Cart() {
                       <button
                         onClick={() => handleQuantityChange(item.orderID, "increment")}
                         className="px-2 md:px-4 py-1 border rounded hover:bg-gray-200"
+                        disabled={loadingItem === item.orderID}
                       >
                         +
                       </button>
@@ -109,29 +119,30 @@ function Cart() {
                   <button
                     onClick={() => handleRemoveFromCart(item.orderID)}
                     className="text-red-500 font-bold hover:text-red-700 mt-2"
+                    disabled={loadingItem === item.orderID}
                   >
-                    Remove
+                    {loadingItem === item.orderID && operationType
+                      ? `${operationType.charAt(0).toUpperCase() + operationType.slice(1)}...`
+                      : "Remove"}
                   </button>
                 </div>
               </div>
             ))}
             <div className="flex justify-between items-center mt-4 mx-6">
               <span className="text-xl font-bold">Total:</span>
-              <span className="text-2xl font-bold">
-                ₹{calculateTotal().toFixed(2)}
-              </span>
+              <span className="text-2xl font-bold">₹{calculateTotal().toFixed(2)}</span>
             </div>
             <div className="flex justify-center mt-6">
               <button
                 onClick={() => navigate("/checkout")}
-                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+                className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:bg-darkcustombg3"
               >
-                Proceed to Checkout
+                Proceed to Order
               </button>
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-600">Your cart is empty.</p>
+          <p className="text-center text-gray-600 m-6">Your cart is empty.</p>
         )}
       </div>
     </div>

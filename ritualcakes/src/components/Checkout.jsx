@@ -8,7 +8,7 @@ function Checkout() {
   const navigate = useNavigate();
   const [customerName, setCustomerName] = useState("");
   const [address, setAddress] = useState("");
-  const [cakeMessage, setCakeMessage] = useState("Happy Birthday <Name>");
+  const [cakeMessage, setCakeMessage] = useState("Happy Birthday");
   const [orderDate, setOrderDate] = useState("");
   const [orderTime, setOrderTime] = useState("17:00"); 
   const [paymentMethod, setPaymentMethod] = useState("COD"); 
@@ -205,7 +205,7 @@ function Checkout() {
               <div className="flex justify-center mt-6">
                 <button
                   onClick={handlePlaceOrder}
-                  className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+                  className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:bg-darkcustombg3"
                   disabled={loading}
                 >
                   {loading ? 'Placing Order...' : 'Place Order'}
