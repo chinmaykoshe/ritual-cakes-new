@@ -93,7 +93,7 @@ function Dashboard() {
           </div>
           <div className="bg-neutral-100 rounded-lg p-6 shadow">
             <h2 className="text-xl font-semibold text-neutral-700">Total Collection Today</h2>
-            <p className="text-2xl font-bold text-neutral-900 mt-4">${totalCollectionToday.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-neutral-900 mt-4">₹{totalCollectionToday.toFixed(2)}</p>
           </div>
           <div className="bg-neutral-100 rounded-lg p-6 shadow">
             <h2 className="text-xl font-semibold text-neutral-700">Orders</h2>

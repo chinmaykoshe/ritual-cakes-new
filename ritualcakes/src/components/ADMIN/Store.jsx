@@ -47,6 +47,7 @@ function Store() {
         return;
       }
       const orderItem = {
+        status: "Completed",
         name: selectedCake.name,
         weight: selectedOption.weight,
         shape: selectedOption.shape,

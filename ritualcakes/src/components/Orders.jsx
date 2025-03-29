@@ -19,7 +19,7 @@ function Orders() {
     e.target.src = "/fallback-image.png";
     setLoading(false);
     setHasLoaded(true);
-    setLoadError(true); 
+    setLoadError(true);
   };
   useEffect(() => {
     const fetchCustomizations = async () => {
@@ -92,7 +92,7 @@ function Orders() {
                     key={index}
                     className="flex flex-col md:flex-row items-start justify-between space-y-4 md:space-y-0 md:space-x-4"
                   >
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 cursor-pointer" onClick={() => navigate(`/product/${item.orderID}`)}>
                       <img
                         src={item.image || "/fallback-image.png"}
                         alt={item.name}
@@ -100,20 +100,23 @@ function Orders() {
                       />
                     </div>
                     <div className="flex flex-col space-y-2">
-                      <h2 className="text-xl font-bold">{item.name}</h2>
+                      <h2 className="text-xl font-bold cursor-pointer" onClick={() => navigate(`/product/${item.orderID}`)}>{item.name}</h2>
                       <p className="text-gray-500 text-sm">Shape: {item.shape}</p>
                       <p className="text-gray-500 text-sm">Weight: {item.weight}</p>
                       <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>
-                      <p className="text-gray-500 text-sm">Amount: $ {item.price * item.quantity}</p>
+                      <p className="text-gray-500 text-sm">Amount: ₹ {item.price * item.quantity}</p>
                     </div>
                     <div className="flex flex-col space-y-2 mt-4">
                       <div className="flex items-center space-x-2">
                         <span
-                          className={`ml-2 px-2 py-1 rounded ${order.status === "Completed"
+                          className={`ml-2 px-2 py-1 rounded 
+                            ${ order.status === "Completed"
                             ? "bg-blue-200 text-blue-700"
                             : order.status === "Pending"
                               ? "bg-yellow-200 text-yellow-700"
-                              : "bg-red-200 text-red-700"
+                            : order.status === "Accepted"
+                              ? "bg-green-200 text-green-700"
+                            : "bg-red-200 text-red-700"
                             }`}
                         >
                           {order.status}
@@ -122,16 +125,16 @@ function Orders() {
                     </div>
                     <div className="mt-4 flex justify-center">
                       <button
-  onClick={() => {
-    const confirmCall = window.confirm("Call +91 --------- to cancel the order?");
-    if (confirmCall) {
-      window.location.href = "tel:+91---------";
-    }
-  }}
-  className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
->
-  Cancel Order
-</button>
+                        onClick={() => {
+                          const confirmCall = window.confirm("Call +91 8169296802 to cancel the order?");
+                          if (confirmCall) {
+                            window.location.href = "tel:+91 8169296802";
+                          }
+                        }}
+                        className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+                      >
+                        Cancel Order
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -168,10 +171,8 @@ function Orders() {
                         className={`px-2 py-1 rounded ${customization.approvalStatus === "approved"
                           ? "bg-green-200 text-green-700"
                           : customization.approvalStatus === "pending"
-                            ? "bg-blue-200 text-blue-700"
-                            : customization.approvalStatus === "rejected"
-                              ? "bg-red-200 text-red-700"
-                              : "bg-yellow-200 text-yellow-700"
+                            ? "bg-yellow-200 text-yellow-700"
+                            : "bg-red-200 text-red-700"
                           }`}
                       >
                         {customization.approvalStatus}
@@ -179,43 +180,54 @@ function Orders() {
                     </p>
                     <p className="text-lg"><strong>Price:</strong> Rs. {customization.price}</p>
                     <p><strong>Image or Design:</strong></p>
-                    <p className="break-all overflow-hidden text-ellipsis line-clamp-3">{customization.imageOrDesign || "No image/design provided"}</p>
+                    <p
+                      className="break-all overflow-hidden text-ellipsis line-clamp-3 cursor-pointer"
+                      onClick={() => {
+                        const imagePath = customization.imageOrDesign.startsWith("http")
+                          ? customization.imageOrDesign
+                          : `/design/${customization.imageOrDesign}`;
+
+                        window.open(imagePath, "_blank");
+                      }}
+                    >
+                      {customization.imageOrDesign || "No image/design provided"}
+                    </p>
                   </div>
                   <div className="m-4 md:mt-0 md:ml-8 md:w-1/3 lg:w-1/3 w-full">
                     {loading && !hasLoaded && !loadError && <div className="spinner">Loading...</div>}
-                    {customization.imageOrDesign && !hasLoaded ? (
-                      customization.imageOrDesign.startsWith("http") ? (
-                        <img
-                          src={customization.imageOrDesign}
-                          alt={`Design: ${customization.imageOrDesign}`}
-                          className="w-full h-full object-cover rounded-lg"
-                          onLoad={handleImageLoad}
-                          onError={handleImageError}
-                        />
-                      ) : (
-                        <img
-                          src={designnames[customization.imageOrDesign] || "/fallback-image.png"}
-                          alt={`Design: ${customization.imageOrDesign}`}
-                          className="w-full h-full object-cover rounded-lg"
-                          onLoad={handleImageLoad}
-                          onError={handleImageError}
-                        />
-                      )
-                    ) : null}
+                    {customization.imageOrDesign && (
+                      <img
+                        src={
+                          customization.imageOrDesign.startsWith("http")
+                            ? customization.imageOrDesign
+                            : designnames?.[customization.imageOrDesign] || "/fallback-image.png"
+                        }
+                        alt={`Design: ${customization.imageOrDesign}`}
+                        className="w-full h-full object-cover rounded-lg"
+                        loading="lazy" // Improves performance by delaying loading until needed
+                        onLoad={handleImageLoad}
+                        onError={(e) => {
+                          e.target.onerror = null; // Prevent infinite error loop
+                          e.target.src = "/fallback-image.png"; // Fallback if image fails
+                        }}
+                      />
+                    )}
+
+
                   </div>
 
                   <div className="mt-4 flex justify-center">
                     <button
-  onClick={() => {
-    const confirmCall = window.confirm("Call +91 --------- to cancel the order?");
-    if (confirmCall) {
-      window.location.href = "tel:+91---------";
-    }
-  }}
-  className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
->
-  Cancel Order
-</button>
+                      onClick={() => {
+                        const confirmCall = window.confirm("Call +91 8169296802 to cancel the order?");
+                        if (confirmCall) {
+                          window.location.href = "tel:+91 8169296802";
+                        }
+                      }}
+                      className="text-white bg-red-500 p-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+                    >
+                      Cancel Order
+                    </button>
                   </div>
                 </div>
               ))}

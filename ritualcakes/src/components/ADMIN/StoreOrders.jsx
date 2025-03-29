@@ -103,7 +103,7 @@ const StoreOrders = () => {
         item.shape,
         item.quantity || 1,
         item.weight,
-        `$${order.totalAmount}`,
+        `₹${order.totalAmount}`,
         formatDate(order.createdAt),
         formatTime(order.createdAt),
       ])
@@ -136,7 +136,7 @@ const StoreOrders = () => {
         <div className="flex items-center space-x-4">
           <div className="border p-4 rounded bg-gray-100 shadow">
             <h3 className="text-lg font-semibold">Today's Total</h3>
-            <p className="text-2xl font-bold">${todayTotal.toFixed(2)}</p>
+            <p className="text-2xl font-bold">₹{todayTotal.toFixed(2)}</p>
           </div>
           <button
             onClick={exportToCSV}
@@ -207,7 +207,7 @@ const StoreOrders = () => {
                   <td className="border border-gray-300 p-2">{item.shape}</td>
                   <td className="border border-gray-300 p-2">{item.quantity || 1}</td>
                   <td className="border border-gray-300 p-2">{item.weight}</td>
-                  <td className="border border-gray-300 p-2">${order.totalAmount}</td>
+                  <td className="border border-gray-300 p-2">₹{order.totalAmount}</td>
                   <td className="border border-gray-300 p-2">{formatDate(order.createdAt)}</td>
                   <td className="border border-gray-300 p-2">{formatTime(order.createdAt)}</td>
                   <td className={`border border-gray-300 p-2 ${order.cakeMessage === 'Ordered from store' ? 'text-gray-500' : 'text-black'}`}>

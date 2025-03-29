@@ -14,6 +14,7 @@ const OrdersPanel = () => {
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const [hideAdminOrders, setHideAdminOrders] = useState(true);
   const [visibleColumns, setVisibleColumns] = useState({
+    createdAt: true,
     orderId: true,
     email: true,
     itemName: true,
@@ -174,6 +175,7 @@ const OrdersPanel = () => {
       ...sortedOrders.map((order) =>
         headers
           .map((column) => {
+            if (column === "createdAt") return order.createdAt;
             if (column === "orderId") return order._id;
             if (column === "email") return order.userEmail;
             if (column === "itemName") return order.orderItems.map(item => item.name).join(", ");
@@ -333,6 +335,7 @@ const OrdersPanel = () => {
         <table className="table-auto w-full border-collapse border border-gray-300 text-sm">
           <thead>
             <tr>
+              {visibleColumns.createdAt && renderColumnHeader("createdAt", "Created on")}
               {visibleColumns.orderId && renderColumnHeader("orderId", "Order ID")}
               {visibleColumns.email && renderColumnHeader("email", "Customer Email")}
               {visibleColumns.itemName && renderColumnHeader("itemName", "Item Name")}
@@ -355,6 +358,11 @@ const OrdersPanel = () => {
                   key={`${order._id}-${itemIndex}`}
                   className={getStatusClass(order.status)}
                 >
+                  {itemIndex === 0 && visibleColumns.createdAt && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      <p>{new Date(order.createdAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</p>
+                    </td>
+                  )}
                   {itemIndex === 0 && visibleColumns.orderId && (
                     <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
                       {order._id}

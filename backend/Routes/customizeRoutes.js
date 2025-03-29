@@ -23,7 +23,7 @@ router.post('/customizations', async (req, res) => {
       deliveryDate,
       imageOrDesign,
       approvalStatus: 'pending',
-      price: 0 
+      price: 0
     });
     await customization.save();
     const customizationDetailsHtml = `
@@ -85,17 +85,43 @@ router.post('/customizations', async (req, res) => {
       </head>
       <body>
         <h1>Thank You for Your Order!</h1>
-        <p>Your order <strong>${customization._id}</strong> has been completed and is being processed.</p>
+        <p>Your order <strong>${customization._id}</strong> has been recived and is being processed.</p>
         <p><strong>Order Number:</strong> ${customization._id}</p>
         <h3>Orderer's Information:</h3>
-        <p><strong>Name:</strong> ${customization.name}</p>
-        <p><strong>Email:</strong> ${customization.email}</p>
-        <h3>Order Details:</h3>
-        <p><strong>Size:</strong> ${customization.size}</p>
-        <p><strong>Cake Type:</strong> ${customization.cakeType}</p>
-        <p><strong>Flavor:</strong> ${customization.flavor}</p>
-        <p><strong>Special Instructions:</strong> ${customization.specialInstructions || 'None'}</p>
-        <p><strong>Delivery Date:</strong>${new Date(customization.deliveryDate).toDateString()}</p>
+        <table border="1">
+        <tr>
+          <th>Field</th>
+          <th>Details</th>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>${customization.name}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>${customization.email}</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>${customization.size}</td>
+        </tr>
+        <tr>
+          <td>Cake Type</td>
+          <td>${customization.cakeType}</td>
+        </tr>
+        <tr>
+          <td>Flavor</td>
+          <td>${customization.flavor}</td>
+        </tr>
+        <tr>
+          <td>Special Instructions</td>
+        <td>${customization.specialInstructions || 'None'}</td>
+          </tr>
+          <tr>
+            <td>Delivery Date</td>
+            <td>${new Date(customization.deliveryDate).toDateString()}</td>
+          </tr>
+        </table>
         <h3>Shipping Address:</h3>
         <p>${customization.address}</p>
         <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
@@ -153,7 +179,7 @@ router.get('/customizations/:email', async (req, res) => {
 router.put('/customizations/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { approvalStatus, price } = req.body; 
+    const { approvalStatus, price } = req.body;
     const validStatuses = ['pending', 'approved', 'rejected'];
     if (!validStatuses.includes(approvalStatus)) {
       return res.status(400).json({ message: "Invalid approval status value" });
@@ -161,7 +187,7 @@ router.put('/customizations/:id', async (req, res) => {
     const updatedCustomization = await Customization.findByIdAndUpdate(
       id,
       { approvalStatus, price },
-      { new: true } 
+      { new: true }
     );
     if (!updatedCustomization) {
       return res.status(404).json({ message: "Customization not found" });
@@ -225,12 +251,40 @@ router.put('/customizations/:id', async (req, res) => {
         <p>The status of your customization <strong>${updatedCustomization._id}</strong> has been updated to <strong>${approvalStatus}</strong>.</p>
         <p><strong>Customization ID:</strong> ${updatedCustomization._id}</p>
         <h3>Customization Details:</h3>
-        <p><strong>Size:</strong> ${updatedCustomization.size}</p>
-        <p><strong>Cake Type:</strong> ${updatedCustomization.cakeType}</p>
-        <p><strong>Flavor:</strong> ${updatedCustomization.flavor}</p>
-        <p><strong>Special Instructions:</strong> ${updatedCustomization.specialInstructions || 'None'}</p>
-        <p><strong>Price:</strong> ${price}</p>
-        <p><strong>Delivery Date:</strong> ${new Date(updatedCustomization.deliveryDate).toDateString()}</p>
+         <table border="1">
+        <tr>
+          <th>Field</th>
+          <th>Details</th>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>${customization.name}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>${customization.email}</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>${customization.size}</td>
+        </tr>
+        <tr>
+          <td>Cake Type</td>
+          <td>${customization.cakeType}</td>
+        </tr>
+        <tr>
+          <td>Flavor</td>
+          <td>${customization.flavor}</td>
+        </tr>
+        <tr>
+          <td>Special Instructions</td>
+        <td>${customization.specialInstructions || 'None'}</td>
+          </tr>
+          <tr>
+            <td>Delivery Date</td>
+            <td>${new Date(customization.deliveryDate).toDateString()}</td>
+          </tr>
+        </table>
         <h3>Shipping Address:</h3>
         <p>${updatedCustomization.address}</p>
         <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
@@ -242,7 +296,7 @@ router.put('/customizations/:id', async (req, res) => {
     </html>`;
     const mailOptionsUser = {
       from: 'ritualcakes2019@gmail.com',
-      to: email, 
+      to: email,
       subject: `Customization Status Updated as ${approvalStatus} for ${updatedCustomization._id}`,
       html: orderDetailsHtml,
     };

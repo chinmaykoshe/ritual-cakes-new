@@ -128,7 +128,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
       </head>
       <body>
         <h1>Thank You for Your Order!</h1>
-        <p>Your order <strong>${newOrder._id}</strong> has been completed and is being processed.</p>
+        <p>Your order <strong>${newOrder._id}</strong> has been recived and is being processed.</p>
         <p><strong>Order Number:</strong> ${newOrder._id}</p>
         <h3>Orderer's Information:</h3>
         <p><strong>Name:</strong> ${userName}</p>
@@ -152,7 +152,7 @@ router.post('/orders', ensureAuthenticated, async (req, res) => {
             `).join('')}
           </tbody>
         </table>
-        <p><strong>Total:</strong> ${totalAmount}</p>
+        <p><strong>Total:</strong> ₹${totalAmount}</p>
         <h3>Shipping Address:</h3>
         <p>${deliveryAddress}</p>
         <p>If you have any questions, feel free to <a href="mailto:ritualcakes2019@gmail.com">contact us</a>.</p>
@@ -303,7 +303,7 @@ router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
             `).join('')}
           </tbody>
         </table>
-        <p><strong>Subtotal:</strong> ${updatedOrder.totalAmount}</p>
+        <p><strong>Subtotal:</strong> ₹${updatedOrder.totalAmount}</p>
         <p><strong>Payment Method:</strong> ${updatedOrder.paymentMethod}</p>
         <p><strong>Total:</strong> ${updatedOrder.totalAmount}</p>
         <p><strong>Note:</strong> ${updatedOrder.cakeMessage || 'No additional note provided.'}</p>
