@@ -87,13 +87,11 @@ const CustomizationPanel = () => {
         price: newPrice,
         approvalStatus: currentCustomization.approvalStatus,
       };
-      console.log("Updating Price:", payload);
       const response = await axios.put(
         `${apiUrl}/customizations/${customizationId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Response Data:", response.data); // Debug response
       setCustomizations((prevCustomizations) =>
         prevCustomizations.map((customization) =>
           customization._id === customizationId ? { ...customization, price: newPrice } : customization
