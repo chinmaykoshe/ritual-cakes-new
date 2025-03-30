@@ -85,7 +85,7 @@ router.post('/customizations', async (req, res) => {
       </head>
       <body>
         <h1>Thank You for Your Order!</h1>
-        <p>Your order <strong>${customization._id}</strong> has been recived and is being processed.</p>
+        <p>Your order <strong>${customization._id}</strong> has been recived on <strong>${new Date(customization.createdAt).toDateString()}</strong> and is being processed.</p>
         <p><strong>Order Number:</strong> ${customization._id}</p>
         <h3>Orderer's Information:</h3>
         <table border="1">
@@ -116,6 +116,10 @@ router.post('/customizations', async (req, res) => {
         <tr>
           <td>Special Instructions</td>
         <td>${customization.specialInstructions || 'None'}</td>
+          </tr>
+          <tr>
+            <td>Placed on</td>
+            <td>${new Date(customization.createdAt).toDateString()}</td>
           </tr>
           <tr>
             <td>Delivery Date</td>
@@ -188,7 +192,7 @@ router.put('/customizations/:id', async (req, res) => {
       id,
       { approvalStatus, price },
       { new: true }
-    );
+    ).lean();
     if (!updatedCustomization) {
       return res.status(404).json({ message: "Customization not found" });
     }
@@ -248,41 +252,49 @@ router.put('/customizations/:id', async (req, res) => {
       </head>
       <body>
         <h1>Customization Status Update</h1>
-        <p>The status of your customization <strong>${updatedCustomization._id}</strong> has been updated to <strong>${approvalStatus}</strong>.</p>
+        <p>The status of your customization <strong>${updatedCustomization._id}</strong> has been updated on <strong>${new Date(updatedCustomization.updatedAt).toDateString()}</strong> to <strong>${approvalStatus}</strong>.</p>
         <p><strong>Customization ID:</strong> ${updatedCustomization._id}</p>
         <h3>Customization Details:</h3>
-         <table border="1">
-        <tr>
-          <th>Field</th>
-          <th>Details</th>
-        </tr>
-        <tr>
-          <td>Name</td>
-          <td>${Customization.name}</td>
-        </tr>
-        <tr>
-          <td>Email</td>
-          <td>${Customization.email}</td>
-        </tr>
-        <tr>
-          <td>Size</td>
-          <td>${Customization.size}</td>
-        </tr>
-        <tr>
-          <td>Cake Type</td>
-          <td>${Customization.cakeType}</td>
-        </tr>
-        <tr>
-          <td>Flavor</td>
-          <td>${Customization.flavor}</td>
-        </tr>
-        <tr>
-          <td>Special Instructions</td>
-        <td>${Customization.specialInstructions || 'None'}</td>
+        <table border="1">
+          <tr>
+            <th>Field</th>
+            <th>Details</th>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>${updatedCustomization.name}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>${updatedCustomization.email}</td>
+          </tr>
+          <tr>
+            <td>Size</td>
+            <td>${updatedCustomization.size}</td>
+          </tr>
+          <tr>
+            <td>Cake Type</td>
+            <td>${updatedCustomization.cakeType}</td>
+          </tr>
+          <tr>
+            <td>Flavor</td>
+            <td>${updatedCustomization.flavor}</td>
+          </tr>
+          <tr>
+            <td>Special Instructions</td>
+            <td>${updatedCustomization.specialInstructions || 'None'}</td>
+          </tr>
+          <tr>
+            <td>Placed on</td>
+            <td>${new Date(updatedCustomization.createdAt).toDateString()}</td>
           </tr>
           <tr>
             <td>Delivery Date</td>
-            <td>${new Date(Customization.deliveryDate).toDateString()}</td>
+            <td>${new Date(updatedCustomization.deliveryDate).toDateString()}</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>${approvalStatus}</td>
           </tr>
         </table>
         <h3>Shipping Address:</h3>
@@ -306,9 +318,15 @@ router.put('/customizations/:id', async (req, res) => {
     } catch (error) {
       console.error('Error sending email to user:', error.message);
     }
-    res.status(200).json({ message: "Customization status updated successfully", customization: updatedCustomization });
+    res.status(200).json({ 
+      message: "Customization status updated successfully", 
+      customization: updatedCustomization 
+    });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
   }
 });
 
