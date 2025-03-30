@@ -7,8 +7,8 @@ function NavigationPane() {
   return (
     <aside className="sticky bg-neutral-900 text-neutral-50 w-[250px] h-full pt-8 px-6 flex flex-col">
       <div className="flex items-center mb-8">
-        <img src="/titlelogo.png" className="h-8" alt="Logo" />
-        <span className="self-center text-xl font-bold text-white hidden md:block ml-4">
+        <img src="/titlelogo.ico" className="h-8" alt="Logo" />
+        <span className="self-center text-xl font-bold text-white hidden md:block ml-3">
           RITUAL CAKES
         </span>
       </div>

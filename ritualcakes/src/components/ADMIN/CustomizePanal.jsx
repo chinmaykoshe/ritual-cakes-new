@@ -7,6 +7,7 @@ const CustomizationPanel = () => {
   const [customizations, setCustomizations] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingStates, setLoadingStates] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCakeType, setSelectedCakeType] = useState("");
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
@@ -50,11 +51,12 @@ const CustomizationPanel = () => {
         dateFilter
       );
     })
-    .sort((a, b) => moment(b.deliveryDate).isBefore(moment(a.deliveryDate)) ? 1 : -1); 
+    .sort((a, b) => moment(b.deliveryDate).isBefore(moment(a.deliveryDate)) ? 1 : -1);
   const updateCustomizationStatus = async (customizationId, newStatus) => {
-    setLoading(true);
+    setLoadingStates((prev) => ({ ...prev, [customizationId]: true }));
     try {
       const token = localStorage.getItem("token");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       if (!token) {
         throw new Error("Token not found. Please log in again.");
       }
@@ -71,30 +73,37 @@ const CustomizationPanel = () => {
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Failed to update customization status");
     } finally {
-      setLoading(false);
+      setLoadingStates((prev) => ({ ...prev, [customizationId]: false }));
     }
   };
   const updateCustomizationPrice = async (customizationId, newPrice) => {
-    setLoading(true);
+    setLoadingStates((prev) => ({ ...prev, [customizationId]: true }));
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found. Please log in again.");
-      }
+      if (!token) throw new Error("Token not found. Please log in again.");
+      const currentCustomization = customizations.find((c) => c._id === customizationId);
+      if (!currentCustomization) throw new Error("Customization not found.");
+      const payload = {
+        price: newPrice,
+        approvalStatus: currentCustomization.approvalStatus,
+      };
+      console.log("Updating Price:", payload);
       const response = await axios.put(
         `${apiUrl}/customizations/${customizationId}`,
-        { price: newPrice },
+        payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log("Response Data:", response.data); // Debug response
       setCustomizations((prevCustomizations) =>
         prevCustomizations.map((customization) =>
           customization._id === customizationId ? { ...customization, price: newPrice } : customization
         )
       );
     } catch (err) {
+      console.error("Update Error:", err.response?.data || err.message);
       setError(err.response?.data?.message || err.message || "Failed to update price");
     } finally {
-      setLoading(false);
+      setLoadingStates((prev) => ({ ...prev, [customizationId]: false }));
     }
   };
   const exportToCSV = () => {
@@ -260,30 +269,43 @@ const CustomizationPanel = () => {
               <td className="border border-gray-300 px-4 py-2">{moment(customization.deliveryDate).format("YYYY-MM-DD")}</td>
               <td className="border border-gray-300 px-4 py-2">{customization.approvalStatus}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <input
-                  type="number"
-                  className="border border-gray-400 rounded px-2 py-1"
-                  value={customization.price}
-                  onBlur={(e) => updateCustomizationPrice(customization._id, parseFloat(e.target.value))}
-                  onChange={(e) => {
-                    setCustomizations((prevCustomizations) =>
-                      prevCustomizations.map((item) =>
-                        item._id === customization._id ? { ...item, price: e.target.value } : item
-                      )
-                    );
-                  }}
-                />
+                {loadingStates[customization._id] ? (
+                  <span className="text-blue-500">Updating...</span> // Show loading only in this td
+                ) : (
+                  <input
+                    type="number"
+                    className="border border-gray-400 rounded px-2 py-1"
+                    value={customization.price || ""} // Prevent undefined issues
+                    onBlur={async (e) => {
+                      const newPrice = parseFloat(e.target.value);
+                      if (isNaN(newPrice)) return; // Prevent invalid updates
+                      await updateCustomizationPrice(customization._id, newPrice);
+                    }}
+                    onChange={(e) => {
+                      const newPrice = e.target.value;
+                      setCustomizations((prevCustomizations) =>
+                        prevCustomizations.map((item) =>
+                          item._id === customization._id ? { ...item, price: newPrice } : item
+                        )
+                      );
+                    }}
+                  />
+                )}
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                <select
-                  className="border border-gray-400 rounded px-2 py-1"
-                  value={customization.approvalStatus}
-                  onChange={(e) => updateCustomizationStatus(customization._id, e.target.value)}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </select>
+                {loadingStates[customization._id] ? (
+                  <span className="text-blue-500">Updating...</span> // Show loading only in this td
+                ) : (
+                  <select
+                    className="border border-gray-400 rounded px-2 py-1"
+                    value={customization.approvalStatus}
+                    onChange={(e) => updateCustomizationStatus(customization._id, e.target.value)}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                )}
               </td>
             </tr>
           ))}

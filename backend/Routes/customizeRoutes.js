@@ -258,31 +258,31 @@ router.put('/customizations/:id', async (req, res) => {
         </tr>
         <tr>
           <td>Name</td>
-          <td>${customization.name}</td>
+          <td>${Customization.name}</td>
         </tr>
         <tr>
           <td>Email</td>
-          <td>${customization.email}</td>
+          <td>${Customization.email}</td>
         </tr>
         <tr>
           <td>Size</td>
-          <td>${customization.size}</td>
+          <td>${Customization.size}</td>
         </tr>
         <tr>
           <td>Cake Type</td>
-          <td>${customization.cakeType}</td>
+          <td>${Customization.cakeType}</td>
         </tr>
         <tr>
           <td>Flavor</td>
-          <td>${customization.flavor}</td>
+          <td>${Customization.flavor}</td>
         </tr>
         <tr>
           <td>Special Instructions</td>
-        <td>${customization.specialInstructions || 'None'}</td>
+        <td>${Customization.specialInstructions || 'None'}</td>
           </tr>
           <tr>
             <td>Delivery Date</td>
-            <td>${new Date(customization.deliveryDate).toDateString()}</td>
+            <td>${new Date(Customization.deliveryDate).toDateString()}</td>
           </tr>
         </table>
         <h3>Shipping Address:</h3>
