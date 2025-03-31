@@ -44,6 +44,29 @@ function About() {
               </p>
             </div>
           </div>
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
+            <div className="md:ml-8">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Visit Our Shop</h2>
+              <p className="text-lg text-gray-700 mb-4">
+                Must visit our shop at Shop no.:1, Uma Imperial, Dronagiri Sec.:48 Dronagiri, Uran-400702 Experience the magic of our cakes in person!
+              </p> 
+              <span className="text-lg text-gray-700 hover:text-darkcustombg1">
+              Our shop timings are 
+                </span>
+              <i className="fa fa-clock m-2"></i>
+                <span className="text-lg text-gray-700 hover:text-darkcustombg1">
+                10:00 am | 10:30 pm
+                </span>
+              <p className="text-lg text-gray-700 my-4">
+                Why just browse online when you can smell, taste, and experience the magic of our cakes in person?
+              </p>
+            </div>
+            <img
+              src="/shopdoor.jpg"
+              alt="Visit Our Shop"
+              className="w-full md:w-1/4 rounded-lg mb-4 mx-2 md:mb-0 shadow-md object-cover h-[300px]"
+            />
+          </div>
         </div>
         <div className="mt-16">
           <h2 className="text-3xl font-semibold mb-8 text-center text-gray-800">Customer Reviews</h2>

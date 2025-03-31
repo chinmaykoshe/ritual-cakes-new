@@ -7,7 +7,7 @@ function Footer() {
     <div className="mt-28 flex flex-col min-h">
       <footer className="bg-orange-50 bg-opacity-85 text-darkcustombg1 pt-4 pb-8">
         <div className="container mx-auto px-6">
-          <div className="flex flex-wrap md:flex-nowrap justify-between">
+          <div className="flex flex-wrap md:flex-nowrap justify-between mx-16">
             <div className="w-full md:w-1/3 mb-6 md:mb-0 pl-4 pr-20 ">
               <Link to="/about">
                 <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>
@@ -40,6 +40,11 @@ function Footer() {
                 Dronagiri, Uran-400702, Raigad, Maharashtra, India
               </address>
               <p className="mt-4">
+              <i className="fa fa-clock mr-2 mb-2"></i>
+                <span className="text-gray-700 hover:text-darkcustombg1">
+                10:00 am | 10:30 pm
+                </span>
+                <br />
                 <i className="fa fa-phone mr-2"></i>
                 <a href="tel:+918169296802" className="text-gray-700 hover:text-darkcustombg1">
                   +91 8169296802
@@ -63,9 +68,9 @@ function Footer() {
               © 2024 Ritual Cakes. All Rights Reserved. Designed and developed by Chinmay Koshe.
             </p>
             <div className="mt-4">
-              <a href="/" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Company Information</a>
-              <a href="/" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Privacy Policy</a>
-              <a href="/" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Terms & Conditions</a>
+              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Privacy Policy</span>
+              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Terms & Conditions</span>
+              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Company Information</span>
             </div>
           </div>
         </div>
