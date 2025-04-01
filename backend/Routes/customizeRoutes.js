@@ -296,6 +296,10 @@ router.put('/customizations/:id', async (req, res) => {
             <td>Status</td>
             <td>${approvalStatus}</td>
           </tr>
+          <tr>
+            <td>Status</td>
+            <td><strong>${price}</strong></td>
+          </tr>
         </table>
         <h3>Shipping Address:</h3>
         <p>${updatedCustomization.address}</p>
