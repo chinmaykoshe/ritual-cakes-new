@@ -105,7 +105,7 @@ function Orders() {
                           year: "numeric",
                         })}
                         </strong>
-                        &nbsp;at <strong><span>{order.orderTime.split(':').slice(0, 2).join(':') + ' ' + order.orderTime.split(' ')[1]}</span>
+                        &nbsp;at <strong><span>{order.orderTime.split(':').slice(0, 2).join(':')}</span>
                         </strong>
                       </span>
                     </div>
@@ -159,7 +159,7 @@ function Orders() {
                       <div className="mt-4 flex justify-center">
                         <button
                           onClick={() => {
-                            const confirmCall = window.confirm("Call +91 8169296802 to cancel the order! OR Reply to the mail for cancellation");
+                            const confirmCall = window.confirm("Call +91 8169296802 to cancel the order! OR Reply to the mail for cancellation !");
                             if (confirmCall) {
                               window.location.href = "tel:+91 8169296802";
                             }
@@ -270,7 +270,7 @@ function Orders() {
                     <div className="mt-4 flex justify-center">
                       <button
                         onClick={() => {
-                          const confirmCall = window.confirm("Call +91 8169296802 to cancel the order! OR Reply to the mail for cancellation");
+                          const confirmCall = window.confirm("Call +91 8169296802 to cancel the order! OR Reply to the mail for cancellation !");
                           if (confirmCall) {
                             window.location.href = "tel:+91 8169296802";
                           }
