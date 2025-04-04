@@ -5,8 +5,11 @@ import PropTypes from 'prop-types';
 function PrivateRoute({ element }) {
   const role = localStorage.getItem('role');
   const email = localStorage.getItem('user');
-  const authorizedEmail = "ritualcake.admin@gmail.com";
-  if (role === 'admin' && email === authorizedEmail) {
+  const adminSecret = localStorage.getItem('key');
+  
+  const authorizedEmail = process.env.REACT_APP_ADMIN_EMAIL;
+  const authorizedSecret = process.env.REACT_APP_ADMIN_SECRET;
+  if (role === 'admin' && email === authorizedEmail && adminSecret === authorizedSecret) {
     return element;
   }
   return <Navigate to="/" replace />;

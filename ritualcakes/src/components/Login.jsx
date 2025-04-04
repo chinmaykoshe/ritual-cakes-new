@@ -53,10 +53,11 @@ function Login() {
             throw new Error('User not found!');
         }
     }    
-      const { token, email, role } = await response.json();
+      const { token, email, role, adminSecret } = await response.json();
       localStorage.setItem('token', token);
       localStorage.setItem('user', email.toLowerCase());
       localStorage.setItem('role', role);
+      localStorage.setItem('key', adminSecret);
       navigateToDashboard(role);
       setTimeout(() => {
         setSucessMessages('Sign in sucess ! Redirecting...');
