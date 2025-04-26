@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
       pass: mailKey,
     },
     tls: {
-      rejectUnauthorized: false,
+      rejectUnauthorized: true,
     },
   });
 transporter.verify((error, success) => {
