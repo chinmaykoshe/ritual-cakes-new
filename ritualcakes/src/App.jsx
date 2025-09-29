@@ -92,6 +92,7 @@ function App() {
 
                       <Route path="/admin/cusbill/:customizationId" element={<CusBillPage />} />
 
+
                       <Route
                         path="/admin/bill/:orderId"
                         element={<PrivateRoute element={<BillPage />} />}

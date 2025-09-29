@@ -315,6 +315,7 @@ const CustomizationPanel = () => {
                   Print Bill
                 </button>
               </td>
+
             </tr>
           ))}
         </tbody>
