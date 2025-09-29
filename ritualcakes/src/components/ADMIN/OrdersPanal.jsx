@@ -444,9 +444,9 @@ const OrdersPanel = () => {
                       </button>
                     </td>
                   )}
-                  <td>
+                  <td >
                     <button
-                      className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                      className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600" 
                       onClick={() => navigate(`/admin/bill/${order._id}`)}
                     >
                       Print Bill

@@ -346,5 +346,19 @@ router.delete('/customizations/:id', async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// Get a single customization by ID
+router.get('/customizations/id/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const customization = await Customization.findById(id);
+    if (!customization) {
+      return res.status(404).json({ message: "Customization not found" });
+    }
+    res.status(200).json(customization);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 module.exports = router;

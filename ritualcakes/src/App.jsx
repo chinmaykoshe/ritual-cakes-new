@@ -44,6 +44,7 @@ import useAxiosInterceptor from './axios.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/Resetpassword.jsx';
 import BillPage from './components/ADMIN/BillPage.jsx';
+import CusBillPage from './components/ADMIN/CusBillPage.jsx';
 
 
 function InvalidRouteRedirect() {
@@ -88,6 +89,8 @@ function App() {
                       <Route path="/admin/orderscollection" element={<PrivateRoute element={<StoreOrders />} />} />
                       <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
                       <Route path="/admin/bill/:orderId" element={<PrivateRoute element={<BillPage />} />} />
+
+                      <Route path="/admin/cusbill/:customizationId" element={<CusBillPage />} />
 
                       <Route
                         path="/admin/bill/:orderId"
