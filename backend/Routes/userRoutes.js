@@ -14,6 +14,7 @@ router.get('/user', ensureAuthenticated, async (req, res) => {
         name: user.name,
         surname: user.surname,
         email: user.email,
+        role: user.role,
         mobile: user.mobile,
         dob: user.dob,
         address: user.address,

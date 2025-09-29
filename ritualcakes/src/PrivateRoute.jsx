@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 function PrivateRoute({ element }) {
-  const role = localStorage.getItem('role');
-  const email = localStorage.getItem('user');
-  const adminSecret = localStorage.getItem('key');
-  
-  const authorizedEmail = process.env.REACT_APP_ADMIN_EMAIL;
-  const authorizedSecret = process.env.REACT_APP_ADMIN_SECRET;
-  if (role === 'admin' && email === authorizedEmail && adminSecret === authorizedSecret) {
-    return element;
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const apiUrl = 'https://ritual-cakes-new-ogk5.vercel.app/api/user'; // note singular /user for current user
+        const response = await axios.get(apiUrl, {
+          withCredentials: true, // include cookies if your auth uses them
+        });
+
+        const user = response.data.user;
+
+        // Simple role-based check
+        if (user && user.role === 'admin') {
+          setAuthorized(true);
+        } else {
+          setAuthorized(false);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setAuthorized(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // optional spinner
   }
-  return <Navigate to="/" replace />;
+
+  return authorized ? element : <Navigate to="/" replace />;
 }
 
 PrivateRoute.propTypes = {

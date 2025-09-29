@@ -6,17 +6,14 @@ function UserButton() {
   const { user, updateUser, loading, error } = useUser(); 
   const [isEditing, setIsEditing] = useState(false); 
   const [formData, setFormData] = useState({
-    name: user && user.user ? user.user.name : "",
-    surname: user && user.user ? user.user.surname : "",
-    mobile: user && user.user ? user.user.mobile : "",
-    address: user && user.user ? user.user.address : "",
-    dob: user && user.user ? user.user.dob : "",
+    name: "",
+    surname: "",
+    mobile: "",
+    address: "",
+    dob: "",
   });
+
   const navigate = useNavigate();
-  const userEmail = localStorage.getItem("user");
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
-  const formattedDOB = user && user.user ? new Date(user.user.dob).toLocaleDateString("en-GB") : "";
 
   useEffect(() => {
     if (user && user.user) {
@@ -29,6 +26,7 @@ function UserButton() {
       });
     }
   }, [user]);
+
   const handleEditChange = (e) => {
     setFormData({
       ...formData,
@@ -38,20 +36,24 @@ function UserButton() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    updateUser(formData); 
-    setIsEditing(false); 
-    setTimeout(() => {
-    window.location.reload();
-      
-    }, 1100);
+    updateUser(formData);
+    setIsEditing(false);
+    setTimeout(() => window.location.reload(), 1100);
   };
+
+  const formattedDOB = user?.user?.dob
+    ? new Date(user.user.dob).toLocaleDateString("en-GB")
+    : "";
+
+  if (loading) return <p className="text-center">Loading...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="mx-2 max-w-7xl md:mx-auto py-4 md:py-12 bg-white bg-opacity-70 rounded-lg md:px-2 lg:p-8 mt-2 lg:mt-16 shadow-lg">
       <div className="container mx-auto p-2 md:py-4 md:px-6">
         <div className="mb-6">
           <Link
-            to="/" 
+            to="/"
             className="text-darkcustombg1 font-montserrat hover:text-darkcustombg1 active:text-darkcustombg2 transition-colors duration-300"
           >
             &larr; Back to Home
@@ -60,9 +62,11 @@ function UserButton() {
 
         <h1 className="text-3xl font-bold mb-6 text-center">Your Information</h1>
 
-        {!token ? (
+        {!user?.user ? (
           <div className="text-center">
-            <p className="text-black-500 font-semibold">Please log in to view your information.</p>
+            <p className="text-black-500 font-semibold">
+              Please log in to view your information.
+            </p>
             <button
               onClick={() => navigate("/login")}
               className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
@@ -70,11 +74,7 @@ function UserButton() {
               Go to Login
             </button>
           </div>
-        ) : loading ? (
-          <p className="text-center">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
-        ) : user && user.user ? (
+        ) : (
           <div className="bg-white p-6 rounded-lg shadow-lg">
             {!isEditing ? (
               <>
@@ -173,18 +173,21 @@ function UserButton() {
                 </button>
               </form>
             )}
+
             <div className="mt-2">
               <button
-                onClick={() => navigate("/orders")} 
+                onClick={() => navigate("/orders")}
                 className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
               >
                 Check Your Orders Here
               </button>
             </div>
-            {userEmail === "ritualcake.admin@gmail.com" && role === "admin" && (
+
+            {/* Admin button: shows only if role is admin AND email matches */}
+            {user.user.role === "admin" && user.user.email === "ritualcake.admin@gmail.com" && (
               <div className="mt-4">
                 <button
-                  onClick={() => navigate("/admin/dashboards")} 
+                  onClick={() => navigate("/admin/dashboards")}
                   className="mt-2 bg-green-500 text-white py-2 px-6 rounded-lg hover:text-green-500 hover:bg-white hover:border-2 hover:border-green-500"
                 >
                   Go to Admin Panel
@@ -192,8 +195,6 @@ function UserButton() {
               </div>
             )}
           </div>
-        ) : (
-          <p className="text-center">No user information available.</p>
         )}
       </div>
     </div>
