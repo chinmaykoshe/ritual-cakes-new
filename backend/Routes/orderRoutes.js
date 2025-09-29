@@ -200,7 +200,21 @@ router.delete('/orders/:orderID', ensureAuthenticated, async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
+router.get('/orders/id/:orderId', ensureAuthenticated, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await OrderModel.findById(orderId);
 
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error('Error fetching order by ID:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
 router.put('/orders/:orderId/status', ensureAuthenticated, async (req, res) => {
   try {
     const { orderId } = req.params;

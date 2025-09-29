@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,  } from "react";
 import axios from "axios";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const OrdersPanel = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,8 +41,8 @@ const OrdersPanel = () => {
       return;
     }
     const order = orders.find((order) => order._id === orderId);
-    const userEmail = order ? order.userEmail : null;  
-    const itemName = order ? order.orderItems[0].name : "Unknown Item"; 
+    const userEmail = order ? order.userEmail : null;
+    const itemName = order ? order.orderItems[0].name : "Unknown Item";
     const itemWeight = order ? order.orderItems[0].weight : "Unknown Weight";
     if (!userEmail) {
       console.error("User email not found");
@@ -49,14 +51,14 @@ const OrdersPanel = () => {
     const confirmationMessage = `Are you sure you want to set ${userEmail}'s order of ${itemName} (Weight: ${itemWeight}) status to ${status}?`;
     const isConfirmed = window.confirm(confirmationMessage);
     if (!isConfirmed) {
-      return; 
+      return;
     }
     try {
       const response = await axios.put(
         `${apiUrl}/${orderId}/status`,
         {
-          status: status, 
-          userEmail: userEmail, 
+          status: status,
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -71,13 +73,13 @@ const OrdersPanel = () => {
     }
   };
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
-    setUpdatingOrderId(orderId); 
+    setUpdatingOrderId(orderId);
     const updatedOrder = await updateOrderStatus(orderId, newStatus);
     if (updatedOrder) {
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId
-            ? { ...order, status: newStatus } 
+            ? { ...order, status: newStatus }
             : order
         )
       );
@@ -153,7 +155,7 @@ const OrdersPanel = () => {
 
   const getStatusClass = (status) => {
     const statusClasses = {
-      Pending: "bg-gray-100", 
+      Pending: "bg-gray-100",
       Completed: "bg-green-100",
       Accepted: "bg-yellow-100",
       Cancelled: "bg-red-100",
@@ -268,7 +270,7 @@ const OrdersPanel = () => {
         </div>
         <div
           className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
-          title="Show or hide delete column" 
+          title="Show or hide delete column"
         >
           <input
             type="checkbox"
@@ -442,6 +444,14 @@ const OrdersPanel = () => {
                       </button>
                     </td>
                   )}
+                  <td>
+                    <button
+                      className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                      onClick={() => navigate(`/admin/bill/${order._id}`)}
+                    >
+                      Print Bill
+                    </button>
+                  </td>
                 </tr>
               ))
             )}

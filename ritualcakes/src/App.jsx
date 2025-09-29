@@ -43,6 +43,8 @@ import ReviewSection from './components/ADMIN/ReviewSection.jsx';
 import useAxiosInterceptor from './axios.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/Resetpassword.jsx';
+import BillPage from './components/ADMIN/BillPage.jsx';
+
 
 function InvalidRouteRedirect() {
   const navigate = useNavigate();
@@ -56,9 +58,9 @@ function InvalidRouteRedirect() {
 
 function App() {
   const location = useLocation();
-  useAxiosInterceptor(); 
+  useAxiosInterceptor();
 
-  const isAdminPath = location.pathname.startsWith('/admin'); 
+  const isAdminPath = location.pathname.startsWith('/admin');
 
   return (
     <div className='container mx-auto max-w-none relative'>
@@ -85,6 +87,12 @@ function App() {
                       <Route path="/admin/CakesAvailable" element={<PrivateRoute element={<CakesAvailable />} />} />
                       <Route path="/admin/orderscollection" element={<PrivateRoute element={<StoreOrders />} />} />
                       <Route path="/admin/reviewsection" element={<PrivateRoute element={<ReviewSection />} />} />
+                      <Route path="/admin/bill/:orderId" element={<PrivateRoute element={<BillPage />} />} />
+
+                      <Route
+                        path="/admin/bill/:orderId"
+                        element={<PrivateRoute element={<BillPage />} />}
+                      />
                     </Route>
 
                     <Route path='/' element={<Home />} />
