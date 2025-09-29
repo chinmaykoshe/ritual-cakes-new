@@ -1,4 +1,4 @@
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect, } from "react";
 import axios from "axios";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -351,6 +351,7 @@ const OrdersPanel = () => {
               {visibleColumns.totalAmount && renderColumnHeader("totalAmount", "Total")}
               {visibleColumns.status && renderColumnHeader("status", "Status")}
               {visibleColumns.actions && renderColumnHeader("actions", "Actions")}
+              <th>Print Bill</th>
             </tr>
           </thead>
           <tbody>
@@ -444,14 +445,16 @@ const OrdersPanel = () => {
                       </button>
                     </td>
                   )}
-                  <td >
-                    <button
-                      className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600" 
-                      onClick={() => navigate(`/admin/bill/${order._id}`)}
-                    >
-                      Print Bill
-                    </button>
-                  </td>
+                  {itemIndex === 0 && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={order.orderItems.length}>
+                      <button
+                        className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                        onClick={() => navigate(`/admin/bill/${order._id}`)}
+                      >
+                        Print Bill
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}
