@@ -40,12 +40,24 @@ const CusBillPage = () => {
   }, [customizationId]);
 
   const handlePrint = () => {
-    const printContents = billRef.current.innerHTML;
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload();
+    if (!billRef.current) return;
+
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>Invoice</title>
+        <!-- Include Tailwind CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+      </head>
+      <body class="bg-gray-100 p-8">
+        ${billRef.current.outerHTML}
+      </body>
+    </html>
+  `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => printWindow.print(), 500);
   };
 
   const handleChange = (field, value) => {
@@ -217,4 +229,3 @@ const CusBillPage = () => {
 };
 
 export default CusBillPage;
-    
