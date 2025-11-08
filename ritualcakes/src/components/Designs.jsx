@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { designnames } from "../designs/designassets";
-import ThemeSection from "./ThemeSection"; 
+import ThemeSection from "./ThemeSection";
 
 const Designs = () => {
   const navigate = useNavigate();
@@ -39,23 +39,22 @@ const Designs = () => {
             ))}
           </Carousel>
         </div>
-
-        <div className="lg:w-1/2 h-full flex flex-col items-center justify-center text-center">
-          <p className="text-gray-500 font-montserrat font-bold text-2xl mb-4">
-            Click on carousel to see all page designs from our page /
+        <div className="lg:w-1/2 flex flex-col items-center text-center py-8">
+          <p className="text-gray-500 font-bold text-xl mb-3 font-montserrat">
+            Click the carousel to see all page designs.
           </p>
-          <p className="text-darkcustombg1 font-montserrat font-bold text-2xl mb-4">
-            View from Our Page
+          <p className="text-darkcustombg1 font-bold text-xl mb-3 font-montserrat">
+            See More Designs from Us
           </p>
-          <NavLink
-            to="https://www.instagram.com/ritualcakes"
+          <a
+            href="https://www.instagram.com/ritualcakes"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-darkcustombg2 hover:text-darkcustombg2 hover:bg-white text-white py-4 px-8 rounded-lg w-full transform transition duration-300 shadow-xl flex items-center justify-center gap-2"
+            className="bg-darkcustombg2 text-white py-3 px-7 rounded-lg w-full max-w-xs flex items-center justify-center gap-2 hover:bg-white hover:text-darkcustombg2 border transition duration-300 shadow"
           >
-            <i className="fa fa-instagram text-2xl"></i>
-            <span className="font-montserrat font-medium">View</span>
-          </NavLink>
+            <i className="fa fa-instagram text-lg"></i>
+            <span className="font-montserrat font-medium">View on Instagram</span>
+          </a>
         </div>
       </section>
       <ThemeSection

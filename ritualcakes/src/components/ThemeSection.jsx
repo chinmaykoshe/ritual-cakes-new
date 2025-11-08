@@ -17,20 +17,20 @@ const ThemeSection = ({ title, categoryPrefix, designnames, handleZoomIn }) => {
     } else {
       setVisibleDesignsCount(filteredDesignKeys.length);
     }
-    setIsExpanded((prev) => !prev); 
+    setIsExpanded((prev) => !prev);
   };
   const handleSectionClick = () => {
-    setVisibleDesignsCount(4); 
+    setVisibleDesignsCount(4);
     setIsExpanded(false);
   };
 
   return (
-    <section className="mb-12" onClick={handleSectionClick}> 
+    <section className="mb-12" onClick={handleSectionClick}>
       <h2 className="text-2xl font-medium text-darkcustombg1 mb-6">{title}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-8 gap-4">
         {filteredDesignKeys.slice(0, visibleDesignsCount).map((designKey) => (
           <DesignCard
-            key={designKey} 
+            key={designKey}
             designnames={designnames}
             designKey={designKey}
             handleZoomIn={handleZoomIn}
@@ -39,10 +39,11 @@ const ThemeSection = ({ title, categoryPrefix, designnames, handleZoomIn }) => {
       </div>
       <div className="mt-4 text-center">
         <button
-          className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+          className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg border-2 border-transparent 
+             hover:text-darkcustombg2 hover:bg-white hover:border-darkcustombg2 transition-all duration-200"
           onClick={handleLoadMore}
         >
-          {isExpanded ? "Show Less" : "Load More"} 
+          {isExpanded ? "Show Less" : "Load More"}
         </button>
       </div>
     </section>

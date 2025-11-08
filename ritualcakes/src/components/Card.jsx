@@ -15,29 +15,28 @@ function Card({ orderID }) {
 
   return (
     <div
-      className="group relative bg-white border border-gray-200 shadow-md rounded-lg cursor-pointer"
-      onClick={handleClick}
-    >
-      <div className="w-full h-48 lg:h-[280px] overflow-hidden rounded-lg">
-        <img
-          src={product.img}
-          alt={product.name}
-          onError={(e) => (e.target.src = elements.fallbackImage)}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-95 rounded-lg"
-        />
-      </div>
-      <div className="p-4 text-left flex justify-between items-center">
-        <h3 className="text-sm font-semibold text-gray-800 group-hover:text-black-800 group-hover:font-bold transition-colors duration-300">
-          {product.name}
-        </h3>
-        <div className="flex items-center space-x-1 text-sm">
-          <span className="text-gray-800 font-bold">Rs</span>
-          <span className="text-gray-800 font-bold">
-            {product.prices["500g"] || product.prices["6 pieces"] || product.prices["1 jar"] || product.prices["1 serving"] || "N/A"}
-          </span>
-        </div>
-      </div>
+  className="group relative bg-white/70 backdrop-blur-md border border-gray-200 shadow-xl rounded-2xl cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-2xl"
+  onClick={handleClick}
+>
+  <div className="relative overflow-hidden rounded-t-2xl">
+    <img
+      src={product.img}
+      alt={product.name}
+      onError={e => (e.target.src = elements.fallbackImage)}
+      className="w-full h-52 lg:h-64 object-cover object-center transition-transform duration-300 group-hover:scale-105"
+    />
+    <div className="absolute top-3 right-3 bg-darkcustombg2 text-darkcustombg1 text-xs px-4 py-1 rounded-full shadow-md font-bold tracking-widest z-10 select-none group-hover:bg-orange-400 transition-colors duration-200">
+      Rs {product.prices["500g"] || product.prices["6 pieces"] || product.prices["1 jar"] || product.prices["1 serving"] || "N/A"}
     </div>
+  </div>
+  <div className="p-4 text-left">
+    <h3 className="text-lg font-bold text-darkcustombg1 mb-1 group-hover:text-orange-600 transition-colors">
+      {product.name}
+    </h3>
+    <p className="text-xs text-gray-500 mb-2">{product.shortDesc || ""}</p>
+  </div>
+</div>
+
   );
 }
 

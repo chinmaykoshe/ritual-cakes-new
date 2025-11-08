@@ -8,25 +8,25 @@ const DesignCard = ({ designnames, designKey }) => {
   }
   const designImage = designnames[designKey];
   const displayName = designKey.replace(/_/g, " ");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const handleCardClick = () => {
     navigate(`/design/${designKey}`);
   };
 
   return (
     <div
-      className="group relative bg-white border border-gray-200 shadow-md rounded-lg cursor-pointer"
+      className="group relative bg-white/70 backdrop-blur-md border border-gray-200 shadow-xl rounded-2xl cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-2xl"
       onClick={handleCardClick}
     >
-      <div className="w-full h-48 lg:h-[280px] overflow-hidden rounded-lg">
+      <div className="relative overflow-hidden rounded-t-2xl">
         <motion.img
-          src={designImage} 
+          src={designImage}
           alt={`Cake design ${designKey}`}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-95 rounded-lg"
+          className="w-full h-48 lg:h-64 object-cover object-center transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <div className="p-4 text-left flex justify-between items-center">
-        <h3 className="text-sm font-semibold text-gray-800 group-hover:text-black-800 group-hover:font-bold transition-colors duration-300">
+      <div className="p-4 text-left">
+        <h3 className="text-lg font-bold text-darkcustombg1 mb-1 group-hover:text-orange-600 transition-colors">
           {displayName}
         </h3>
       </div>

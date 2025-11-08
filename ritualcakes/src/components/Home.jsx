@@ -15,14 +15,13 @@ function Home() {
     threshold: 0.5,
   });
   useEffect(() => {
-    const getRandomDesigns = () => {
-      if (!designnames || typeof designnames !== 'object') return [];
-      const designKeys = Object.keys(designnames);
-      const shuffledKeys = designKeys.sort(() => Math.random() - 0.5).slice(0, 4);
-      setRandomDesigns(shuffledKeys);
-    };
-    getRandomDesigns();
-  }, [designnames]);
+    if (!designnames || typeof designnames !== 'object') return;
+    const designKeys = Object.keys(designnames);
+    const shuffledKeys = designKeys.sort(() => Math.random() - 0.5).slice(0, 4);
+    setRandomDesigns(shuffledKeys);
+    // Only on mount!
+  }, []);
+
   const reviews = [
     { id: 1, name: 'Aarti', text: 'Amazing cakes! Highly recommend.' },
     { id: 2, name: 'Swapnil', text: 'Fresh and delicious, every single time.' },
@@ -125,7 +124,8 @@ function Home() {
         <div className="flex justify-center mt-8">
           <button
             onClick={() => navigate("/cakes")}
-            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg border-2 border-transparent 
+             hover:text-darkcustombg2 hover:bg-white hover:border-darkcustombg2 transition-all duration-200"
           >
             View All Cakes
           </button>
@@ -162,7 +162,8 @@ function Home() {
         <div className="flex justify-center mt-8">
           <button
             onClick={() => navigate("/designs")}
-            className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2 transition"
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg border-2 border-transparent 
+             hover:text-darkcustombg2 hover:bg-white hover:border-darkcustombg2 transition-all duration-200"
           >
             View All Designs
           </button>
