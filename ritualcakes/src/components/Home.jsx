@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, NavLink } from 'react-router-dom';
 import assets from '../assets/assets';
-import { NavLink } from 'react-router-dom';
 import Card from './Card';
 import DesignCard from './DesignCard';
 import { designnames } from '../designs/designassets';
@@ -9,6 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import '../App.css';
 
 function Home() {
+  const navigate = useNavigate();
   const [randomDesigns, setRandomDesigns] = useState([]);
   const { ref: heroRef, inView: heroInView } = useInView({
     threshold: 0.5,
@@ -23,17 +24,17 @@ function Home() {
     getRandomDesigns();
   }, [designnames]);
   const reviews = [
-    { id: 1, name: 'Alice', text: 'Amazing cakes! Highly recommend.' },
-    { id: 2, name: 'Bob', text: 'Fresh and delicious, every single time.' },
-    { id: 3, name: 'Charlie', text: 'Great service and even better cakes.' },
+    { id: 1, name: 'Aarti', text: 'Amazing cakes! Highly recommend.' },
+    { id: 2, name: 'Swapnil', text: 'Fresh and delicious, every single time.' },
+    { id: 3, name: 'Meenal', text: 'Great service and even better cakes.' },
   ];
   return (
     <>
       <motion.div
         className="py-8 px-4 overflow-hidden"
-        ref={heroRef} 
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: heroInView ? 1 : 0 }} 
+        ref={heroRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: heroInView ? 1 : 0 }}
         transition={{ duration: 0.4 }}
       >
         <div className="flex flex-col lg:flex-row items-center justify-between">
@@ -121,6 +122,14 @@ function Home() {
             <Card orderID="rituals10" />
           </motion.div>
         </div>
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={() => navigate("/cakes")}
+            className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"
+          >
+            View All Cakes
+          </button>
+        </div>
       </motion.div>
 
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
@@ -141,8 +150,8 @@ function Home() {
                 transition={{ duration: 0.6 }}
               >
                 <DesignCard
-                  designnames={designnames}  
-                  designKey={designKey}      
+                  designnames={designnames}
+                  designKey={designKey}
                 />
               </motion.div>
             ))
@@ -150,8 +159,17 @@ function Home() {
             <div>No designs available</div>
           )}
         </div>
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={() => navigate("/designs")}
+            className="bg-darkcustombg2 text-white py-2 px-6 rounded-lg font-semibold text-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2 transition"
+          >
+            View All Designs
+          </button>
+        </div>
       </motion.div>
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
+
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}

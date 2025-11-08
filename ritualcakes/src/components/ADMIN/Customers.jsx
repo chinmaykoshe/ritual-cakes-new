@@ -6,8 +6,10 @@ function Customers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showActions, setShowActions] = useState(false); // Controls "Delete" visibility
   const token = localStorage.getItem('token');
   const apiUrl = `https://ritual-cakes-new-ogk5.vercel.app/api/users`;
+
   useEffect(() => {
     const fetchCustomers = async () => {
       if (token) {
@@ -75,6 +77,16 @@ function Customers() {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded"
       />
+      <div className="mb-4">
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={showActions}
+            onChange={(e) => setShowActions(e.target.checked)}
+          />
+          <span className="text-gray-700">Show Delete Actions</span>
+        </label>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -90,17 +102,21 @@ function Customers() {
                 <th className="px-4 py-2 border border-solid">Phone</th>
                 <th className="px-4 py-2 border border-solid">Address</th>
                 <th className="px-4 py-2 border border-solid">Cart Products</th>
-                <th className="px-4 py-2 border border-solid">Actions</th>
+                {showActions && (
+                  <th className="px-4 py-2 border border-solid">Actions</th>
+                )}
               </tr>
             </thead>
             <tbody>
               {filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-4">No customers found</td>
+                  <td colSpan={showActions ? 7 : 6} className="text-center py-4">
+                    No customers found
+                  </td>
                 </tr>
               ) : (
                 filteredCustomers
-                  .filter((customer) => customer.role !== 'admin') 
+                  .filter((customer) => customer.role !== 'admin')
                   .map((customer) => (
                     <tr key={customer._id}>
                       <td className="px-4 py-2 border border-solid">{customer.name}</td>
@@ -119,14 +135,18 @@ function Customers() {
                           <span>No products</span>
                         )}
                       </td>
-                      <td className="px-4 py-2 border border-solid">
-                        <button
-                          onClick={() => handleDelete(customer._id)}
-                          className="text-red-500 hover:underline"
-                        >
-                          ❌ Delete
-                        </button>
-                      </td>
+                      {showActions && (
+                        <td className="px-4 py-2 border border-solid">
+                          <button
+                            onClick={() => handleDelete(customer._id)}
+                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 active:bg-red-700 transition"
+                          >
+                            Delete
+                          </button>
+
+
+                        </td>
+                      )}
                     </tr>
                   ))
               )}

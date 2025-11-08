@@ -14,7 +14,6 @@ export const CartProvider = ({ children }) => {
         const response = await axios.get(apiUrl, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Cart API Response:", response.data);
         setCart(response.data.cartItems || []);
       } catch (error) {
         console.error("Error fetching cart items:", error);

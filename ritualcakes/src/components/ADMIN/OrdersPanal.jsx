@@ -268,8 +268,10 @@ const OrdersPanel = () => {
             <i className="fa-solid fa-store"></i>
           </label>
         </div>
+
+
         <div
-          className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
+          className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white  hover:bg-red-500"
           title="Show or hide delete column"
         >
           <input
@@ -281,10 +283,15 @@ const OrdersPanel = () => {
             }
             className="h-4 w-4"
           />
-          <label htmlFor="toggleDeleteColumn" className="text-sm cursor-pointer">
-            <i className="fa-solid fa-trash"></i> Delete Column
+          <label
+            htmlFor="toggleDeleteColumn"
+            className="text-sm cursor-pointer flex items-center gap-1 whitespace-nowrap"
+          >
+            <i className="fa-solid fa-trash"></i>
+            <span>Delete</span>
           </label>
         </div>
+
         <div className="relative">
           <button
             onClick={handleDropdownToggle}
