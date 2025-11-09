@@ -65,7 +65,7 @@ function Cart() {
         {errorMessages && <p className="text-red-500 text-center">{errorMessages}</p>}
         {!isLoggedIn ? (
           <div className="text-center">
-            <p className="text-black font-semibold">Please log in to add items to the cart.</p>
+            <p className="text-red-500 font-semibold">Please log in to add items to the cart.</p>
             <button
               onClick={() => navigate("/login")}
               className="mt-4 bg-darkcustombg2 text-white py-2 px-6 rounded-lg hover:text-darkcustombg2 hover:bg-white hover:border-2 hover:border-darkcustombg2"

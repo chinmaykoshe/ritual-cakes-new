@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCustomization } from '../context/customizeContext'; 
+import { useCustomization } from '../context/customizeContext';
 import { useNavigate } from 'react-router-dom';
 
 function CustomizationForm() {
@@ -10,7 +10,7 @@ function CustomizationForm() {
     loading,
     error,
     success,
-  } = useCustomization(); 
+  } = useCustomization();
   const navigate = useNavigate();
   const availableCakeTypes = {
     "0.5 kg": ["Round", "Heart", "Square"],
@@ -37,12 +37,12 @@ function CustomizationForm() {
     "Mixed Fruit (Real Fruit)", "Strawberry (Real Fruit)", "Mango (Real Fruit)"
   ];
   const handleSizeChange = (event) => {
-    handleChange(event); 
+    handleChange(event);
   };
   const filteredCakeTypes = formData.size ? availableCakeTypes[formData.size] : [];
   const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 2); 
-  const minDateString = minDate.toISOString().split("T")[0]; 
+  minDate.setDate(minDate.getDate() + 2);
+  const minDateString = minDate.toISOString().split("T")[0];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,6 +53,13 @@ function CustomizationForm() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-8 lg:py-16 bg-white bg-opacity-30 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6 text-center">Customize Your Cake</h1>
+      {!isLoggedIn && (
+        <div className='flex justify-center'>
+        <p className="text-red-600 md:font-semibold ">
+          Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to place customized orders online.
+        </p>
+        </div> 
+      )}
       <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
@@ -65,7 +72,7 @@ function CustomizationForm() {
             value={formData.name}
             onChange={handleChange}
             required
-            disabled={!isLoggedIn} 
+            disabled={!isLoggedIn}
           />
         </div>
         <div className="mb-4">
@@ -117,7 +124,7 @@ function CustomizationForm() {
             onChange={handleSizeChange}
             value={formData.size}
             required
-            disabled={!isLoggedIn} 
+            disabled={!isLoggedIn}
           >
             <option value="">Select Size</option>
             {Object.keys(availableCakeTypes).map((size) => (
@@ -132,7 +139,7 @@ function CustomizationForm() {
             name="cakeType"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             required
-            disabled={filteredCakeTypes.length === 0 || !isLoggedIn} 
+            disabled={filteredCakeTypes.length === 0 || !isLoggedIn}
             value={formData.cakeType}
             onChange={handleChange}
           >
@@ -149,7 +156,7 @@ function CustomizationForm() {
             name="flavor"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.flavor}
-            onChange={handleChange} 
+            onChange={handleChange}
             required
             disabled={!isLoggedIn}
           >
@@ -182,8 +189,8 @@ function CustomizationForm() {
             placeholder="Happy Birthday "
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.message}
-            onChange={handleChange} 
-            disabled={!isLoggedIn} 
+            onChange={handleChange}
+            disabled={!isLoggedIn}
           />
         </div>
         <div className="mb-4">
@@ -194,9 +201,9 @@ function CustomizationForm() {
             name="imageOrDesign"
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             placeholder="Enter Image URL"
-            value={formData.imageOrDesign} 
+            value={formData.imageOrDesign}
             onChange={handleChange}
-            disabled={!isLoggedIn} 
+            disabled={!isLoggedIn}
           />
         </div>
         <div className="mb-4">
@@ -208,7 +215,7 @@ function CustomizationForm() {
             className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-darkcustombg focus:outline-none"
             value={formData.specialInstructions}
             onChange={handleChange}
-            disabled={!isLoggedIn} 
+            disabled={!isLoggedIn}
           ></textarea>
         </div>
         <p className="text-center text-sm font-medium text-customGray mt-4 mb-8 bg-yellow-200 p-4 rounded-lg border border-yellow-400">

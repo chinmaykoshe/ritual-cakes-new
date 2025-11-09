@@ -63,7 +63,7 @@ function UserButton() {
 
         {!user ? (
           <div className="text-center">
-            <p className="text-black-500 font-semibold">
+            <p className="text-red-500 font-semibold">
               Please log in to view your information.
             </p>
             <button

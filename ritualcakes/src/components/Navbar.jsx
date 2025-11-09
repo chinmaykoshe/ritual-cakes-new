@@ -7,26 +7,26 @@ import { useCart } from "../context/CartContext";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") ? true : false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [isOpen, setIsOpen] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const { cart } = useCart();
+
   const toggleMenu = () => setIsOpen(!isOpen);
+
   const handleSignOut = () => {
     const isConfirmed = window.confirm("Are you sure you want to sign out?");
     if (isConfirmed) {
       localStorage.clear();
       setIsLoggedIn(false);
-      navigate("/"); 
+      navigate("/");
     }
   };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      localStorage.clear();
-    } else {
-      setIsLoggedIn(true);
-    }
+    setIsLoggedIn(!!token);
+    if (!token) localStorage.clear();
   }, []);
 
   return (
@@ -106,13 +106,6 @@ function Navbar() {
             }`}
           onClick={toggleMenu}
         ></div>
-        {!isLoggedIn && (
-          <div className="fixed top-12 left-0 w-full bg-red-50 bg-opacity-50 text-center p-2">
-            <p className="text-red-600 md:font-semibold">
-              Please <span className="cursor-pointer text-red-500" onClick={() => navigate('/login')}>sign in</span> to order online.
-            </p>
-          </div>
-        )}
         <div
           className={`fixed top-0 left-0 w-64 bg-white h-full shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
@@ -144,9 +137,6 @@ function Navbar() {
           </div>
         </div>
       </div>
-      {
-        isLoggedIn ?? <div>please signin to place orders! </div>
-      }
     </div>
   );
 }

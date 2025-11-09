@@ -14,7 +14,7 @@ const Catalogue = () => {
   };
 
   return (
-    <div className="mx-2 max-w-7xl md:mx-auto px-4 py-12 bg-white bg-opacity-30 rounded-lg px-4 lg:p-8 lg:m-top-16 shadow-lg">
+    <div className="mx-2 max-w-7xl md:mx-auto py-12 bg-white bg-opacity-30 rounded-lg px-4 lg:p-8 lg:m-top-16 shadow-lg">
     <div className="catalogue max-w-7xl mx-auto py-4 px-4 md:px-8 flex flex-col md:flex-row gap-4 md:gap-8">
       <div className="md:w-1/4 w-full border-r-4 border-customGray">
         <div className="sticky top-4">
