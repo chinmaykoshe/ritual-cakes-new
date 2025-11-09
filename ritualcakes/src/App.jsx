@@ -45,6 +45,7 @@ import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/Resetpassword.jsx';
 import BillPage from './components/ADMIN/BillPage.jsx';
 import CusBillPage from './components/ADMIN/CusBillPage.jsx';
+import CompanyInfo from './components/CompanyInfo.jsx';
 
 
 function InvalidRouteRedirect() {
@@ -65,7 +66,7 @@ function App() {
 
   return (
     <div className='container mx-auto max-w-none relative'>
-      <React.StrictMode>
+      
         <CustomizationProvider>
           <OrderProvider>
             <CartProvider>
@@ -115,6 +116,7 @@ function App() {
                     <Route path="/pagedesigns" element={<PageDesigns />} />
                     <Route path="*" element={<InvalidRouteRedirect />} />
                     <Route path="/UserDetails" element={<UserDetails />} />
+                    <Route path="/company-info" element={<CompanyInfo />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                   </Routes>
@@ -129,7 +131,6 @@ function App() {
             </CartProvider>
           </OrderProvider>
         </CustomizationProvider>
-      </React.StrictMode>
     </div>
   );
 }

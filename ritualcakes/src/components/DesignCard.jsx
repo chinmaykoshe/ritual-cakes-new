@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const DesignCard = ({ designnames, designKey }) => {
@@ -8,7 +7,7 @@ const DesignCard = ({ designnames, designKey }) => {
   }
   const designImage = designnames[designKey];
   const displayName = designKey.replace(/_/g, " ");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const handleCardClick = () => {
     navigate(`/design/${designKey}`);
   };
@@ -19,8 +18,8 @@ const DesignCard = ({ designnames, designKey }) => {
       onClick={handleCardClick}
     >
       <div className="w-full h-48 lg:h-[280px] overflow-hidden rounded-lg">
-        <motion.img
-          src={designImage} 
+        <img
+          src={designImage}
           alt={`Cake design ${designKey}`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-95 rounded-lg"
         />
@@ -33,5 +32,4 @@ const DesignCard = ({ designnames, designKey }) => {
     </div>
   );
 };
-
 export default DesignCard;

@@ -4,11 +4,12 @@ import 'font-awesome/css/font-awesome.min.css';
 
 function Footer() {
   return (
-    <div className="mt-28 flex flex-col min-h">
+    <div className="pt-10 flex flex-col">
       <footer className="bg-orange-50 bg-opacity-85 text-darkcustombg1 pt-4 pb-8">
         <div className="container mx-auto px-6">
-          <div className="flex flex-wrap md:flex-nowrap justify-between mx-16">
-            <div className="w-full md:w-1/3 mb-6 md:mb-0 pl-4 pr-20 ">
+          {/* 3 always-left-aligned columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8 mx-2 md:mx-16 text-left">
+            <div className="mb-6 md:mb-0 pl-2 md:pl-4 md:pr-8">
               <Link to="/about">
                 <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">About Us</h2>
               </Link>
@@ -17,7 +18,7 @@ function Footer() {
               </p>
               <p className="mt-4 font-italic text-gray-500">- Jyoti Joshi COO</p>
             </div>
-            <div className="w-full md:w-1/3 mb-6 md:mb-0 px-4">
+            <div className="mb-6 md:mb-0 px-2 md:px-4">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">Keep Connected</h2>
               <ul className="list-none">
                 <li className="mb-2">
@@ -32,15 +33,15 @@ function Footer() {
                 </li>
               </ul>
             </div>
-            <div className="w-full md:w-1/3 px-4">
+            <div className="px-2 md:px-4">
               <h2 className="text-2xl font-bold mb-4 text-darkcustombg1">Contact Information</h2>
-              <address className="text-gray-700">
+              <address className="text-gray-700 not-italic">
                 Ritual Cakes <br />
                 Shop no.:1, Uma Imperial, Dronagiri Sec.:48 <br />
                 Dronagiri, Uran-400702, Raigad, Maharashtra, India
               </address>
               <p className="mt-4">
-              <i className="fa fa-clock mr-2 mb-2"></i>
+                <i className="fa fa-clock mr-2 mb-2"></i>
                 <span className="text-gray-700 hover:text-darkcustombg1">
                 10:00 am | 10:30 pm
                 </span>
@@ -63,14 +64,15 @@ function Footer() {
               </p>
             </div>
           </div>
-          <div className="mt-8 border-t border-gray-700 pt-4 text-center">
+          {/* Bottom legal/links */}
+          <div className="mt-8 border-t border-gray-700 pt-4 text-left md:text-center">
             <p className="text-gray-700 text-sm">
               © 2024 Ritual Cakes. All Rights Reserved. Designed and developed by Chinmay Koshe.
             </p>
-            <div className="mt-4">
-              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Privacy Policy</span>
-              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Terms & Conditions</span>
-              <span className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Company Information</span>
+            <div className="mt-4 flex flex-col md:flex-row justify-start md:justify-center">
+              <Link to="/company-info" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Privacy Policy</Link>
+              <Link to="/company-info" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Terms &amp; Conditions</Link>
+              <Link to="/company-info" className="text-gray-700 hover:text-darkcustombg1 mx-2 text-sm">Company Information</Link>
             </div>
           </div>
         </div>

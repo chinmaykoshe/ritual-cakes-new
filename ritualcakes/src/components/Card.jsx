@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { elements } from "../assets/assets";
 
@@ -33,12 +33,15 @@ function Card({ orderID }) {
         <div className="flex items-center space-x-1 text-sm">
           <span className="text-gray-800 font-bold">Rs</span>
           <span className="text-gray-800 font-bold">
-            {product.prices["500g"] || product.prices["6 pieces"] || product.prices["1 jar"] || product.prices["1 serving"] || "N/A"}
+            {product.prices["500g"] ||
+              product.prices["6 pieces"] ||
+              product.prices["1 jar"] ||
+              product.prices["1 serving"] ||
+              "N/A"}
           </span>
         </div>
       </div>
     </div>
   );
 }
-
 export default Card;

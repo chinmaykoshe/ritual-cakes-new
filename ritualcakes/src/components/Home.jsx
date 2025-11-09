@@ -53,7 +53,7 @@ function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
-              We are a company dedicated to the preparation of cakes, providing our customers with a product always fresh from the oven.
+              We make sure every cake we deliver is freshly baked.
             </motion.p>
             <NavLink to="/cakes">
               <motion.button
