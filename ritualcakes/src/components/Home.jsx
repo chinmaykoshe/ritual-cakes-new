@@ -15,21 +15,19 @@ function Home() {
     threshold: 0.5,
   });
   useEffect(() => {
-    const getRandomDesigns = () => {
-      if (!designnames || typeof designnames !== 'object') return [];
-      const designKeys = Object.keys(designnames);
-      const shuffledKeys = designKeys.sort(() => Math.random() - 0.5).slice(0, 4);
-      setRandomDesigns(shuffledKeys);
-    };
-    getRandomDesigns();
+    if (!designnames || typeof designnames !== 'object') return;
+    const designKeys = Object.keys(designnames);
+    setRandomDesigns(designKeys.sort(() => Math.random() - 0.5).slice(0, 4));
   }, [designnames]);
   const reviews = [
     { id: 1, name: 'Aarti', text: 'Amazing cakes! Highly recommend.' },
     { id: 2, name: 'Swapnil', text: 'Fresh and delicious, every single time.' },
     { id: 3, name: 'Meenal', text: 'Great service and even better cakes.' },
   ];
+
   return (
-    <>
+    <div className="font-montserrat">
+      {/* HERO */}
       <motion.div
         className="py-8 px-4 overflow-hidden"
         ref={heroRef}
@@ -40,7 +38,7 @@ function Home() {
         <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="flex-1 lg:ml-16 md:mb-8">
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-7xl font-bold font-montserrat text-darkcustombg1"
+              className="text-4xl md:text-5xl lg:text-7xl font-bold text-darkcustombg1"
               initial={{ x: -100 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.4 }}
@@ -48,7 +46,7 @@ function Home() {
               From Our Oven to Your Heart.
             </motion.h1>
             <motion.p
-              className="text-m lg:text-2xl mt-4 text-gray-500 italic font-montserrat"
+              className="text-m lg:text-2xl mt-4 text-gray-500 italic"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
@@ -85,42 +83,26 @@ function Home() {
         </div>
       </motion.div>
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
+
+      {/* Specials */}
       <motion.div
         className="signature-section py-8 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Our Specials</h2>
+        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center text-darkcustombg1">Our Specials</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <motion.div
-            whileInView={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card orderID="rituals5" />
-          </motion.div>
-          <motion.div
-            whileInView={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card orderID="rituals6" />
-          </motion.div>
-          <motion.div
-            whileInView={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card orderID="rituals1" />
-          </motion.div>
-          <motion.div
-            whileInView={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card orderID="rituals10" />
-          </motion.div>
+          {["rituals5", "rituals6", "rituals1", "rituals10"].map(id => (
+            <motion.div
+              key={id}
+              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card orderID={id} />
+            </motion.div>
+          ))}
         </div>
         <div className="flex justify-center mt-8">
           <button
@@ -131,15 +113,16 @@ function Home() {
           </button>
         </div>
       </motion.div>
-
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
+
+      {/* Categories */}
       <motion.div
         className="signature-section py-8 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center font-montserrat text-darkcustombg1">Explore Our Categories</h2>
+        <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-center text-darkcustombg1">Explore Our Categories</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {randomDesigns.length > 0 ? (
             randomDesigns.map((designKey) => (
@@ -170,13 +153,14 @@ function Home() {
       </motion.div>
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
 
+      {/* Reviews */}
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-darkcustombg1">What Our Customers Say</h2>
+        <h2 className="text-4xl lg:text-6xl md:text-2xl font-bold text-center text-darkcustombg1 mb-10">What Our Customers Say</h2>
         <div className="flex flex-col md:flex-row justify-center gap-6">
           {reviews.map((review) => (
             <motion.div
@@ -198,34 +182,48 @@ function Home() {
           ))}
         </div>
       </motion.div>
-      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
-      <motion.div
-        className="py-8 px-4 lg:mx-24 mx-4"
-        whileInView={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="text-4xl font-bold text-center text-darkcustombg1">How We Bake</h2>
-        <div className="flex flex-col md:flex-row justify-between items-center mt-8">
-          <img
-            src="/baking process.png"
-            alt="Baking Process"
-            className="w-full md:w-1/2 rounded-lg shadow-md"
-          />
-          <p className="text-lg md:ml-8 mt-4 md:mt-0 text-gray-600">
-            Our cakes are made using fresh ingredients, precision, and love. From selecting the finest ingredients to delivering perfectly baked cakes, we ensure every step is done with perfection.
-          </p>
-        </div>
-      </motion.div>
-      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
+      
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20 mb-10" />
+
+{/* Baking process */}
+<motion.div
+  className="py-16 px-4 lg:mx-24 mx-4 relative rounded-2xl overflow-hidden shadow-lg"
+  whileInView={{ opacity: 1 }}
+  initial={{ opacity: 0 }}
+  transition={{ duration: 0.6 }}
+  style={{ minHeight: '340px' }}
+>
+  {/* Background image, blurred and dimmed */}
+  <img
+    src="/baking process.png"
+    alt="Baking Process"
+    className="absolute inset-0 w-full h-full object-cover blur-md brightness-75 scale-110"
+    style={{ zIndex: 0 }}
+  />
+  {/* Glass overlay */}
+  <div className="relative z-10 bg-white bg-opacity-60 backdrop-blur-lg rounded-2xl p-6 md:p-12 max-w-3xl mx-auto">
+    <h2 className="text-4xl lg:text-5xl font-bold text-center text-darkcustombg1 mb-8 drop-shadow">
+      How We Bake
+    </h2>
+    <p className="font-montserrat text-lg lg:text-2xl md:text-xl text-left text-gray-800 leading-relaxed">
+      Every Ritual Cake is made with fresh, carefully chosen ingredients and a genuine love for baking.
+      <br /><br />
+      From the first step—selecting quality flour, chocolate, and fruits—to the final delivery, we use precision and care at every stage. The result is a cake baked to perfection, every single time.
+    </p>
+  </div>
+</motion.div>
+
+      <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20 mt-10" />
+
+      {/* CTA */}
       <motion.div
         className="py-8 px-4 text-darkcustomGray text-center lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl font-bold mb-6">Ready to Order Your Favorite Cake?</h2>
-        <p className="text-lg">
+        <h2 className="text-4xl lg:text-6xl md:text-2xl font-bold text-center text-darkcustombg1">Ready to Order Your Favorite Cake?</h2>
+        <p className="text-lg lg:text-2xl md:text-xl text-center mt-4 text-gray-600">
           Sign up now to customize and order your delicious cake online with just a few clicks!
         </p>
         <motion.button
@@ -240,14 +238,16 @@ function Home() {
         </motion.button>
       </motion.div>
       <hr className="border-2 border-darkcustombg1 mx-4 md:mx-20" />
+
+      {/* Find Us */}
       <motion.div
         className="py-8 px-4 lg:mx-24 mx-4"
         whileInView={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl font-bold text-center text-darkcustombg1">Find Us Here</h2>
-        <p className="text-lg text-center mt-4 text-gray-600">
+        <h2 className="text-4xl lg:text-6xl md:text-2xl font-bold text-center text-darkcustombg1">Find Us Here</h2>
+        <p className="text-lg lg:text-2xl md:text-xl text-center mt-4 text-gray-600">
           Visit us at our location for a closer look at our delicious cakes!
         </p>
         <div className="mt-8 flex justify-center h-[300px] lg:h-[450px]">
@@ -257,7 +257,7 @@ function Home() {
             width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy"></iframe>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }
 
