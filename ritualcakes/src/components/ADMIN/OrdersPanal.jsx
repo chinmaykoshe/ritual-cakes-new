@@ -214,15 +214,17 @@ const OrdersPanel = () => {
     <div className="pt-4 h-full">
       <h2 className="text-xl font-bold mb-4">Orders Panel</h2>
       <div className="flex items-center space-x-4 mb-4">
+
         <input
           type="text"
-          className="border border-gray-400 rounded px-2 py-1 h-10 border-2 border-gray-400"
+          className="border-2 border-gray-400 rounded px-2 py-1 h-10"
           placeholder="Search by Order ID, Email, or Address"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+
         <select
-          className="border border-gray-400 rounded px-2 border-2 border-gray-400 py-1 h-10"
+          className="border-2 border-gray-400 rounded px-2 py-1 h-10"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -230,29 +232,33 @@ const OrdersPanel = () => {
           <option value="Pending">Pending</option>
           <option value="Completed">Completed</option>
           <option value="Cancelled">Cancelled</option>
-          <option value="Cancelled">Accepted</option>
+          <option value="Accepted">Accepted</option>
         </select>
+
         <input
           type="date"
-          className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
+          className="border-2 border-gray-400 rounded px-2 py-1 h-10"
           value={filterDate}
           onChange={(e) => setFilterDate(e.target.value)}
         />
+
         <input
           type="number"
-          className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
+          className="border-2 border-gray-400 rounded px-2 py-1 h-10"
           placeholder="Min Amount"
           value={minAmount}
           onChange={(e) => setMinAmount(e.target.value)}
           min="0"
         />
+
         <input
           type="number"
-          className="border border-gray-400 rounded border-2 border-gray-400 px-2 py-1 h-10"
+          className="border-2 border-gray-400 rounded px-2 py-1 h-10"
           placeholder="Max Amount"
           value={filterAmount}
           onChange={(e) => setFilterAmount(e.target.value)}
         />
+        
         <div
           className="flex items-center space-x-2 border-2 border-gray-400 px-2 py-1 h-10 rounded-md bg-white"
           title="Hide orders from store"
