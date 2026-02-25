@@ -11,8 +11,7 @@ const resetpassroute = require('./Routes/ResetPassRoute');
 const app = express();
 
 // CORS configuration
-const allowedOrigins = ["https://ritual-cakes--alpha.vercel.app",
- "http://localhost:5174"];
+const allowedOrigins = ["https://ritual-cakes.vercel.app"];
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
